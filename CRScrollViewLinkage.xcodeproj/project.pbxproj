@@ -25,6 +25,7 @@
 		0983DC0B26D3AC8400E667FF /* LBLinkageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0226D3AC8400E667FF /* LBLinkageManager.m */; };
 		0983DC0C26D3AC8400E667FF /* LBLinkageHookInstanceCook.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0526D3AC8400E667FF /* LBLinkageHookInstanceCook.m */; };
 		0983DC0D26D3AC8400E667FF /* LBLinkageScrollViewHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0826D3AC8400E667FF /* LBLinkageScrollViewHook.m */; };
+		0983DC1026D3AE6700E667FF /* BearTestNestLinkageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0F26D3AE6700E667FF /* BearTestNestLinkageVC.m */; };
 		14C862A13208C92BCAE8CF82 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFEDC8729EB1A4B49A5060 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework */; };
 		8465D656627D855441130062 /* Pods_CRScrollViewLinkageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */; };
 		ABAD2B01D539525049B2DA12 /* Pods_CRScrollViewLinkage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7BF2E1E7553D2C23C9FF3DD /* Pods_CRScrollViewLinkage.framework */; };
@@ -84,6 +85,8 @@
 		0983DC0626D3AC8400E667FF /* LBLinkageScrollViewHook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageScrollViewHook.h; sourceTree = "<group>"; };
 		0983DC0726D3AC8400E667FF /* LBLinkageHookInstanceCook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageHookInstanceCook.h; sourceTree = "<group>"; };
 		0983DC0826D3AC8400E667FF /* LBLinkageScrollViewHook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLinkageScrollViewHook.m; sourceTree = "<group>"; };
+		0983DC0E26D3AE6600E667FF /* BearTestNestLinkageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BearTestNestLinkageVC.h; sourceTree = "<group>"; };
+		0983DC0F26D3AE6700E667FF /* BearTestNestLinkageVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BearTestNestLinkageVC.m; sourceTree = "<group>"; };
 		2B513DFE0E24BA67E09DFAE6 /* Pods-CRScrollViewLinkage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.debug.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.debug.xcconfig"; sourceTree = "<group>"; };
 		73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CRScrollViewLinkageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97B7FA92AF9C0DDD97DCB12D /* Pods-CRScrollViewLinkage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.release.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.release.xcconfig"; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 				0983DBBD26D3AC3400E667FF /* SceneDelegate.m */,
 				0983DBBF26D3AC3400E667FF /* ViewController.h */,
 				0983DBC026D3AC3400E667FF /* ViewController.m */,
+				0983DC0E26D3AE6600E667FF /* BearTestNestLinkageVC.h */,
+				0983DC0F26D3AE6700E667FF /* BearTestNestLinkageVC.m */,
 				0983DBF226D3AC6500E667FF /* BearChildTableView.h */,
 				0983DBF526D3AC6600E667FF /* BearChildTableView.m */,
 				0983DBF426D3AC6600E667FF /* BearChildView.h */,
@@ -507,6 +512,7 @@
 				0983DBBB26D3AC3400E667FF /* AppDelegate.m in Sources */,
 				0983DBCC26D3AC3400E667FF /* main.m in Sources */,
 				0983DBF726D3AC6600E667FF /* BearChildView.m in Sources */,
+				0983DC1026D3AE6700E667FF /* BearTestNestLinkageVC.m in Sources */,
 				0983DBBE26D3AC3400E667FF /* SceneDelegate.m in Sources */,
 				0983DBF626D3AC6600E667FF /* BearTestBaseScrollView.m in Sources */,
 				0983DC0C26D3AC8400E667FF /* LBLinkageHookInstanceCook.m in Sources */,

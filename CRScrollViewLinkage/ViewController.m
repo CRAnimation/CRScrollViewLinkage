@@ -7,17 +7,11 @@
 
 #import "ViewController.h"
 #import <Masonry/Masonry.h>
-#import "BearChildView.h"
-#import "LBLinkageManager.h"
-#import "BearTestScrollView.h"
 
-@interface ViewController ()
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) BearTestScrollView *mainScrollView;
-@property (nonatomic, strong) BearChildView *childView;
-@property (nonatomic, strong) LBLinkageManager *linkageManager;
-@property (nonatomic, strong) UIButton *myBtn;
-@property (nonatomic, assign) CGFloat topHeight;
+@property (nonatomic, strong) UITableView *mainTableView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -26,74 +20,64 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.topHeight = 310;
+    [self.dataArray addObject:@"BearTestNestLinkageVC"];
+    
     [self createUI];
-    [self test];
 }
 
 - (void)createUI {
-    CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
-    CGFloat topHeight = self.topHeight;
-    CGFloat contentHeight = topHeight + [BearChildView viewHeight];
-    
-    self.mainScrollView = [BearTestScrollView new];
-    self.mainScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    self.mainScrollView.backgroundColor = [UIColor orangeColor];
-    self.mainScrollView.contentSize = CGSizeMake(screenWidth, contentHeight);
-    [self.view addSubview:self.mainScrollView];
-    [self.mainScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
+    [self.view addSubview:self.mainTableView];
+    [self.mainTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.insets(UIEdgeInsetsZero);
     }];
-    
-    [self.mainScrollView addSubview:self.myBtn];
-    [self.myBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(50);
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.top.equalTo(self.mainScrollView.mas_top).offset(150);
-    }];
-    
-    self.childView = [BearChildView new];
-    [self.mainScrollView addSubview:self.childView];
-    [self.childView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left);
-        make.top.equalTo(self.mainScrollView.mas_top).offset(topHeight);
-        make.height.mas_equalTo([BearChildView viewHeight]);
-        make.width.mas_equalTo(screenWidth);
-    }];
-    
-    self.linkageManager = [LBLinkageManager new];
-    [self.linkageManager configMainScrollView:self.mainScrollView];
-    [self.linkageManager configChildScrollView:self.childView.myTableView childViewHeight:[BearChildView viewHeight]];
 }
 
-- (void)test {
-    NSString *aaa = @"+86";
-    NSNumber *num = [NSNumber numberWithInt:aaa.intValue];
-    NSLog(@"num:%@", num);
+#pragma mark - UITableViewDataSource & UITableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataArray.count;
 }
 
-- (void)changeTopHeightEvent {
-    NSLog(@"--1");
-    
-    self.topHeight += 50;
-    [self.childView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mainScrollView.mas_top).offset(self.topHeight);
-    }];
-    
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
-#pragma mark - Setter & Getter
-- (UIButton *)myBtn {
-    if (!_myBtn) {
-        _myBtn = [UIButton new];
-        _myBtn.backgroundColor = [UIColor whiteColor];
-        [_myBtn addTarget:self action:@selector(changeTopHeightEvent) forControlEvents:UIControlEventTouchUpInside];
-        [_myBtn setTitle:@"change height" forState:UIControlStateNormal];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *cellID = @"cellID";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
-    return _myBtn;
+    cell.textLabel.text = self.dataArray[indexPath.row];
+    
+    return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *name = self.dataArray[indexPath.row];
+    Class cellClass = NSClassFromString(name);
+    UIViewController *vc = (UIViewController *)[cellClass new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+#pragma mark - Setter & Getter
+- (UITableView *)mainTableView {
+    if (!_mainTableView) {
+        _mainTableView = [UITableView new];
+        _mainTableView.delegate = self;
+        _mainTableView.dataSource = self;
+    }
+    
+    return _mainTableView;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray new];
+    }
+    
+    return _dataArray;
+}
 
 @end
