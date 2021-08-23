@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,18 @@
 		0983DBCC26D3AC3400E667FF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBCB26D3AC3400E667FF /* main.m */; };
 		0983DBD626D3AC3500E667FF /* CRScrollViewLinkageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBD526D3AC3500E667FF /* CRScrollViewLinkageTests.m */; };
 		0983DBE126D3AC3500E667FF /* CRScrollViewLinkageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBE026D3AC3500E667FF /* CRScrollViewLinkageUITests.m */; };
+		0983DBF626D3AC6600E667FF /* BearTestBaseScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBEE26D3AC6500E667FF /* BearTestBaseScrollView.m */; };
+		0983DBF726D3AC6600E667FF /* BearChildView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBF026D3AC6500E667FF /* BearChildView.m */; };
+		0983DBF826D3AC6600E667FF /* BearTestScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBF326D3AC6500E667FF /* BearTestScrollView.m */; };
+		0983DBF926D3AC6600E667FF /* BearChildTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBF526D3AC6600E667FF /* BearChildTableView.m */; };
+		0983DC0926D3AC8400E667FF /* UIScrollView+LBLinkage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBFD26D3AC8400E667FF /* UIScrollView+LBLinkage.m */; };
+		0983DC0A26D3AC8400E667FF /* LBLinkageConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBFF26D3AC8400E667FF /* LBLinkageConfig.m */; };
+		0983DC0B26D3AC8400E667FF /* LBLinkageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0226D3AC8400E667FF /* LBLinkageManager.m */; };
+		0983DC0C26D3AC8400E667FF /* LBLinkageHookInstanceCook.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0526D3AC8400E667FF /* LBLinkageHookInstanceCook.m */; };
+		0983DC0D26D3AC8400E667FF /* LBLinkageScrollViewHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC0826D3AC8400E667FF /* LBLinkageScrollViewHook.m */; };
+		14C862A13208C92BCAE8CF82 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFEDC8729EB1A4B49A5060 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework */; };
+		8465D656627D855441130062 /* Pods_CRScrollViewLinkageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */; };
+		ABAD2B01D539525049B2DA12 /* Pods_CRScrollViewLinkage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7BF2E1E7553D2C23C9FF3DD /* Pods_CRScrollViewLinkage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +66,33 @@
 		0983DBDC26D3AC3500E667FF /* CRScrollViewLinkageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRScrollViewLinkageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0983DBE026D3AC3500E667FF /* CRScrollViewLinkageUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRScrollViewLinkageUITests.m; sourceTree = "<group>"; };
 		0983DBE226D3AC3500E667FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0983DBEE26D3AC6500E667FF /* BearTestBaseScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BearTestBaseScrollView.m; sourceTree = "<group>"; };
+		0983DBEF26D3AC6500E667FF /* BearTestBaseScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BearTestBaseScrollView.h; sourceTree = "<group>"; };
+		0983DBF026D3AC6500E667FF /* BearChildView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BearChildView.m; sourceTree = "<group>"; };
+		0983DBF126D3AC6500E667FF /* BearTestScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BearTestScrollView.h; sourceTree = "<group>"; };
+		0983DBF226D3AC6500E667FF /* BearChildTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BearChildTableView.h; sourceTree = "<group>"; };
+		0983DBF326D3AC6500E667FF /* BearTestScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BearTestScrollView.m; sourceTree = "<group>"; };
+		0983DBF426D3AC6600E667FF /* BearChildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BearChildView.h; sourceTree = "<group>"; };
+		0983DBF526D3AC6600E667FF /* BearChildTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BearChildTableView.m; sourceTree = "<group>"; };
+		0983DBFC26D3AC8400E667FF /* UIScrollView+LBLinkage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LBLinkage.h"; sourceTree = "<group>"; };
+		0983DBFD26D3AC8400E667FF /* UIScrollView+LBLinkage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LBLinkage.m"; sourceTree = "<group>"; };
+		0983DBFF26D3AC8400E667FF /* LBLinkageConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLinkageConfig.m; sourceTree = "<group>"; };
+		0983DC0026D3AC8400E667FF /* LBLinkageConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageConfig.h; sourceTree = "<group>"; };
+		0983DC0226D3AC8400E667FF /* LBLinkageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLinkageManager.m; sourceTree = "<group>"; };
+		0983DC0326D3AC8400E667FF /* LBLinkageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageManager.h; sourceTree = "<group>"; };
+		0983DC0526D3AC8400E667FF /* LBLinkageHookInstanceCook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLinkageHookInstanceCook.m; sourceTree = "<group>"; };
+		0983DC0626D3AC8400E667FF /* LBLinkageScrollViewHook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageScrollViewHook.h; sourceTree = "<group>"; };
+		0983DC0726D3AC8400E667FF /* LBLinkageHookInstanceCook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLinkageHookInstanceCook.h; sourceTree = "<group>"; };
+		0983DC0826D3AC8400E667FF /* LBLinkageScrollViewHook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLinkageScrollViewHook.m; sourceTree = "<group>"; };
+		2B513DFE0E24BA67E09DFAE6 /* Pods-CRScrollViewLinkage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.debug.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.debug.xcconfig"; sourceTree = "<group>"; };
+		73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CRScrollViewLinkageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		97B7FA92AF9C0DDD97DCB12D /* Pods-CRScrollViewLinkage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.release.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.release.xcconfig"; sourceTree = "<group>"; };
+		98CFEDC8729EB1A4B49A5060 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1867E79D46353036F189248 /* Pods-CRScrollViewLinkageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkageTests.debug.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkageTests/Pods-CRScrollViewLinkageTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BCF9C669FBBD8715EE2587CD /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.debug.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C27123CF5B360351082DB0B3 /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.release.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.release.xcconfig"; sourceTree = "<group>"; };
+		D7BF2E1E7553D2C23C9FF3DD /* Pods_CRScrollViewLinkage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CRScrollViewLinkage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE140F9314ED1300E1011713 /* Pods-CRScrollViewLinkageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkageTests.release.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkageTests/Pods-CRScrollViewLinkageTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABAD2B01D539525049B2DA12 /* Pods_CRScrollViewLinkage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8465D656627D855441130062 /* Pods_CRScrollViewLinkageTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14C862A13208C92BCAE8CF82 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +130,8 @@
 				0983DBD426D3AC3500E667FF /* CRScrollViewLinkageTests */,
 				0983DBDF26D3AC3500E667FF /* CRScrollViewLinkageUITests */,
 				0983DBB726D3AC3300E667FF /* Products */,
+				F19F51E2616A7D59FAECEF10 /* Pods */,
+				79C7F10CD5E14A95D2CEC54E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,6 +154,15 @@
 				0983DBBD26D3AC3400E667FF /* SceneDelegate.m */,
 				0983DBBF26D3AC3400E667FF /* ViewController.h */,
 				0983DBC026D3AC3400E667FF /* ViewController.m */,
+				0983DBF226D3AC6500E667FF /* BearChildTableView.h */,
+				0983DBF526D3AC6600E667FF /* BearChildTableView.m */,
+				0983DBF426D3AC6600E667FF /* BearChildView.h */,
+				0983DBF026D3AC6500E667FF /* BearChildView.m */,
+				0983DBEF26D3AC6500E667FF /* BearTestBaseScrollView.h */,
+				0983DBEE26D3AC6500E667FF /* BearTestBaseScrollView.m */,
+				0983DBF126D3AC6500E667FF /* BearTestScrollView.h */,
+				0983DBF326D3AC6500E667FF /* BearTestScrollView.m */,
+				0983DBFA26D3AC8400E667FF /* LBLinkage */,
 				0983DBC226D3AC3400E667FF /* Main.storyboard */,
 				0983DBC526D3AC3400E667FF /* Assets.xcassets */,
 				0983DBC726D3AC3400E667FF /* LaunchScreen.storyboard */,
@@ -137,6 +190,78 @@
 			path = CRScrollViewLinkageUITests;
 			sourceTree = "<group>";
 		};
+		0983DBFA26D3AC8400E667FF /* LBLinkage */ = {
+			isa = PBXGroup;
+			children = (
+				0983DBFB26D3AC8400E667FF /* Category */,
+				0983DBFE26D3AC8400E667FF /* Config */,
+				0983DC0126D3AC8400E667FF /* Manager */,
+				0983DC0426D3AC8400E667FF /* HookInstanceCook */,
+			);
+			path = LBLinkage;
+			sourceTree = "<group>";
+		};
+		0983DBFB26D3AC8400E667FF /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				0983DBFC26D3AC8400E667FF /* UIScrollView+LBLinkage.h */,
+				0983DBFD26D3AC8400E667FF /* UIScrollView+LBLinkage.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		0983DBFE26D3AC8400E667FF /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				0983DBFF26D3AC8400E667FF /* LBLinkageConfig.m */,
+				0983DC0026D3AC8400E667FF /* LBLinkageConfig.h */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		0983DC0126D3AC8400E667FF /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				0983DC0226D3AC8400E667FF /* LBLinkageManager.m */,
+				0983DC0326D3AC8400E667FF /* LBLinkageManager.h */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		0983DC0426D3AC8400E667FF /* HookInstanceCook */ = {
+			isa = PBXGroup;
+			children = (
+				0983DC0526D3AC8400E667FF /* LBLinkageHookInstanceCook.m */,
+				0983DC0626D3AC8400E667FF /* LBLinkageScrollViewHook.h */,
+				0983DC0726D3AC8400E667FF /* LBLinkageHookInstanceCook.h */,
+				0983DC0826D3AC8400E667FF /* LBLinkageScrollViewHook.m */,
+			);
+			path = HookInstanceCook;
+			sourceTree = "<group>";
+		};
+		79C7F10CD5E14A95D2CEC54E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D7BF2E1E7553D2C23C9FF3DD /* Pods_CRScrollViewLinkage.framework */,
+				98CFEDC8729EB1A4B49A5060 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework */,
+				73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F19F51E2616A7D59FAECEF10 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2B513DFE0E24BA67E09DFAE6 /* Pods-CRScrollViewLinkage.debug.xcconfig */,
+				97B7FA92AF9C0DDD97DCB12D /* Pods-CRScrollViewLinkage.release.xcconfig */,
+				BCF9C669FBBD8715EE2587CD /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.debug.xcconfig */,
+				C27123CF5B360351082DB0B3 /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.release.xcconfig */,
+				A1867E79D46353036F189248 /* Pods-CRScrollViewLinkageTests.debug.xcconfig */,
+				EE140F9314ED1300E1011713 /* Pods-CRScrollViewLinkageTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -144,9 +269,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0983DBE526D3AC3500E667FF /* Build configuration list for PBXNativeTarget "CRScrollViewLinkage" */;
 			buildPhases = (
+				9364076FD453700369928CC9 /* [CP] Check Pods Manifest.lock */,
 				0983DBB226D3AC3300E667FF /* Sources */,
 				0983DBB326D3AC3300E667FF /* Frameworks */,
 				0983DBB426D3AC3300E667FF /* Resources */,
+				E5B06F9138F771AFF3A415C5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -161,6 +288,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0983DBE826D3AC3500E667FF /* Build configuration list for PBXNativeTarget "CRScrollViewLinkageTests" */;
 			buildPhases = (
+				373DD23B9873D608369D2BC3 /* [CP] Check Pods Manifest.lock */,
 				0983DBCD26D3AC3500E667FF /* Sources */,
 				0983DBCE26D3AC3500E667FF /* Frameworks */,
 				0983DBCF26D3AC3500E667FF /* Resources */,
@@ -179,9 +307,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0983DBEB26D3AC3500E667FF /* Build configuration list for PBXNativeTarget "CRScrollViewLinkageUITests" */;
 			buildPhases = (
+				4FBF14B5496C07AC71CBAA38 /* [CP] Check Pods Manifest.lock */,
 				0983DBD826D3AC3500E667FF /* Sources */,
 				0983DBD926D3AC3500E667FF /* Frameworks */,
 				0983DBDA26D3AC3500E667FF /* Resources */,
+				063D607D9994CF24D3F3BC43 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -261,15 +391,127 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		063D607D9994CF24D3F3BC43 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		373DD23B9873D608369D2BC3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CRScrollViewLinkageTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4FBF14B5496C07AC71CBAA38 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9364076FD453700369928CC9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CRScrollViewLinkage-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E5B06F9138F771AFF3A415C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0983DBB226D3AC3300E667FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0983DBF926D3AC6600E667FF /* BearChildTableView.m in Sources */,
+				0983DC0B26D3AC8400E667FF /* LBLinkageManager.m in Sources */,
+				0983DBF826D3AC6600E667FF /* BearTestScrollView.m in Sources */,
 				0983DBC126D3AC3400E667FF /* ViewController.m in Sources */,
+				0983DC0D26D3AC8400E667FF /* LBLinkageScrollViewHook.m in Sources */,
 				0983DBBB26D3AC3400E667FF /* AppDelegate.m in Sources */,
 				0983DBCC26D3AC3400E667FF /* main.m in Sources */,
+				0983DBF726D3AC6600E667FF /* BearChildView.m in Sources */,
 				0983DBBE26D3AC3400E667FF /* SceneDelegate.m in Sources */,
+				0983DBF626D3AC6600E667FF /* BearTestBaseScrollView.m in Sources */,
+				0983DC0C26D3AC8400E667FF /* LBLinkageHookInstanceCook.m in Sources */,
+				0983DC0926D3AC8400E667FF /* UIScrollView+LBLinkage.m in Sources */,
+				0983DC0A26D3AC8400E667FF /* LBLinkageConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,12 +680,14 @@
 		};
 		0983DBE626D3AC3500E667FF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B513DFE0E24BA67E09DFAE6 /* Pods-CRScrollViewLinkage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMW38VA5X;
 				INFOPLIST_FILE = CRScrollViewLinkage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -456,12 +700,14 @@
 		};
 		0983DBE726D3AC3500E667FF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97B7FA92AF9C0DDD97DCB12D /* Pods-CRScrollViewLinkage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMW38VA5X;
 				INFOPLIST_FILE = CRScrollViewLinkage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -474,6 +720,7 @@
 		};
 		0983DBE926D3AC3500E667FF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1867E79D46353036F189248 /* Pods-CRScrollViewLinkageTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -494,6 +741,7 @@
 		};
 		0983DBEA26D3AC3500E667FF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE140F9314ED1300E1011713 /* Pods-CRScrollViewLinkageTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -514,6 +762,7 @@
 		};
 		0983DBEC26D3AC3500E667FF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BCF9C669FBBD8715EE2587CD /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMW38VA5X;
@@ -532,6 +781,7 @@
 		};
 		0983DBED26D3AC3500E667FF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C27123CF5B360351082DB0B3 /* Pods-CRScrollViewLinkage-CRScrollViewLinkageUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMW38VA5X;

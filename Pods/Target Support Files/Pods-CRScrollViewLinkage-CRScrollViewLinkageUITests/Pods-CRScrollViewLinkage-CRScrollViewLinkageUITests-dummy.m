@@ -1,0 +1,5 @@
+#import <Foundation/Foundation.h>
+@interface PodsDummy_Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests : NSObject
+@end
+@implementation PodsDummy_Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests
+@end
