@@ -30,6 +30,7 @@
 		0983DC2426D69A6400E667FF /* CRLinkageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC2326D69A6400E667FF /* CRLinkageManager.m */; };
 		0983DC2726D69AF800E667FF /* UIScrollView+CRLinkage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC2626D69AF800E667FF /* UIScrollView+CRLinkage.m */; };
 		0983DC2A26D69B0B00E667FF /* CRLinkageConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC2926D69B0B00E667FF /* CRLinkageConfig.m */; };
+		0983DC3726D6A55500E667FF /* CRLinkageDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DC3626D6A55500E667FF /* CRLinkageDefine.m */; };
 		14C862A13208C92BCAE8CF82 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFEDC8729EB1A4B49A5060 /* Pods_CRScrollViewLinkage_CRScrollViewLinkageUITests.framework */; };
 		8465D656627D855441130062 /* Pods_CRScrollViewLinkageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */; };
 		ABAD2B01D539525049B2DA12 /* Pods_CRScrollViewLinkage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7BF2E1E7553D2C23C9FF3DD /* Pods_CRScrollViewLinkage.framework */; };
@@ -99,6 +100,8 @@
 		0983DC2626D69AF800E667FF /* UIScrollView+CRLinkage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRLinkage.m"; sourceTree = "<group>"; };
 		0983DC2826D69B0B00E667FF /* CRLinkageConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRLinkageConfig.h; sourceTree = "<group>"; };
 		0983DC2926D69B0B00E667FF /* CRLinkageConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRLinkageConfig.m; sourceTree = "<group>"; };
+		0983DC3526D6A55500E667FF /* CRLinkageDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRLinkageDefine.h; sourceTree = "<group>"; };
+		0983DC3626D6A55500E667FF /* CRLinkageDefine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRLinkageDefine.m; sourceTree = "<group>"; };
 		2B513DFE0E24BA67E09DFAE6 /* Pods-CRScrollViewLinkage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.debug.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.debug.xcconfig"; sourceTree = "<group>"; };
 		73D059142498613D18AF4E73 /* Pods_CRScrollViewLinkageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CRScrollViewLinkageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97B7FA92AF9C0DDD97DCB12D /* Pods-CRScrollViewLinkage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CRScrollViewLinkage.release.xcconfig"; path = "Target Support Files/Pods-CRScrollViewLinkage/Pods-CRScrollViewLinkage.release.xcconfig"; sourceTree = "<group>"; };
@@ -278,6 +281,7 @@
 		0983DC2B26D69B7D00E667FF /* CRLinkage */ = {
 			isa = PBXGroup;
 			children = (
+				0983DC3826D6A55B00E667FF /* Define */,
 				0983DC2C26D69B8800E667FF /* Category */,
 				0983DC2D26D69B8F00E667FF /* Config */,
 				0983DC2E26D69B9F00E667FF /* Manager */,
@@ -310,6 +314,15 @@
 				0983DC2326D69A6400E667FF /* CRLinkageManager.m */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		0983DC3826D6A55B00E667FF /* Define */ = {
+			isa = PBXGroup;
+			children = (
+				0983DC3526D6A55500E667FF /* CRLinkageDefine.h */,
+				0983DC3626D6A55500E667FF /* CRLinkageDefine.m */,
+			);
+			path = Define;
 			sourceTree = "<group>";
 		};
 		79C7F10CD5E14A95D2CEC54E /* Frameworks */ = {
@@ -587,6 +600,7 @@
 				0983DC2A26D69B0B00E667FF /* CRLinkageConfig.m in Sources */,
 				0983DBBE26D3AC3400E667FF /* SceneDelegate.m in Sources */,
 				0983DBF626D3AC6600E667FF /* BearTestBaseScrollView.m in Sources */,
+				0983DC3726D6A55500E667FF /* CRLinkageDefine.m in Sources */,
 				0983DC0C26D3AC8400E667FF /* CRLinkageHookInstanceCook.m in Sources */,
 				0983DC0926D3AC8400E667FF /* UIScrollView+LBLinkage.m in Sources */,
 				0983DC0A26D3AC8400E667FF /* LBLinkageConfig.m in Sources */,

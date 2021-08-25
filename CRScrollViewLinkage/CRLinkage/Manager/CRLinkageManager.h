@@ -9,17 +9,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef enum : NSUInteger {
-    /// 只允许mainScrollview刷新
-    LKRefreshForMain,
-    /// 只允许childScrollview刷新
-    LKRefreshForChild,
-}CRRefreshType;
-
 @interface CRLinkageManager : NSObject
 
-@property (nonatomic, strong) UIScrollView *mainScrollView;
-@property (nonatomic, strong) NSPointerArray *childScrollViews;
+@property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
 
 /// 配置mainScrollView
 /// @param mainScrollView mainScrollView
@@ -29,6 +21,7 @@ typedef enum : NSUInteger {
 - (void)addChildScrollView:(UIScrollView *)childScrollView;
 - (void)removeChildScrollView:(UIScrollView *)childScrollView;
 - (void)resetChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews;
+- (NSArray <UIScrollView *> *)getChildScrollViews;
 
 @end
 

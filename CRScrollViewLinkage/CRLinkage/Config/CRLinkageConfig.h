@@ -6,21 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRLinkageDefine.h"
 @class CRLinkageManager;
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef enum : NSUInteger {
-    CRGestureForMainScrollView = 0,
-    CRGestureForBothScrollView = 1,
-} CRGestureType;
-
-typedef enum : NSUInteger {
-    /// 只允许mainScrollview上拉/下拉加载更多
-    CRBounceForMain,
-    /// 只允许childScrollview上拉/下拉加载更多
-    CRBounceForChild,
-}CRBounceType;
 
 @interface CRLinkageConfig : NSObject
 
@@ -29,7 +18,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, weak) CRLinkageManager *mainLinkageManager;
 
 // child专用
-@property (nonatomic, assign) CGFloat childTopFixHeight;
+@property (nonatomic, strong) NSNumber *childTopFixHeight;
 @property (nonatomic, assign) CGFloat childHeight;
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;

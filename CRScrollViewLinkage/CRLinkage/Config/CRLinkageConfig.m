@@ -19,7 +19,7 @@
         self.mainLinkageManager = nil;
         
         // child专用
-        self.childTopFixHeight = 0;
+        self.childTopFixHeight = nil;
 //        self.childHeight
         self.headerBounceType = CRBounceForMain;
         self.footerBounceType = CRBounceForMain;
