@@ -5,17 +5,17 @@
 //  Created by apple on 2021/3/12.
 //
 
-#import "LBLinkageScrollViewHook.h"
+#import "CRLinkageScrollViewHook.h"
 #import <objc/message.h>
 #import "LBLinkageConfig.h"
 #import "UIScrollView+LBLinkage.h"
 #import "LBLinkageManager.h"
 
-@interface LBLinkageScrollViewHook() <UIGestureRecognizerDelegate, LBLinkageRuntimeMethodProtocol>
+@interface CRLinkageScrollViewHook() <UIGestureRecognizerDelegate, CRLinkageRuntimeMethodProtocol>
 
 @end
 
-@implementation LBLinkageScrollViewHook
+@implementation CRLinkageScrollViewHook
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {

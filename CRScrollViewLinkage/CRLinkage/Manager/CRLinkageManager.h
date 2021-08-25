@@ -21,7 +21,14 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UIScrollView *mainScrollView;
 @property (nonatomic, strong) NSPointerArray *childScrollViews;
 
+/// 配置mainScrollView
+/// @param mainScrollView mainScrollView
+- (void)configMainScrollView:(UIScrollView *)mainScrollView;
 
+/// 配置childScrollView
+- (void)addChildScrollView:(UIScrollView *)childScrollView;
+- (void)removeChildScrollView:(UIScrollView *)childScrollView;
+- (void)resetChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews;
 
 @end
 

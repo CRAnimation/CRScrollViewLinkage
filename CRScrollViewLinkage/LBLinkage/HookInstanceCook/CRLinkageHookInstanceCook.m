@@ -6,24 +6,24 @@
 //  Copyright © 2021 5th. All rights reserved.
 //
 
-#import "LBLinkageHookInstanceCook.h"
+#import "CRLinkageHookInstanceCook.h"
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
-#import "LBLinkageScrollViewHook.h"
+#import "CRLinkageScrollViewHook.h"
 
 static NSMutableDictionary *newClassDict;
 
-@interface LBLinkageHookInstanceCook() <UIGestureRecognizerDelegate, LBLinkageRuntimeMethodProtocol>
+@interface CRLinkageHookInstanceCook() <UIGestureRecognizerDelegate, CRLinkageRuntimeMethodProtocol>
 {
     dispatch_semaphore_t _lock;
 }
 @end
 
-@implementation LBLinkageHookInstanceCook
+@implementation CRLinkageHookInstanceCook
 
 + (void)initialize
 {
-    if (self == [LBLinkageHookInstanceCook class]) {
+    if (self == [CRLinkageHookInstanceCook class]) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             newClassDict = [NSMutableDictionary new];
@@ -74,11 +74,11 @@ static NSMutableDictionary *newClassDict;
         SEL inBothAreaSel = @selector(gestureIsInBothArea:);
         
         // 添加新方法(如果当前类存在该方法，则不会添加)
-        [self addInstanceMethodWithTargetClass:newClass fromClass:[LBLinkageScrollViewHook class] selector:simultaneouslySel];
-        [self addInstanceMethodWithTargetClass:newClass fromClass:[LBLinkageScrollViewHook class] selector:namualCallSuperOriginSel];
-        [self addInstanceMethodWithTargetClass:newClass fromClass:[LBLinkageScrollViewHook class] selector:linkageGestureCheckSel];
-        [self addInstanceMethodWithTargetClass:newClass fromClass:[LBLinkageScrollViewHook class] selector:shouldBeginSel];
-        [self addInstanceMethodWithTargetClass:newClass fromClass:[LBLinkageScrollViewHook class] selector:inBothAreaSel];
+        [self addInstanceMethodWithTargetClass:newClass fromClass:[CRLinkageScrollViewHook class] selector:simultaneouslySel];
+        [self addInstanceMethodWithTargetClass:newClass fromClass:[CRLinkageScrollViewHook class] selector:namualCallSuperOriginSel];
+        [self addInstanceMethodWithTargetClass:newClass fromClass:[CRLinkageScrollViewHook class] selector:linkageGestureCheckSel];
+        [self addInstanceMethodWithTargetClass:newClass fromClass:[CRLinkageScrollViewHook class] selector:shouldBeginSel];
+        [self addInstanceMethodWithTargetClass:newClass fromClass:[CRLinkageScrollViewHook class] selector:inBothAreaSel];
         
         // 注册类
         objc_registerClassPair(newClass);

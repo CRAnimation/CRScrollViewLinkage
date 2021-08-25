@@ -14,13 +14,18 @@
 {
     self = [super init];
     if (self) {
-        self.mainTopHeight = 0;
+        // main专用
         self.mainGestureType = CRGestureForMainScrollView;
         self.mainLinkageManager = nil;
         
-        self.isMain = NO;
+        // child专用
+        self.childTopFixHeight = 0;
+//        self.childHeight
         self.headerBounceType = CRBounceForMain;
         self.footerBounceType = CRBounceForMain;
+        
+        // main，child共用
+        self.isMain = NO;
 //        self.isCanScroll = NO;
 //        self.holdOffSetY = 0;
     }

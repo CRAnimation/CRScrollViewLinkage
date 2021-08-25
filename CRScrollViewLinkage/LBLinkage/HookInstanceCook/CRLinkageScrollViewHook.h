@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// 该协议用于规范runtime生成的类，添加这些方法
-@protocol LBLinkageRuntimeMethodProtocol <NSObject>
+@protocol CRLinkageRuntimeMethodProtocol <NSObject>
 
 @optional
 /// 判断手势点击的是否在2个view的交集区
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface LBLinkageScrollViewHook : UIScrollView
+@interface CRLinkageScrollViewHook : UIScrollView
 
 @end
 

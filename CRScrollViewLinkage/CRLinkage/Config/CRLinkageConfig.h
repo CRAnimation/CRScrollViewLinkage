@@ -25,18 +25,17 @@ typedef enum : NSUInteger {
 @interface CRLinkageConfig : NSObject
 
 // main专用
-@property (nonatomic, assign) CGFloat mainTopHeight;
 @property (nonatomic, assign) CRGestureType mainGestureType;
 @property (nonatomic, weak) CRLinkageManager *mainLinkageManager;
 
-
 // child专用
+@property (nonatomic, assign) CGFloat childTopFixHeight;
 @property (nonatomic, assign) CGFloat childHeight;
+@property (nonatomic, assign) CRBounceType headerBounceType;
+@property (nonatomic, assign) CRBounceType footerBounceType;
 
 // main，child共用
 @property (nonatomic, assign) BOOL isMain;
-@property (nonatomic, assign) CRBounceType headerBounceType;
-@property (nonatomic, assign) CRBounceType footerBounceType;
 //@property (nonatomic, assign) BOOL isCanScroll;
 //@property (nonatomic, assign) CGFloat holdOffSetY;
 

@@ -6,7 +6,7 @@
 //
 
 #import "LBLinkageManager.h"
-#import "LBLinkageHookInstanceCook.h"
+#import "CRLinkageHookInstanceCook.h"
 #import "LBLinkageConfig.h"
 
 static NSString * const kContentOffset = @"contentOffset";
@@ -91,7 +91,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
 @property (nonatomic, strong, readwrite) UIScrollView *childScrollView;
-@property (nonatomic, strong) LBLinkageHookInstanceCook *hookInstanceCook;
+@property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 @property (nonatomic, assign) BOOL useLinkageHook;
 @property (nonatomic, assign) LBLinkageScrollStatus linkageScrollStatus;
 /// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
@@ -594,9 +594,9 @@ typedef enum : NSUInteger {
     }
 }
 
-- (LBLinkageHookInstanceCook *)hookInstanceCook {
+- (CRLinkageHookInstanceCook *)hookInstanceCook {
     if (!_hookInstanceCook) {
-        _hookInstanceCook = [LBLinkageHookInstanceCook new];
+        _hookInstanceCook = [CRLinkageHookInstanceCook new];
     }
     return _hookInstanceCook;
 }
