@@ -25,7 +25,7 @@
 //        UIPanGestureRecognizer *tmpPanGesture = (UIPanGestureRecognizer *)gestureRecognizer;
 //        UIScrollView *scrollView = (UIScrollView *)gestureRecognizer.view;
 //        CGPoint velocity = [tmpPanGesture velocityInView:gestureRecognizer.view];
-//        if ([scrollView.linkageConfig.mainLinkageManager refreshType] == LKRefreshForChild) {
+//        if ([scrollView.oldlinkageConfig.mainLinkageManager refreshType] == LKRefreshForChild) {
 //            if (velocity.y > 0) {
 //                /// 向下滑
 //                if (self.contentOffset.y <= 0) {

@@ -1,20 +1,24 @@
 PODS:
   - Aspects (1.4.1)
+  - LookinServer (1.0.3)
   - Masonry (1.1.0)
 
 DEPENDENCIES:
   - Aspects
+  - LookinServer (~> 1.0.0)
   - Masonry
 
 SPEC REPOS:
   trunk:
     - Aspects
+    - LookinServer
     - Masonry
 
 SPEC CHECKSUMS:
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
+  LookinServer: 5e1d44b7e4a2a98793f1eaf319c583e1e946b830
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: 098998cbc9b4e279c2f909f4db4297dae5409e5c
+PODFILE CHECKSUM: 7d0e42ba4f5aa57cc404a2439ba801a133e9dc39
 
 COCOAPODS: 1.10.2

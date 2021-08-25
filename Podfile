@@ -7,6 +7,7 @@ target 'CRScrollViewLinkage' do
 
   pod "Aspects"
   pod 'Masonry'
+  pod 'LookinServer', '~> 1.0.0', :configurations => ['Debug']
   
   target 'CRScrollViewLinkageTests' do
     inherit! :search_paths

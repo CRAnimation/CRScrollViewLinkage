@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIScrollView (LBLinkage)
 
-@property (nonatomic, strong) LBLinkageConfig *linkageConfig;
+@property (nonatomic, strong) LBLinkageConfig *oldlinkageConfig;
 
 @end
 

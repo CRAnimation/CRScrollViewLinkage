@@ -29,7 +29,7 @@
         UIPanGestureRecognizer *tmpPanGesture = (UIPanGestureRecognizer *)gestureRecognizer;
         UIScrollView *scrollView = (UIScrollView *)gestureRecognizer.view;
         CGPoint velocity = [tmpPanGesture velocityInView:gestureRecognizer.view];
-        if ([scrollView.linkageConfig.mainLinkageManager refreshType] == LKRefreshForChild) {
+        if ([scrollView.oldlinkageConfig.mainLinkageManager refreshType] == LKRefreshForChild) {
             if (velocity.y > 0) {
                 /// 向下滑
                 if (self.contentOffset.y <= 0) {
@@ -56,7 +56,7 @@
     if ([gestureRecognizer.view isKindOfClass:[UIScrollView class]]
         && [otherGestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
         UIScrollView *mainScrollView = (UIScrollView *)gestureRecognizer.view;
-        LBLinkageConfig *mainConfig = mainScrollView.linkageConfig;
+        LBLinkageConfig *mainConfig = mainScrollView.oldlinkageConfig;
         
         UIScrollView *childScrollView = (UIScrollView *)otherGestureRecognizer.view;
         
@@ -70,9 +70,9 @@
 
             BOOL resVal = [self gestureIsInBothArea:gestureRecognizer];
             if (resVal) {
-                mainScrollView.linkageConfig.mainGestureType = LKGestureForBothScrollView;
+                mainScrollView.oldlinkageConfig.mainGestureType = LKGestureForBothScrollView;
             } else {
-                mainScrollView.linkageConfig.mainGestureType = LKGestureForMainScrollView;
+                mainScrollView.oldlinkageConfig.mainGestureType = LKGestureForMainScrollView;
             }
             
             return resVal;
@@ -88,7 +88,7 @@
 - (BOOL)gestureIsInBothArea:(UIGestureRecognizer *)gestureRecognizer {
     if ([gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)gestureRecognizer.view;
-        CGFloat offsetY = scrollView.linkageConfig.mainTopHeight;
+        CGFloat offsetY = scrollView.oldlinkageConfig.mainTopHeight;
         CGSize contentSize = scrollView.contentSize;
         CGRect targetRect = CGRectMake(0,
                                        offsetY,

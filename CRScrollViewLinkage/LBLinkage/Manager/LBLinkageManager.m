@@ -145,9 +145,9 @@ typedef enum : NSUInteger {
     self.childScrollView = childScrollView;
     CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
     if (childViewHeight == 0) {
-        self.childScrollView.linkageConfig.childHeight = self.mainScrollView.frame.size.height;
+        self.childScrollView.oldlinkageConfig.childHeight = self.mainScrollView.frame.size.height;
     } else {
-        self.childScrollView.linkageConfig.childHeight = childViewHeight;
+        self.childScrollView.oldlinkageConfig.childHeight = childViewHeight;
     }
     [self childScrollViewUpdateTopHeight:tmpTopHeight];
     [self tryConfigLibkageScrollType];
@@ -156,7 +156,7 @@ typedef enum : NSUInteger {
 - (void)childScrollViewUpdateTopHeight:(CGFloat)topHeight {
     if (self.customTopHeight == nil) {
         if (self.mainScrollView) {
-            self.mainScrollView.linkageConfig.mainTopHeight = topHeight;
+            self.mainScrollView.oldlinkageConfig.mainTopHeight = topHeight;
         }
     }
 }
@@ -283,7 +283,7 @@ typedef enum : NSUInteger {
             else if (currentOffSetY >= tmpOffset) {
                 // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
                 // 继续保持为mainScroll
-                if (mainScrollView.linkageConfig.mainGestureType == LKGestureForMainScrollView) {
+                if (mainScrollView.oldlinkageConfig.mainGestureType == LKGestureForMainScrollView) {
                     nil;
                 } else {
                     // 向下滑，此时为临界状态，继续保持为mainScroll
@@ -335,7 +335,7 @@ typedef enum : NSUInteger {
 //            NSLog(@"--5");
             // childRefresh状态下，却只滑了main的私有区域。
             // 并且child offsetY是0，没有滑动，则标识这会是个临界状态（滑得比较猛，自动触发到的childRefresh状态）
-            if (mainScrollView.linkageConfig.mainGestureType == LKGestureForMainScrollView && self.childScrollView.contentOffset.y == 0) {
+            if (mainScrollView.oldlinkageConfig.mainGestureType == LKGestureForMainScrollView && self.childScrollView.contentOffset.y == 0) {
                 self.linkageScrollStatus = LBLinkageScrollStatus_MainScroll;
             } else {
 //                // 因为手势的问题，导致child在连贯的操作中无法拿到手势
@@ -459,8 +459,8 @@ typedef enum : NSUInteger {
 
 #pragma mark - Tool Method
 - (CGFloat)getMainAnchorOffset {
-    CGFloat childHeight = self.childScrollView.linkageConfig.childHeight;
-    CGFloat mainTopHeight = self.mainScrollView.linkageConfig.mainTopHeight;
+    CGFloat childHeight = self.childScrollView.oldlinkageConfig.childHeight;
+    CGFloat mainTopHeight = self.mainScrollView.oldlinkageConfig.mainTopHeight;
     CGFloat mainScrollViewHeight = self.mainScrollView.frame.size.height;
     CGFloat tmpOffset = childHeight + mainTopHeight - mainScrollViewHeight;
     return tmpOffset;
@@ -483,7 +483,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)scrollHoldDetail:(UIScrollView *)scrollView needRelax:(BOOL)needRelax {
-    CGFloat offsetY = scrollView.linkageConfig.holdOffSetY;
+    CGFloat offsetY = scrollView.oldlinkageConfig.holdOffSetY;
     CGFloat currentOffsetY = scrollView.contentOffset.y;
 //    CGFloat delta = 1;
     if (currentOffsetY != offsetY) {
@@ -506,8 +506,8 @@ typedef enum : NSUInteger {
 
 #pragma mark - Setter & Getter
 - (void)setLinkageScrollStatus:(LBLinkageScrollStatus)linkageScrollStatus {
-    LBLinkageConfig *mainConfig = self.mainScrollView.linkageConfig;
-    LBLinkageConfig *childConfig = self.childScrollView.linkageConfig;
+    LBLinkageConfig *mainConfig = self.mainScrollView.oldlinkageConfig;
+    LBLinkageConfig *childConfig = self.childScrollView.oldlinkageConfig;
     
     switch (linkageScrollStatus) {
 
@@ -560,12 +560,12 @@ typedef enum : NSUInteger {
     if (childScrollView != _childScrollView) {
         LBLinkageConfig *config = [LBLinkageConfig new];
         if (_childScrollView != nil) {
-            config = _childScrollView.linkageConfig;
+            config = _childScrollView.oldlinkageConfig;
             [self removeChildObserver];
             [self clearChildNestedView];
         }
         _childScrollView = childScrollView;
-        _childScrollView.linkageConfig = config;
+        _childScrollView.oldlinkageConfig = config;
         [self findChildNestedView];
         [self addChildObserver];
     }
@@ -576,14 +576,14 @@ typedef enum : NSUInteger {
     if (mainScrollView != _mainScrollView) {
         if (_mainScrollView != nil) {
             // 清空旧的
-            _mainScrollView.linkageConfig = [LBLinkageConfig new];
+            _mainScrollView.oldlinkageConfig = [LBLinkageConfig new];
             [self removeMainObserver];
         }
         
         // 生成新的
         _mainScrollView = mainScrollView;
-        _mainScrollView.linkageConfig.isMain = YES;
-        _mainScrollView.linkageConfig.mainLinkageManager = self;
+        _mainScrollView.oldlinkageConfig.isMain = YES;
+        _mainScrollView.oldlinkageConfig.mainLinkageManager = self;
         
         if (self.useLinkageHook) {
             [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
@@ -604,7 +604,7 @@ typedef enum : NSUInteger {
 - (void)setCustomTopHeight:(NSNumber *)customTopHeight {
     _customTopHeight = customTopHeight;
     if (self.mainScrollView) {
-        self.mainScrollView.linkageConfig.mainTopHeight = [customTopHeight floatValue];
+        self.mainScrollView.oldlinkageConfig.mainTopHeight = [customTopHeight floatValue];
     }
 }
 

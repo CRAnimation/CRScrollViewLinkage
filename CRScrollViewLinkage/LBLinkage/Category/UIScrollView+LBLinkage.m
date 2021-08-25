@@ -14,17 +14,17 @@
 
 @implementation UIScrollView (LBLinkage)
 
-- (LBLinkageConfig *)linkageConfig {
+- (LBLinkageConfig *)oldlinkageConfig {
     LBLinkageConfig *config = objc_getAssociatedObject(self, _cmd);
     if (!config) {
         config = [LBLinkageConfig new];
-        self.linkageConfig = config;
+        self.oldlinkageConfig = config;
     }
     return config;
 }
 
-- (void)setLinkageConfig:(LBLinkageConfig *)linkageConfig {
-    objc_setAssociatedObject(self, @selector(linkageConfig), linkageConfig, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setOldLinkageConfig:(LBLinkageConfig *)oldlinkageConfig {
+    objc_setAssociatedObject(self, @selector(oldlinkageConfig), oldlinkageConfig, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end
