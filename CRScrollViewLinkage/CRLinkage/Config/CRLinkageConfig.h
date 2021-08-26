@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CRLinkageDefine.h"
-@class CRLinkageManager;
+@class CRLinkageManagerInternal;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // main专用
 @property (nonatomic, assign) CRGestureType mainGestureType;
-@property (nonatomic, weak) CRLinkageManager *mainLinkageManager;
+@property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
 // child专用
 @property (nonatomic, strong) NSNumber *childTopFixHeight;
@@ -25,8 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // main，child共用
 @property (nonatomic, assign) BOOL isMain;
-//@property (nonatomic, assign) BOOL isCanScroll;
-//@property (nonatomic, assign) CGFloat holdOffSetY;
+@property (nonatomic, assign) BOOL isCanScroll;
+@property (nonatomic, assign) CGFloat holdOffSetY;
 
 @end
 

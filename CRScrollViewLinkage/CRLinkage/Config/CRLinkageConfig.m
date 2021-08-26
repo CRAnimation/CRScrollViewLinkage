@@ -26,8 +26,8 @@
         
         // main，child共用
         self.isMain = NO;
-//        self.isCanScroll = NO;
-//        self.holdOffSetY = 0;
+        self.isCanScroll = NO;
+        self.holdOffSetY = 0;
     }
     return self;
 }

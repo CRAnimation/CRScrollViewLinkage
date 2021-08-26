@@ -20,6 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRLinkageManagerInternal : NSObject
 
 @property (nonatomic, weak) id <CRLinkageManagerInternalDelegate> delegate;
+@property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
+@property (nonatomic, strong, readonly) UIScrollView *childScrollView;
+/**
+ * 自定义滑动时，头部允许滑动的范围高度
+ * 默认：nil，此时会自动根据childScrollView计算。
+ * 如果手动赋值，则不会自动根据childScrollView计算。
+ */
+@property (nonatomic, strong) NSNumber * __nullable customTopHeight;
 
 /// 配置mainScrollView
 /// @param mainScrollView mainScrollView
