@@ -6,42 +6,25 @@
 //
 
 #import "CRLinkageManager.h"
-#import "CRLinkageHookInstanceCook.h"
-#import "CRLinkageConfig.h"
-#import "CRLinkageDefine.h"
+#import "CRLinkageManagerInternal.h"
 
-static NSString * const kContentOffset = @"contentOffset";
-static NSString * const kCenter = @"center";
-
-@interface CRLinkageManager()
+@interface CRLinkageManager() <CRLinkageManagerInternalDelegate>
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
 @property (nonatomic, strong) NSMutableArray *childScrollViews;
 @property (nonatomic, strong) UIScrollView *currentChildScrollView;
-@property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
-@property (nonatomic, assign) BOOL useLinkageHook;
-@property (nonatomic, assign) CRLinkageScrollStatus linkageScrollStatus;
-/// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
-@property (nonatomic, strong) UIView *childNestedView;
+
+@property (nonatomic, strong) CRLinkageManagerInternal *linkageInternal;
 
 @end
 
 @implementation CRLinkageManager
 
-/// init
 - (instancetype)init
-{
-    return [self initWithUseLinkageHook:YES];
-}
-
-/// init
-/// @param useLinkageHook 是否使用默认hook方法（用来hook shouldRecognizeSimultaneouslyWithGestureRecognizer）
-- (instancetype)initWithUseLinkageHook:(BOOL)useLinkageHook
 {
     self = [super init];
     if (self) {
-        self.useLinkageHook = useLinkageHook;
-        self.linkageScrollStatus = CRLinkageScrollStatus_Idle;
+        
     }
     return self;
 }
@@ -50,7 +33,6 @@ static NSString * const kCenter = @"center";
 /// 配置mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
-    [self tryConfigLibkageScrollType];
 }
 
 #pragma mark - 配置childScrollView
@@ -67,12 +49,27 @@ static NSString * const kCenter = @"center";
     [self.childScrollViews addObjectsFromArray:childScrollViews];
 }
 
-/// 尝试初始化libkageScrollType
-- (void)tryConfigLibkageScrollType {
-    if (self.mainScrollView != nil && self.currentChildScrollView != nil && self.linkageScrollStatus == CRLinkageScrollStatus_Idle) {
-        self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+#pragma mark - CRLinkageManagerInternalDelegate
+- (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus {
+    switch (linkageRelayStatus) {
+        case CRLinkageRelayStatus_Idle:
+        {
+            
+        }
+            break;
+        case CRLinkageRelayStatus_ToUpScrollView:
+        {
+            
+        }
+            break;
+        case CRLinkageRelayStatus_ToDownScrollView:
+        {
+            
+        }
+            break;
     }
 }
+
 
 #pragma mark - Setter & Getter
 - (NSArray <UIScrollView *> *)getChildScrollViews {
@@ -85,6 +82,15 @@ static NSString * const kCenter = @"center";
     }
     
     return _childScrollViews;
+}
+
+- (CRLinkageManagerInternal *)linkageInternal {
+    if (!_linkageInternal) {
+        _linkageInternal = [CRLinkageManagerInternal new];
+        _linkageInternal.delegate = self;
+    }
+    
+    return _linkageInternal;
 }
 
 @end

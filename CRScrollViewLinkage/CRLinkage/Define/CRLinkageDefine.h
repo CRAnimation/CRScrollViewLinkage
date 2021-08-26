@@ -37,6 +37,15 @@ typedef enum : NSUInteger {
     CRScrollDir_Down,
 } CRScrollDir;
 
+#pragma mark - CRLinkageRelayStatus
+typedef enum : NSUInteger {
+    // 空状态
+    CRLinkageRelayStatus_Idle,
+    // 扭转给上方的scrollView
+    CRLinkageRelayStatus_ToUpScrollView,
+    // 扭转给下方的scrollView
+    CRLinkageRelayStatus_ToDownScrollView,
+} CRLinkageRelayStatus;
 
 #pragma mark - CRLinkageScrollStatus
 typedef enum : NSUInteger {
