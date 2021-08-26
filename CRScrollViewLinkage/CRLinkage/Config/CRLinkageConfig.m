@@ -16,7 +16,7 @@
     if (self) {
         // main专用
         self.mainGestureType = CRGestureForMainScrollView;
-        self.mainLinkageManager = nil;
+        self.mainLinkageInternal = nil;
         
         // child专用
         self.childTopFixHeight = nil;
