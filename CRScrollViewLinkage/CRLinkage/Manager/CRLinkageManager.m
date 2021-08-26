@@ -7,8 +7,13 @@
 
 #import "CRLinkageManager.h"
 #import "CRLinkageManagerInternal.h"
+#import "CRLinkageConfig.h"
+#import <pthread.h>
 
 @interface CRLinkageManager() <CRLinkageManagerInternalDelegate>
+{
+    pthread_mutex_t _arrayLock;
+}
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
 @property (nonatomic, strong) NSMutableArray *childScrollViews;
@@ -24,7 +29,10 @@
 {
     self = [super init];
     if (self) {
-        
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);
+        pthread_mutex_init(&_arrayLock, &attr);
     }
     return self;
 }
@@ -33,47 +41,115 @@
 /// 配置mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
+    [self.linkageInternal configMainScrollView:mainScrollView];
 }
 
 #pragma mark - 配置childScrollView
+/// 配置childScrollView
+- (void)configCurrentChildScrollView:(UIScrollView *)childScrollView {
+    self.currentChildScrollView = childScrollView;
+    [self.linkageInternal configChildScrollView:childScrollView];
+}
+
+#pragma mark - 添加/删除/重置childScrollView
 - (void)addChildScrollView:(UIScrollView *)childScrollView {
+    pthread_mutex_lock(&_arrayLock);
     [self.childScrollViews addObject:childScrollView];
+    pthread_mutex_unlock(&_arrayLock);
 }
 
 - (void)removeChildScrollView:(UIScrollView *)childScrollView {
+    pthread_mutex_lock(&_arrayLock);
     [self.childScrollViews removeObject:childScrollView];
+    pthread_mutex_unlock(&_arrayLock);
 }
 
 - (void)resetChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews {
+    pthread_mutex_lock(&_arrayLock);
     [self.childScrollViews removeAllObjects];
     [self.childScrollViews addObjectsFromArray:childScrollViews];
+    pthread_mutex_unlock(&_arrayLock);
+}
+
+- (void)clearChildScrollViews {
+    pthread_mutex_lock(&_arrayLock);
+    [self.childScrollViews removeAllObjects];
+    pthread_mutex_unlock(&_arrayLock);
 }
 
 #pragma mark - CRLinkageManagerInternalDelegate
 - (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus {
-    switch (linkageRelayStatus) {
-        case CRLinkageRelayStatus_Idle:
-        {
-            
-        }
-            break;
-        case CRLinkageRelayStatus_ToUpScrollView:
-        {
-            
-        }
-            break;
-        case CRLinkageRelayStatus_ToDownScrollView:
-        {
-            
-        }
-            break;
-    }
+    UIScrollView *newChildScrollView = [self findNextScrollView:linkageRelayStatus currentScrollView:self.currentChildScrollView];
+    [self configCurrentChildScrollView:newChildScrollView];
 }
 
+#pragma mark - Func
+- (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
+    pthread_mutex_lock(&_arrayLock);
+    NSArray *originArray = [self.childScrollViews copy];
+    pthread_mutex_unlock(&_arrayLock);
+    
+    if (linkageRelayStatus == CRLinkageRelayStatus_RemainCurrent || originArray.count == 0) {
+        return currentScrollView;
+    }
+    
+    if (originArray.count == 1) {
+        return originArray[0];
+    }
+    
+    __block UIScrollView *nextScrollView;
+    __block CGFloat minDeltaValue = CGFLOAT_MAX;
+    __block CGFloat minDeltaIndex = 0;
+    CGFloat currentBottom = CGRectGetMaxY(currentScrollView.frame);
+    CGFloat currentTop = CGRectGetMinY(currentScrollView.frame);
+    
+    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (tmpScrollView == currentScrollView) {
+            return;
+        }
+        
+        CGFloat tmpBottom = CGRectGetMaxY(tmpScrollView.frame);
+        CGFloat tmpTop = CGRectGetMinY(tmpScrollView.frame);
+        
+        switch (linkageRelayStatus) {
+            case CRLinkageRelayStatus_RemainCurrent:
+            {
+                nil;
+            }
+                break;
+            case CRLinkageRelayStatus_ToNextUpScrollView:
+            {
+                CGFloat delta = currentBottom - tmpBottom;
+                if (delta > 0 && delta < minDeltaValue) {
+                    minDeltaValue = delta;
+                    nextScrollView = tmpScrollView;
+                    minDeltaIndex = idx;
+                }
+            }
+                break;
+            case CRLinkageRelayStatus_ToNextDownScrollView:
+            {
+                CGFloat delta = tmpTop - currentTop;
+                if (delta > 0 && delta < minDeltaValue) {
+                    minDeltaValue = delta;
+                    nextScrollView = tmpScrollView;
+                    minDeltaIndex = idx;
+                }
+            }
+                break;
+        }
+    }];
+    
+    return nextScrollView;
+}
 
 #pragma mark - Setter & Getter
 - (NSArray <UIScrollView *> *)getChildScrollViews {
-    return [self.childScrollViews copy];
+    pthread_mutex_lock(&_arrayLock);
+    NSArray *tmpArray = [self.childScrollViews copy];
+    pthread_mutex_unlock(&_arrayLock);
+    
+    return tmpArray;
 }
 
 - (NSMutableArray *)childScrollViews {

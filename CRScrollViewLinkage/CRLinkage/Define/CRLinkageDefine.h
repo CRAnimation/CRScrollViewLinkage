@@ -39,12 +39,12 @@ typedef enum : NSUInteger {
 
 #pragma mark - CRLinkageRelayStatus
 typedef enum : NSUInteger {
-    // 空状态
-    CRLinkageRelayStatus_Idle,
+    // 仍然是当前ScrollView
+    CRLinkageRelayStatus_RemainCurrent,
     // 扭转给上方的scrollView
-    CRLinkageRelayStatus_ToUpScrollView,
+    CRLinkageRelayStatus_ToNextUpScrollView,
     // 扭转给下方的scrollView
-    CRLinkageRelayStatus_ToDownScrollView,
+    CRLinkageRelayStatus_ToNextDownScrollView,
 } CRLinkageRelayStatus;
 
 #pragma mark - CRLinkageScrollStatus
