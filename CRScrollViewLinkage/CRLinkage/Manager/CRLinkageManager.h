@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)clearChildScrollViews;
 - (NSArray <UIScrollView *> *)getChildScrollViews;
 
+/// childScrollView发生添加/移除/移动时，需要调用该方法
+- (void)childChanged;
+
 @end
 
 NS_ASSUME_NONNULL_END

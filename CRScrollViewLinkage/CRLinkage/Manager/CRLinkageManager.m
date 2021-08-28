@@ -38,21 +38,22 @@
     return self;
 }
 
-#pragma mark - 配置mainScrollView
+#pragma mark Public
+#pragma mark 配置mainScrollView
 /// 配置mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
     [self.linkageInternal configMainScrollView:mainScrollView];
 }
 
-#pragma mark - 配置childScrollView
+#pragma mark 配置childScrollView
 /// 配置childScrollView
 - (void)configCurrentChildScrollView:(UIScrollView *)childScrollView {
     self.currentChildScrollView = childScrollView;
     [self.linkageInternal configChildScrollView:childScrollView];
 }
 
-#pragma mark - 添加/删除/重置childScrollView
+#pragma mark 添加/删除/重置childScrollView
 - (void)addChildScrollView:(UIScrollView *)childScrollView {
     pthread_mutex_lock(&_arrayLock);
     [self.childScrollViews addObject:childScrollView];
@@ -76,6 +77,23 @@
     pthread_mutex_lock(&_arrayLock);
     [self.childScrollViews removeAllObjects];
     pthread_mutex_unlock(&_arrayLock);
+}
+
+- (void)childChanged {
+    [self clearOrderCache];
+}
+
+#pragma mark - Private
+- (void)clearOrderCache {
+    pthread_mutex_lock(&_arrayLock);
+    NSArray *originArray = [self.childScrollViews copy];
+    pthread_mutex_unlock(&_arrayLock);
+    
+#warning Bear 这里线程安全优化下
+    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+        tmpScrollView.linkageConfig.lastScrollView = nil;
+        tmpScrollView.linkageConfig.nextScrollView = nil;
+    }];
 }
 
 #pragma mark - CRLinkageManagerInternalDelegate
@@ -128,6 +146,7 @@
     CGFloat currentBottom = CGRectGetMaxY(currentScrollView.frame);
     CGFloat currentTop = CGRectGetMinY(currentScrollView.frame);
     
+#warning Bear 这里线程安全优化下
     [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
         if (tmpScrollView == currentScrollView) {
             return;
