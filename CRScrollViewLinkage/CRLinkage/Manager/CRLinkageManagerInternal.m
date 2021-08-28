@@ -49,7 +49,7 @@ static NSString * const kCenter = @"center";
 /// @param mainScrollView mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
-    [self tryConfigLibkageScrollType];
+    [self tryConfigLinkageScrollType];
 }
 
 /// 配置child（默认使用childScrollView的高度）
@@ -72,7 +72,7 @@ static NSString * const kCenter = @"center";
         self.childScrollView.linkageConfig.childHeight = childViewHeight;
     }
     [self childScrollViewUpdateTopHeight:tmpTopHeight];
-    [self tryConfigLibkageScrollType];
+    [self tryConfigLinkageScrollType];
 }
 
 - (void)childScrollViewUpdateTopHeight:(CGFloat)topHeight {
@@ -84,7 +84,7 @@ static NSString * const kCenter = @"center";
 }
 
 /// 尝试初始化libkageScrollType
-- (void)tryConfigLibkageScrollType {
+- (void)tryConfigLinkageScrollType {
     if (self.mainScrollView != nil && self.childScrollView != nil && self.linkageScrollStatus == CRLinkageScrollStatus_Idle) {
         self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
     }

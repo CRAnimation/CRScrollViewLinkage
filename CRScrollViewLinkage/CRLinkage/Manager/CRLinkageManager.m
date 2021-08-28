@@ -8,6 +8,7 @@
 #import "CRLinkageManager.h"
 #import "CRLinkageManagerInternal.h"
 #import "CRLinkageConfig.h"
+#import "UIScrollView+CRLinkage.h"
 #import <pthread.h>
 
 @interface CRLinkageManager() <CRLinkageManagerInternalDelegate>
@@ -16,7 +17,7 @@
 }
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
-@property (nonatomic, strong) NSMutableArray *childScrollViews;
+@property (nonatomic, strong) NSMutableArray <UIScrollView *> *childScrollViews;
 @property (nonatomic, strong) UIScrollView *currentChildScrollView;
 
 @property (nonatomic, strong) CRLinkageManagerInternal *linkageInternal;
@@ -85,6 +86,30 @@
 
 #pragma mark - Func
 - (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
+    /// 先查缓存
+    CRLinkageConfig *linkageConfig = currentScrollView.linkageConfig;
+    switch (linkageRelayStatus) {
+        case CRLinkageRelayStatus_RemainCurrent:
+        {
+            nil;
+        }
+            break;
+        case CRLinkageRelayStatus_ToLastScrollView:
+        {
+            if (linkageConfig.lastScrollView) {
+                return linkageConfig.lastScrollView;
+            }
+        }
+            break;
+        case CRLinkageRelayStatus_ToNextScrollView:
+        {
+            if (linkageConfig.nextScrollView) {
+                return linkageConfig.nextScrollView;
+            }
+        }
+            break;
+    }
+    
     pthread_mutex_lock(&_arrayLock);
     NSArray *originArray = [self.childScrollViews copy];
     pthread_mutex_unlock(&_arrayLock);
@@ -97,7 +122,7 @@
         return originArray[0];
     }
     
-    __block UIScrollView *nextScrollView;
+    __block UIScrollView *resultScrollView;
     __block CGFloat minDeltaValue = CGFLOAT_MAX;
     __block CGFloat minDeltaIndex = 0;
     CGFloat currentBottom = CGRectGetMaxY(currentScrollView.frame);
@@ -117,30 +142,32 @@
                 nil;
             }
                 break;
-            case CRLinkageRelayStatus_ToNextUpScrollView:
+            case CRLinkageRelayStatus_ToLastScrollView:
             {
                 CGFloat delta = currentBottom - tmpBottom;
                 if (delta > 0 && delta < minDeltaValue) {
                     minDeltaValue = delta;
-                    nextScrollView = tmpScrollView;
+                    resultScrollView = tmpScrollView;
                     minDeltaIndex = idx;
+                    linkageConfig.lastScrollView = resultScrollView;
                 }
             }
                 break;
-            case CRLinkageRelayStatus_ToNextDownScrollView:
+            case CRLinkageRelayStatus_ToNextScrollView:
             {
                 CGFloat delta = tmpTop - currentTop;
                 if (delta > 0 && delta < minDeltaValue) {
                     minDeltaValue = delta;
-                    nextScrollView = tmpScrollView;
+                    resultScrollView = tmpScrollView;
                     minDeltaIndex = idx;
+                    linkageConfig.nextScrollView = resultScrollView;
                 }
             }
                 break;
         }
     }];
     
-    return nextScrollView;
+    return resultScrollView;
 }
 
 #pragma mark - Setter & Getter
@@ -152,7 +179,7 @@
     return tmpArray;
 }
 
-- (NSMutableArray *)childScrollViews {
+- (NSMutableArray <UIScrollView *> *)childScrollViews {
     if (!_childScrollViews) {
         _childScrollViews = [NSMutableArray new];
     }

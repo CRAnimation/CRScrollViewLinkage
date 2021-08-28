@@ -22,6 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat childHeight;
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;
+/// 上一个scrollView（类似双向链表的结构）
+@property (nonatomic, weak) UIScrollView *lastScrollView;
+/// 下一个scrollView
+@property (nonatomic, weak) UIScrollView *nextScrollView;
 
 // main，child共用
 @property (nonatomic, assign) BOOL isMain;

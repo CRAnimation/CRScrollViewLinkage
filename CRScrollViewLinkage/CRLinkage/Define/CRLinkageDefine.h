@@ -42,9 +42,9 @@ typedef enum : NSUInteger {
     // 仍然是当前ScrollView
     CRLinkageRelayStatus_RemainCurrent,
     // 扭转给上方的scrollView
-    CRLinkageRelayStatus_ToNextUpScrollView,
+    CRLinkageRelayStatus_ToLastScrollView,
     // 扭转给下方的scrollView
-    CRLinkageRelayStatus_ToNextDownScrollView,
+    CRLinkageRelayStatus_ToNextScrollView,
 } CRLinkageRelayStatus;
 
 #pragma mark - CRLinkageScrollStatus
