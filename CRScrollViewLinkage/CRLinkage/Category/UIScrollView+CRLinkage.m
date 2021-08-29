@@ -7,20 +7,20 @@
 
 #import "UIScrollView+CRLinkage.h"
 #import <objc/runtime.h>
-#import "CRLinkageConfig.h"
+#import "CRLinkageChildConfig.h"
 
 @implementation UIScrollView (CRLinkage)
 
-- (CRLinkageConfig *)linkageConfig {
-    CRLinkageConfig *config = objc_getAssociatedObject(self, _cmd);
+- (CRLinkageChildConfig *)linkageConfig {
+    CRLinkageChildConfig *config = objc_getAssociatedObject(self, _cmd);
     if (!config) {
-        config = [CRLinkageConfig new];
+        config = [CRLinkageChildConfig new];
         self.linkageConfig = config;
     }
     return config;
 }
 
-- (void)setLinkageConfig:(CRLinkageConfig *)linkageConfig {
+- (void)setLinkageConfig:(CRLinkageChildConfig *)linkageConfig {
     objc_setAssociatedObject(self, @selector(linkageConfig), linkageConfig, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

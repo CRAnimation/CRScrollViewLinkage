@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRLinkageConfig : NSObject
+@interface CRLinkageChildConfig : NSObject
 
 /// main专用
 @property (nonatomic, assign) CRGestureType mainGestureType;

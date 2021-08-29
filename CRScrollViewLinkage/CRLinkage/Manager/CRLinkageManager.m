@@ -7,7 +7,7 @@
 
 #import "CRLinkageManager.h"
 #import "CRLinkageManagerInternal.h"
-#import "CRLinkageConfig.h"
+#import "CRLinkageChildConfig.h"
 #import "UIScrollView+CRLinkage.h"
 #import <pthread.h>
 
@@ -105,7 +105,7 @@
 #pragma mark - Func
 - (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
     /// 先查缓存
-    CRLinkageConfig *linkageConfig = currentScrollView.linkageConfig;
+    CRLinkageChildConfig *linkageConfig = currentScrollView.linkageConfig;
     switch (linkageRelayStatus) {
         case CRLinkageRelayStatus_RemainCurrent:
         {

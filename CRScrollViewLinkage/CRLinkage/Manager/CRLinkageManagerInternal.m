@@ -407,8 +407,8 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Setter & Getter
 - (void)setLinkageScrollStatus:(CRLinkageScrollStatus)linkageScrollStatus {
-    CRLinkageConfig *mainConfig = self.mainScrollView.linkageConfig;
-    CRLinkageConfig *childConfig = self.childScrollView.linkageConfig;
+    CRLinkageChildConfig *mainConfig = self.mainScrollView.linkageConfig;
+    CRLinkageChildConfig *childConfig = self.childScrollView.linkageConfig;
     
     switch (linkageScrollStatus) {
 
@@ -459,7 +459,7 @@ static NSString * const kCenter = @"center";
 @synthesize childScrollView = _childScrollView;
 - (void)setChildScrollView:(UIScrollView *)childScrollView {
     if (childScrollView != _childScrollView) {
-        CRLinkageConfig *config = [CRLinkageConfig new];
+        CRLinkageChildConfig *config = [CRLinkageChildConfig new];
         if (_childScrollView != nil) {
             config = _childScrollView.linkageConfig;
             [self removeChildObserver];
@@ -477,7 +477,7 @@ static NSString * const kCenter = @"center";
     if (mainScrollView != _mainScrollView) {
         if (_mainScrollView != nil) {
             // 清空旧的
-            _mainScrollView.linkageConfig = [CRLinkageConfig new];
+            _mainScrollView.linkageConfig = [CRLinkageChildConfig new];
             [self removeMainObserver];
         }
         

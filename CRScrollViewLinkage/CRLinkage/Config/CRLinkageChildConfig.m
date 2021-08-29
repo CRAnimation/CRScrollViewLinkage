@@ -5,10 +5,10 @@
 //  Created by Bear on 2021/8/25.
 //
 
-#import "CRLinkageConfig.h"
+#import "CRLinkageChildConfig.h"
 #import "CRLinkageManager.h"
 
-@implementation CRLinkageConfig
+@implementation CRLinkageChildConfig
 
 - (instancetype)init
 {
