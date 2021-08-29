@@ -21,6 +21,8 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, assign) CRLinkageScrollStatus linkageScrollStatus;
 /// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
 @property (nonatomic, strong) UIView *childNestedView;
+@property (nonatomic, strong) CRLinkageMainConfig *mainConfig;
+@property (nonatomic, strong) CRLinkageChildConfig *childConfig;
 
 @end
 
@@ -168,17 +170,6 @@ static NSString * const kCenter = @"center";
     }
 }
 
-/// 判断方向
-- (CRScrollDir)checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
-    CRScrollDir dir = CRScrollDir_Hold;
-    if (oldOffset < newOffset) {
-        dir = CRScrollDir_Up;
-    }else if (oldOffset > newOffset) {
-        dir = CRScrollDir_Down;
-    }
-    return dir;
-}
-
 #pragma mark - Header/Footer bounce type
 - (CRBounceType)headerBounceType {
     return self.childScrollView.linkageChildConfig.headerBounceType;
@@ -190,7 +181,8 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Process
 - (void)processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
-    CGFloat tmpOffset = self.childScrollView.linkageChildConfig.bestContentOffSet.y;
+    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
+    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
         
@@ -201,7 +193,7 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_MainScroll:
         {
-            
+            [self _processMainScrollWithMainScrollView:mainScrollView oldOffset:oldOffset newOffset:newOffset];
         }
             break;
         case CRLinkageScrollStatus_ChildScroll:
@@ -236,6 +228,42 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_ChildLoadMoreToLimit:
         {}
+            break;
+    }
+}
+
+#pragma mark ProcessMainScroll
+- (void)_processMainScrollWithMainScrollView:(UIScrollView *)mainScrollView
+                                   oldOffset:(CGFloat)oldOffset
+                                   newOffset:(CGFloat)newOffset {
+    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
+    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
+    CGFloat currentOffSetY = mainScrollView.contentOffset.y;
+    BOOL isScrollToChild = NO;
+    switch (scrollDir) {
+        case CRScrollDir_Hold: { nil; } break;
+            
+        /// 往上滑
+        case CRScrollDir_Up: {
+            if (currentOffSetY >= bestOffSetY) {
+                // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
+                // 继续保持为mainScroll
+                isScrollToChild = YES;
+                if (self.childConfig.gestureType == CRGestureForMainScrollView) {
+                    nil;
+                } else {
+                    
+                }
+            }
+        }
+            break;
+            
+        /// 往下滑
+        case CRScrollDir_Down: {
+            if (currentOffSetY <= bestOffSetY) {
+                isScrollToChild = YES;
+            }
+        }
             break;
     }
 }
@@ -348,6 +376,17 @@ static NSString * const kCenter = @"center";
 }
 
 #pragma mark - Tool Method
+/// 判断方向
+- (CRScrollDir)_checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
+    CRScrollDir dir = CRScrollDir_Hold;
+    if (oldOffset < newOffset) {
+        dir = CRScrollDir_Up;
+    }else if (oldOffset > newOffset) {
+        dir = CRScrollDir_Down;
+    }
+    return dir;
+}
+
 - (void)mainHold {
     [self mainHoldNeedRelax:NO];
 }
@@ -385,6 +424,7 @@ static NSString * const kCenter = @"center";
         scrollView.contentOffset = CGPointMake(0, offsetY);
     }
 }
+
 
 #pragma mark - Reset Func
 - (void)updateConfig {
@@ -503,6 +543,14 @@ static NSString * const kCenter = @"center";
 //        self.mainScrollView.linkageConfig.childTopFixHeight = customTopHeight;
 //    }
 //}
+
+- (CRLinkageMainConfig *)mainConfig {
+    return self.mainScrollView.linkageMainConfig;
+}
+
+- (CRLinkageChildConfig *)childConfig {
+    return self.childScrollView.linkageChildConfig;
+}
 
 #pragma mark - Dealloc
 - (void)dealloc {

@@ -307,10 +307,10 @@
 		0983DC2D26D69B8F00E667FF /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				0983DC2826D69B0B00E667FF /* CRLinkageChildConfig.h */,
-				0983DC2926D69B0B00E667FF /* CRLinkageChildConfig.m */,
 				09E1307726DBCF9000805E46 /* CRLinkageMainConfig.h */,
 				09E1307826DBCF9000805E46 /* CRLinkageMainConfig.m */,
+				0983DC2826D69B0B00E667FF /* CRLinkageChildConfig.h */,
+				0983DC2926D69B0B00E667FF /* CRLinkageChildConfig.m */,
 			);
 			path = Config;
 			sourceTree = "<group>";

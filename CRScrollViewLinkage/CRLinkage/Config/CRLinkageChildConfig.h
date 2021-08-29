@@ -18,6 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat childBottomFixHeight;
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;
+
+
+/// 手势滑动类型
+#warning Bear 这里用来表示main上的手势是否允许多个scrollView接收（可以参考原先的代码）
+@property (nonatomic, assign) CRGestureType gestureType;
+
+
 /// child固定类型（第一个child一定是top类型，最后一个child一定是bottom类型）
 @property (nonatomic, assign) CRChildHoldPosition childHoldPosition;
 /// childHoldPosition为customRatio类型时生效。（默认：0.5）
