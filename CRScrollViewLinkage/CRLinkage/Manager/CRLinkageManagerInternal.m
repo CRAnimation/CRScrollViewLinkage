@@ -190,7 +190,7 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Process
 - (void)processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
-    CGFloat tmpOffset = [self getMainAnchorOffset];
+    CGFloat tmpOffset = self.childScrollView.linkageChildConfig.bestContentOffSet.y;
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
         
@@ -348,28 +348,6 @@ static NSString * const kCenter = @"center";
 }
 
 #pragma mark - Tool Method
-- (CGFloat)getMainAnchorOffset {
-    CGRect childFrame = self.childScrollView.frame;
-    CGFloat mainScrollViewHeight = self.mainScrollView.frame.size.height;
-    CGFloat resOffSet = 0;
-    switch (self.childScrollView.linkageChildConfig.childHoldPosition) {
-        case CRChildHoldPosition_Center:
-            resOffSet = CGRectGetMidY(childFrame) - mainScrollViewHeight/2.0;
-            break;
-        case CRChildHoldPosition_Top:
-            resOffSet = CGRectGetMinY(childFrame) - self.childScrollView.linkageChildConfig.childTopFixHeight;
-            break;
-        case CRChildHoldPosition_Bottom:
-            resOffSet = CGRectGetMaxY(childFrame) + self.childScrollView.linkageChildConfig.childBottomFixHeight - mainScrollViewHeight;
-            break;
-        case CRChildHoldPosition_CustomRatio:
-            resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.childScrollView.linkageChildConfig.positionRatio;
-            break;
-    }
-//    self.mainScrollView.contentOffset;
-    return resOffSet;
-}
-
 - (void)mainHold {
     [self mainHoldNeedRelax:NO];
 }
@@ -446,7 +424,7 @@ static NSString * const kCenter = @"center";
             // childScroll: main不能滑，child可以滑动
         case CRLinkageScrollStatus_ChildScroll:
             mainConfig.isCanScroll = NO;
-            mainConfig.holdOffSetY = [self getMainAnchorOffset];
+            mainConfig.holdOffSetY = childConfig.bestContentOffSet.y;
             
             childConfig.isCanScroll = YES;
             break;
