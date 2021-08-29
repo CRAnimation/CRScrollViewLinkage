@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)active;
 - (void)deactive;
 
+- (void)updateConfig;
+
 @end
 
 NS_ASSUME_NONNULL_END

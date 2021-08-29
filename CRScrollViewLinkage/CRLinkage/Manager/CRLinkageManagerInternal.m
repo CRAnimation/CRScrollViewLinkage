@@ -49,7 +49,8 @@ static NSString * const kCenter = @"center";
 /// @param mainScrollView mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
-    [self tryConfigLinkageScrollType];
+    [self _tryConfigLinkageScrollType];
+    [self _tryConfigOffSet];
 }
 
 /// 配置child（默认使用childScrollView的高度）
@@ -67,7 +68,8 @@ static NSString * const kCenter = @"center";
     self.childScrollView = childScrollView;
 //    CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
 //    [self childScrollViewUpdateTopHeight:tmpTopHeight];
-    [self tryConfigLinkageScrollType];
+    [self _tryConfigLinkageScrollType];
+    [self _tryConfigOffSet];
 }
 
 #warning Bear 检查下这个方法是否需要
@@ -80,7 +82,7 @@ static NSString * const kCenter = @"center";
 }
 
 /// 尝试初始化libkageScrollType
-- (void)tryConfigLinkageScrollType {
+- (void)_tryConfigLinkageScrollType {
     if (self.mainScrollView != nil && self.childScrollView != nil && self.linkageScrollStatus == CRLinkageScrollStatus_Idle) {
         self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
     }
@@ -364,6 +366,7 @@ static NSString * const kCenter = @"center";
             resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.childScrollView.linkageChildConfig.positionRatio;
             break;
     }
+//    self.mainScrollView.contentOffset;
     return resOffSet;
 }
 
@@ -402,6 +405,18 @@ static NSString * const kCenter = @"center";
 ////            }
 //        }
         scrollView.contentOffset = CGPointMake(0, offsetY);
+    }
+}
+
+#pragma mark - Reset Func
+- (void)updateConfig {
+    [self _tryConfigOffSet];
+    [self _tryConfigLinkageScrollType];
+}
+
+- (void)_tryConfigOffSet {
+    if (self.childScrollView && self.mainScrollView) {
+        [self.childScrollView.linkageChildConfig caculateMainAnchorOffset:self.mainScrollView];
     }
 }
 
@@ -460,6 +475,7 @@ static NSString * const kCenter = @"center";
 - (void)setChildScrollView:(UIScrollView *)childScrollView {
     if (childScrollView != _childScrollView) {
         CRLinkageChildConfig *config = [CRLinkageChildConfig new];
+        config.currentScrollView = childScrollView;
         if (_childScrollView != nil) {
             config = _childScrollView.linkageChildConfig;
             [self removeChildObserver];
@@ -477,7 +493,9 @@ static NSString * const kCenter = @"center";
     if (mainScrollView != _mainScrollView) {
         if (_mainScrollView != nil) {
             // 清空旧的
-            _mainScrollView.linkageMainConfig = [CRLinkageMainConfig new];
+            CRLinkageMainConfig *config = [CRLinkageMainConfig new];
+            config.mainScrollView = mainScrollView;
+            _mainScrollView.linkageMainConfig = config;
             [self removeMainObserver];
         }
         

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRLinkageMainConfig : NSObject
 
 /// main专用
+@property (nonatomic, weak) UIScrollView *mainScrollView;
 @property (nonatomic, assign) CRGestureType mainGestureType;
 @property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
