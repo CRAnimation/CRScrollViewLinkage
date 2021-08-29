@@ -40,7 +40,7 @@ static NSString * const kCenter = @"center";
     if (self) {
         self.useLinkageHook = useLinkageHook;
         self.linkageScrollStatus = CRLinkageScrollStatus_Idle;
-        self.customTopHeight = nil;
+//        self.customTopHeight = nil;
     }
     return self;
 }
@@ -65,22 +65,18 @@ static NSString * const kCenter = @"center";
 /// @param childViewHeight 指定Child的高度（因为可能childScroll会放在其他容器中，这时需要使用容器高度，尽量保证每次都一样。）
 - (void)configChildScrollView:(UIScrollView *)childScrollView childViewHeight:(CGFloat)childViewHeight {
     self.childScrollView = childScrollView;
-    CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
-    if (childViewHeight == 0) {
-        self.childScrollView.linkageConfig.childHeight = self.mainScrollView.frame.size.height;
-    } else {
-        self.childScrollView.linkageConfig.childHeight = childViewHeight;
-    }
-    [self childScrollViewUpdateTopHeight:tmpTopHeight];
+//    CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
+//    [self childScrollViewUpdateTopHeight:tmpTopHeight];
     [self tryConfigLinkageScrollType];
 }
 
+#warning Bear 检查下这个方法是否需要
 - (void)childScrollViewUpdateTopHeight:(CGFloat)topHeight {
-    if (self.customTopHeight == nil) {
-        if (self.mainScrollView) {
-            self.mainScrollView.linkageConfig.childTopFixHeight = @(topHeight);
-        }
-    }
+//    if (self.customTopHeight == nil) {
+//        if (self.mainScrollView) {
+//            self.mainScrollView.linkageConfig.childTopFixHeight = topHeight;
+//        }
+//    }
 }
 
 /// 尝试初始化libkageScrollType
@@ -165,7 +161,7 @@ static NSString * const kCenter = @"center";
         }
         
         if (object == self.childNestedView) {
-            [self childScrollViewUpdateTopHeight:self.childNestedView.frame.origin.y];
+//            [self childScrollViewUpdateTopHeight:self.childNestedView.frame.origin.y];
         }
     }
 }
@@ -197,10 +193,14 @@ static NSString * const kCenter = @"center";
     switch (self.linkageScrollStatus) {
         
         case CRLinkageScrollStatus_Idle:
-        {}
+        {
+            [self mainHold];
+        }
             break;
         case CRLinkageScrollStatus_MainScroll:
-        {}
+        {
+            
+        }
             break;
         case CRLinkageScrollStatus_ChildScroll:
         {}
@@ -347,11 +347,24 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Tool Method
 - (CGFloat)getMainAnchorOffset {
-    CGFloat childHeight = self.childScrollView.linkageConfig.childHeight;
-    CGFloat mainTopHeight = [self.mainScrollView.linkageConfig.childTopFixHeight floatValue];
+    CGRect childFrame = self.childScrollView.frame;
     CGFloat mainScrollViewHeight = self.mainScrollView.frame.size.height;
-    CGFloat tmpOffset = childHeight + mainTopHeight - mainScrollViewHeight;
-    return tmpOffset;
+    CGFloat resOffSet = 0;
+    switch (self.childScrollView.linkageConfig.childHoldPosition) {
+        case CRChildHoldPosition_Center:
+            resOffSet = CGRectGetMidY(childFrame) - mainScrollViewHeight/2.0;
+            break;
+        case CRChildHoldPosition_Top:
+            resOffSet = CGRectGetMinY(childFrame) - self.childScrollView.linkageConfig.childTopFixHeight;
+            break;
+        case CRChildHoldPosition_Bottom:
+            resOffSet = CGRectGetMaxY(childFrame) + self.childScrollView.linkageConfig.childBottomFixHeight - mainScrollViewHeight;
+            break;
+        case CRChildHoldPosition_CustomRatio:
+            resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.childScrollView.linkageConfig.positionRatio;
+            break;
+    }
+    return resOffSet;
 }
 
 - (void)mainHold {
@@ -489,12 +502,12 @@ static NSString * const kCenter = @"center";
     return _hookInstanceCook;
 }
 
-- (void)setCustomTopHeight:(NSNumber *)customTopHeight {
-    _customTopHeight = customTopHeight;
-    if (self.mainScrollView) {
-        self.mainScrollView.linkageConfig.childTopFixHeight = customTopHeight;
-    }
-}
+//- (void)setCustomTopHeight:(NSNumber *)customTopHeight {
+//    _customTopHeight = customTopHeight;
+//    if (self.mainScrollView) {
+//        self.mainScrollView.linkageConfig.childTopFixHeight = customTopHeight;
+//    }
+//}
 
 #pragma mark - Dealloc
 - (void)dealloc {

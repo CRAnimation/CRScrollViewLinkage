@@ -47,6 +47,18 @@ typedef enum : NSUInteger {
     CRLinkageRelayStatus_ToNextScrollView,
 } CRLinkageRelayStatus;
 
+#pragma mark - CRChildHoldPosition
+typedef enum : NSUInteger {
+    /// 位于mainScrollView剧中位置
+    CRChildHoldPosition_Center,
+    /// 顶部+topFixHeight为准
+    CRChildHoldPosition_Top,
+    /// 底部+bottomFixHeight为准
+    CRChildHoldPosition_Bottom,
+    /// 自定义比例
+    CRChildHoldPosition_CustomRatio,
+} CRChildHoldPosition;
+
 #pragma mark - CRLinkageScrollStatus
 /**
  * main下拉到顶：main.contentOffSet <= child.minY - child.topFixHeight
