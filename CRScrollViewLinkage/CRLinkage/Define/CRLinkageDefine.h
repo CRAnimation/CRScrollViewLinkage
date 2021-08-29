@@ -48,6 +48,12 @@ typedef enum : NSUInteger {
 } CRLinkageRelayStatus;
 
 #pragma mark - CRLinkageScrollStatus
+/**
+ * main下拉到顶：main.contentOffSet <= child.minY - child.topFixHeight
+ * main上拉到底：main.contentOffSet >=  child.maxY + child.bottomHeight - main.height
+ * main真的到顶了：main.contentOffSet <= 0;
+ * main真的到底了：main.contentOffSet >= main.contentSize-main.height;
+ */
 typedef enum : NSUInteger {
     CRLinkageScrollStatus_Idle = 0,
     
@@ -61,23 +67,38 @@ typedef enum : NSUInteger {
     // child.canscroll = NO; hold=0;
 //    CRLinkageScrollStatus_MainDefault,
     
-    // mainScroll: main可以滑动，child不能滑
-    //
-    // InMain
-    // 1,区域内可滑:（0<=value<mainOffsetY）
-    //  nil
-    // 2,继续上滑，滑到顶了，child即将允许滑动：(value>=mainOffsetY)
-    //  next = childScroll
-    //  main.canscroll = NO; hold=mainOffsetY;
-    //  child.canscroll = YES;
-    // 3,还在下拉，两个scrollView都拉到顶了，判断谁能刷新:(value<0)
-    //  根据条件判断
-    //  3.1,next=mainRefresh
-    //      main.canscroll = YES;
-    //      child.canscroll = NO; hold=0;
-    //  3.2,next=childRefresh
-    //      main.canscroll = NO; hold=0;
-    //      child.canscroll = YES;
+    /**
+     * mainScroll: main可以滑动，child不能滑
+     * InMain
+     *  1,区域内可滑
+     *      nil
+     *  2,下拉/上拉
+     *      2.1,main下拉到顶，并且有合适child，child即将允许滑动
+     *          next = childScroll
+     *          main.canscroll = NO; hold=mainOffsetY;
+     *          child.canscroll = YES;
+     *      2.2,child还在下拉，两个scrollView都拉到顶了，判断谁能刷新:(value<0)
+     *          根据条件判断
+     *          2.2.1main真的到顶了
+     *              2.2.1.1,main下拉刷新
+     *                  next=mainRefresh
+     *                  main.canscroll = YES;
+     *                  child.canscroll = NO; hold=0;
+     *                  2.2.1.1.1main下拉到极限
+     *                      next=mainRefreshToLimit
+     *                      再根据条件判断是到-1楼，还是做自定义操作
+     *              2.2.1.2,child下拉刷新
+     *                  next=childRefresh
+     *                  main.canscroll = NO; hold=0;
+     *                  child.canscroll = YES;
+     *                  2.2.1.2.2child下拉到极限
+     *                      等同于（2.2.1.1.1main下拉到极限）
+     *          2.2.2main上面还有空间
+     *              next=mainScroll
+     *              main.canscroll = YES;
+     *              child.canscroll = NO; hold=0;
+     *              (考虑交接给lastScrollView)
+     */
     CRLinkageScrollStatus_MainScroll,
     
     // childScroll: main不能滑，child可以滑动
@@ -101,6 +122,19 @@ typedef enum : NSUInteger {
     //  main.canscroll = YES;
     //  child.canscroll = NO; hold=0;
     CRLinkageScrollStatus_MainRefresh,
+    // main下拉滑到极限了
+    CRLinkageScrollStatus_MainRefreshToLimit,///
+    // main下拉停留在负1楼
+    CRLinkageScrollStatus_MainHoldOnFirstFloor,///
+    
+    // main上拉
+    CRLinkageScrollStatus_MainLoadMore,
+    // main上拉到极限了
+    CRLinkageScrollStatus_MainLoadMoreToLimit,
+    // main上拉停留在阁楼了
+    CRLinkageScrollStatus_MainHoldOnLoft,///
+    
+    
     
     // childRefresh: main不能滑，child可以滑动
     //
@@ -112,6 +146,13 @@ typedef enum : NSUInteger {
     //  main.canscroll = YES;
     //  child.canscroll = NO; hold=0;
     CRLinkageScrollStatus_ChildRefresh,
+    // child下拉滑到极限了
+    CRLinkageScrollStatus_ChildRefreshToLimit,
+    
+    // child上拉
+    CRLinkageScrollStatus_ChildLoadMore,
+    // child上拉到极限了
+    CRLinkageScrollStatus_ChildLoadMoreToLimit,
 } CRLinkageScrollStatus;
 
 @end

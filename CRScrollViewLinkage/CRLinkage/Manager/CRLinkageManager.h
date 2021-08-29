@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// childScrollView发生添加/移除/移动时，需要调用该方法
 - (void)childChanged;
 
+/// 是否生效
+- (void)active;
+- (void)deactive;
+
 @end
 
 NS_ASSUME_NONNULL_END

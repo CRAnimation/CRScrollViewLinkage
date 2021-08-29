@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // child专用
 @property (nonatomic, strong) NSNumber *childTopFixHeight;
+@property (nonatomic, strong) NSNumber *childBottomFixHeight;
 @property (nonatomic, assign) CGFloat childHeight;
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;

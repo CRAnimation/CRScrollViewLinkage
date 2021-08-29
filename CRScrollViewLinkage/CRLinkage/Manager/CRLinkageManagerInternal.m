@@ -195,89 +195,45 @@ static NSString * const kCenter = @"center";
     CGFloat tmpOffset = [self getMainAnchorOffset];
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
-            
-            // idle: 空
+        
         case CRLinkageScrollStatus_Idle:
-//            NSLog(@"--1");
-            [self mainHold];
+        {}
             break;
-            
-            // mainScroll: main可以滑动，child不能滑
         case CRLinkageScrollStatus_MainScroll:
-//            NSLog(@"--2");
-//            NSLog(@"--currentOffSetY:%f", currentOffSetY);
-            // 区域内可滑:（0<=value<tmpOffset）
-            if (currentOffSetY < tmpOffset && currentOffSetY >= 0) {
-                nil;
-            }
-            // 继续上滑，滑到顶了，child即将允许滑动：(value>=tmpOffset)
-            else if (currentOffSetY >= tmpOffset) {
-                // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
-                // 继续保持为mainScroll
-                if (mainScrollView.linkageConfig.mainGestureType == CRGestureForMainScrollView) {
-                    nil;
-                } else {
-                    // 向下滑，此时为临界状态，继续保持为mainScroll
-                    // （在main私有区域中上滑，然后在main&child共有区域立马下滑，会触发）
-                    if ([self checkDirByOldOffset:oldOffset newOffset:newOffset] == CRScrollDir_Down) {
-                        nil;
-                    } else {
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                    }
-                }
-            }
-            // 还在下拉，两个scrollView都拉到顶了，判断谁能刷新:(value<0)
-            else {
-                switch ([self headerBounceType]) {
-                        // 只能main刷新
-                    case CRBounceForMain:
-                        self.linkageScrollStatus = CRLinkageScrollStatus_MainRefresh;
-                        break;
-                        
-                        // 只能child刷新
-                    case CRBounceForChild:
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildRefresh;
-                        break;
-                }
-            }
+        {}
             break;
-            
-            // childScroll: main不能滑，child可以滑动
         case CRLinkageScrollStatus_ChildScroll:
-//            NSLog(@"--3");
-            [self mainHoldNeedRelax:YES];
+        {}
             break;
-            
-            // mainRefresh: main可以滑动，child不能滑
         case CRLinkageScrollStatus_MainRefresh:
-//            NSLog(@"--4");
-            // 区域内可滑:（value<0）
-            if (currentOffSetY < 0) {
-                nil;
-            }
-            // 又开始往上滑了:(value>=0)
-            else {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            }
+        {}
             break;
-            
-            // childRefresh: main不能滑，child可以滑动
+        case CRLinkageScrollStatus_MainRefreshToLimit:
+        {}
+            break;
+        case CRLinkageScrollStatus_MainHoldOnFirstFloor:
+        {}
+            break;
+        case CRLinkageScrollStatus_MainLoadMore:
+        {}
+            break;
+        case CRLinkageScrollStatus_MainLoadMoreToLimit:
+        {}
+            break;
+        case CRLinkageScrollStatus_MainHoldOnLoft:
+        {}
+            break;
         case CRLinkageScrollStatus_ChildRefresh:
-//            NSLog(@"--5");
-            // childRefresh状态下，却只滑了main的私有区域。
-            // 并且child offsetY是0，没有滑动，则标识这会是个临界状态（滑得比较猛，自动触发到的childRefresh状态）
-            if (mainScrollView.linkageConfig.mainGestureType == CRGestureForMainScrollView && self.childScrollView.contentOffset.y == 0) {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            } else {
-//                // 因为手势的问题，导致child在连贯的操作中无法拿到手势
-//                if (self.childScrollView.contentOffset.y == 0) {
-//                    CGFloat newOffSetY = self.childScrollView.contentOffset.y + (newOffset - oldOffset);
-//                    CGPoint newOffset = CGPointMake(self.childScrollView.contentOffset.x, newOffSetY);
-//                    self.childScrollView.contentOffset = newOffset;
-//                } else {
-                    [self mainHold];
-//                }
-            }
+        {}
+            break;
+        case CRLinkageScrollStatus_ChildRefreshToLimit:
+        {}
+            break;
+        case CRLinkageScrollStatus_ChildLoadMore:
+        {}
+            break;
+        case CRLinkageScrollStatus_ChildLoadMoreToLimit:
+        {}
             break;
     }
 }
