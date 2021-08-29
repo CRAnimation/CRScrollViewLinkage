@@ -8,6 +8,7 @@
 #import "CRLinkageManager.h"
 #import "CRLinkageManagerInternal.h"
 #import "CRLinkageChildConfig.h"
+#import "CRLinkageMainConfig.h"
 #import "UIScrollView+CRLinkage.h"
 #import <pthread.h>
 
@@ -91,8 +92,8 @@
     
 #warning Bear 这里线程安全优化下
     [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
-        tmpScrollView.linkageConfig.lastScrollView = nil;
-        tmpScrollView.linkageConfig.nextScrollView = nil;
+        tmpScrollView.linkageChildConfig.lastScrollView = nil;
+        tmpScrollView.linkageChildConfig.nextScrollView = nil;
     }];
 }
 
@@ -105,7 +106,7 @@
 #pragma mark - Func
 - (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
     /// 先查缓存
-    CRLinkageChildConfig *linkageConfig = currentScrollView.linkageConfig;
+    CRLinkageChildConfig *linkageConfig = currentScrollView.linkageChildConfig;
     switch (linkageRelayStatus) {
         case CRLinkageRelayStatus_RemainCurrent:
         {

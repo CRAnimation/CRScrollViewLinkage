@@ -14,9 +14,7 @@
 {
     self = [super init];
     if (self) {
-        // main专用
-        self.mainGestureType = CRGestureForMainScrollView;
-        self.mainLinkageInternal = nil;
+        
         
         // child专用
         self.childTopFixHeight = 0;
@@ -27,7 +25,6 @@
         self.positionRatio = 0.5;
         
         // main，child共用
-        self.isMain = NO;
         self.isCanScroll = NO;
         self.holdOffSetY = 0;
     }

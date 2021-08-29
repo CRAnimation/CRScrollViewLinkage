@@ -179,11 +179,11 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Header/Footer bounce type
 - (CRBounceType)headerBounceType {
-    return self.childScrollView.linkageConfig.headerBounceType;
+    return self.childScrollView.linkageChildConfig.headerBounceType;
 }
 
 - (CRBounceType)footerBounceType {
-    return self.childScrollView.linkageConfig.footerBounceType;
+    return self.childScrollView.linkageChildConfig.footerBounceType;
 }
 
 #pragma mark - Process
@@ -350,18 +350,18 @@ static NSString * const kCenter = @"center";
     CGRect childFrame = self.childScrollView.frame;
     CGFloat mainScrollViewHeight = self.mainScrollView.frame.size.height;
     CGFloat resOffSet = 0;
-    switch (self.childScrollView.linkageConfig.childHoldPosition) {
+    switch (self.childScrollView.linkageChildConfig.childHoldPosition) {
         case CRChildHoldPosition_Center:
             resOffSet = CGRectGetMidY(childFrame) - mainScrollViewHeight/2.0;
             break;
         case CRChildHoldPosition_Top:
-            resOffSet = CGRectGetMinY(childFrame) - self.childScrollView.linkageConfig.childTopFixHeight;
+            resOffSet = CGRectGetMinY(childFrame) - self.childScrollView.linkageChildConfig.childTopFixHeight;
             break;
         case CRChildHoldPosition_Bottom:
-            resOffSet = CGRectGetMaxY(childFrame) + self.childScrollView.linkageConfig.childBottomFixHeight - mainScrollViewHeight;
+            resOffSet = CGRectGetMaxY(childFrame) + self.childScrollView.linkageChildConfig.childBottomFixHeight - mainScrollViewHeight;
             break;
         case CRChildHoldPosition_CustomRatio:
-            resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.childScrollView.linkageConfig.positionRatio;
+            resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.childScrollView.linkageChildConfig.positionRatio;
             break;
     }
     return resOffSet;
@@ -384,7 +384,7 @@ static NSString * const kCenter = @"center";
 }
 
 - (void)scrollHoldDetail:(UIScrollView *)scrollView needRelax:(BOOL)needRelax {
-    CGFloat offsetY = scrollView.linkageConfig.holdOffSetY;
+    CGFloat offsetY = scrollView.linkageChildConfig.holdOffSetY;
     CGFloat currentOffsetY = scrollView.contentOffset.y;
 //    CGFloat delta = 1;
     if (currentOffsetY != offsetY) {
@@ -407,8 +407,8 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Setter & Getter
 - (void)setLinkageScrollStatus:(CRLinkageScrollStatus)linkageScrollStatus {
-    CRLinkageChildConfig *mainConfig = self.mainScrollView.linkageConfig;
-    CRLinkageChildConfig *childConfig = self.childScrollView.linkageConfig;
+    CRLinkageMainConfig *mainConfig = self.mainScrollView.linkageMainConfig;
+    CRLinkageChildConfig *childConfig = self.childScrollView.linkageChildConfig;
     
     switch (linkageScrollStatus) {
 
@@ -461,12 +461,12 @@ static NSString * const kCenter = @"center";
     if (childScrollView != _childScrollView) {
         CRLinkageChildConfig *config = [CRLinkageChildConfig new];
         if (_childScrollView != nil) {
-            config = _childScrollView.linkageConfig;
+            config = _childScrollView.linkageChildConfig;
             [self removeChildObserver];
             [self clearChildNestedView];
         }
         _childScrollView = childScrollView;
-        _childScrollView.linkageConfig = config;
+        _childScrollView.linkageChildConfig = config;
         [self findChildNestedView];
         [self addChildObserver];
     }
@@ -477,14 +477,13 @@ static NSString * const kCenter = @"center";
     if (mainScrollView != _mainScrollView) {
         if (_mainScrollView != nil) {
             // 清空旧的
-            _mainScrollView.linkageConfig = [CRLinkageChildConfig new];
+            _mainScrollView.linkageMainConfig = [CRLinkageMainConfig new];
             [self removeMainObserver];
         }
         
         // 生成新的
         _mainScrollView = mainScrollView;
-        _mainScrollView.linkageConfig.isMain = YES;
-        _mainScrollView.linkageConfig.mainLinkageInternal = self;
+        _mainScrollView.linkageMainConfig.mainLinkageInternal = self;
         
         if (self.useLinkageHook) {
             [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
