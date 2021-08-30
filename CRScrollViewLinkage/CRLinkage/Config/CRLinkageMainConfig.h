@@ -18,6 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CRGestureType mainGestureType;
 @property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
+/// 头部/底部拉动极限
+@property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
+@property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
+
 // main，child共用
 @property (nonatomic, assign) BOOL isCanScroll;
 @property (nonatomic, assign) CGFloat holdOffSetY;

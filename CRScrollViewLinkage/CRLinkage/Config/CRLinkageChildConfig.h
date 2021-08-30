@@ -13,12 +13,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRLinkageChildConfig : NSObject
 
-/// child专用
+/// 头部/尾部固定预留高度
 @property (nonatomic, assign) CGFloat childTopFixHeight;
 @property (nonatomic, assign) CGFloat childBottomFixHeight;
+
+/// 上拉/下拉回弹类型
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;
 
+/// 头部/底部拉动极限
+@property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
+@property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
 
 /// 手势滑动类型
 #warning Bear 这里用来表示main上的手势是否允许多个scrollView接收（可以参考原先的代码）

@@ -215,7 +215,14 @@ static NSString * const kCenter = @"center";
         }
             break;
         case CRLinkageScrollStatus_MainRefreshToLimit:
-        {}
+        {
+            /// 下拉刷新到极限
+            if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
+                                                     scrollViewType:CRScrollViewForMain
+                                                  bouncePostionType:CRBouncePositionForHeader];
+            }
+        }
             break;
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
         {}
@@ -269,6 +276,7 @@ static NSString * const kCenter = @"center";
                     case CRGestureForMainScrollView: {
                         // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
                         // 继续保持为mainScroll
+                        
                         nil;
                     } break;
                     case CRGestureForBothScrollView:
@@ -277,6 +285,9 @@ static NSString * const kCenter = @"center";
                         self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
                     } break;
                 }
+            } else {
+                // 继续保持为mainScroll
+                nil;
             }
         }
             break;
@@ -288,7 +299,13 @@ static NSString * const kCenter = @"center";
                 switch (self.childConfig.gestureType) {
                     case CRGestureForMainScrollView: {
                         // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
-                        // 继续保持为mainScroll
+                        if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
+                            // 超过极限了
+                            self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
+                        } else {
+                            // 继续保持为mainScroll
+                            nil;
+                        }
                         nil;
                     } break;
                     case CRGestureForBothScrollView:
@@ -297,6 +314,9 @@ static NSString * const kCenter = @"center";
                         self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
                     } break;
                 }
+            } else {
+                // 继续保持为mainScroll
+                nil;
             }
         }
             break;

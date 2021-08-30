@@ -15,11 +15,18 @@
     self = [super init];
     if (self) {
         
-        // child专用
+        /// 头部/尾部固定预留高度
         self.childTopFixHeight = 0;
         self.childBottomFixHeight = 0;
+        
+        /// 上拉/下拉回弹类型
         self.headerBounceType = CRBounceForMain;
         self.footerBounceType = CRBounceForMain;
+        
+        /// 头部/底部拉动极限
+        self.headerBounceLimit = nil;
+        self.footerBounceLimit = nil;
+        
         self.childHoldPosition = CRChildHoldPosition_Center;
         self.positionRatio = 0.5;
         

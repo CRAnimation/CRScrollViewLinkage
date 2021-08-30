@@ -15,8 +15,13 @@
     self = [super init];
     if (self) {
         // main专用
+        self.mainScrollView = nil;
         self.mainGestureType = CRGestureForMainScrollView;
         self.mainLinkageInternal = nil;
+        
+        /// 头部/底部拉动极限
+        self.headerBounceLimit = nil;
+        self.footerBounceLimit = nil;
         
         self.isCanScroll = NO;
         self.holdOffSetY = 0;

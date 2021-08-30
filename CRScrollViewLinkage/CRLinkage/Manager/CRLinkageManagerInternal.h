@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 联动器需要扭转状态
 - (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus;
+/// scrollView触发拉动极限
+- (void)scrollViewTriggerLimitWithScrollView:(UIScrollView *)scrollView
+                              scrollViewType:(CRScrollViewType)scrollViewType
+                           bouncePostionType:(CRBouncePostionType)bouncePostionType;
 
 @end
 

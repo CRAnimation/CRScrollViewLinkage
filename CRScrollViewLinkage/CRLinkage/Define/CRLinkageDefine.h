@@ -11,6 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRLinkageDefine : NSObject
 
+
+#pragma mark - CRScrollViewType
+typedef enum : NSUInteger {
+    CRScrollViewForMain,
+    CRScrollViewForChild,
+} CRScrollViewType;
+
 #pragma mark - CRGestureType
 typedef enum : NSUInteger {
     CRGestureForMainScrollView = 0,
@@ -25,6 +32,14 @@ typedef enum : NSUInteger {
     /// 只允许childScrollview上拉/下拉加载更多
     CRBounceForChild,
 } CRBounceType;
+
+#pragma mark - CRBounceType
+typedef enum : NSUInteger {
+    /// 只允许头部下拉刷新
+    CRBouncePositionForHeader,
+    /// 只允许尾部上拉加载更多
+    CRBouncePositionForFooter,
+} CRBouncePostionType;
 
 
 #pragma mark - CRScrollDir
