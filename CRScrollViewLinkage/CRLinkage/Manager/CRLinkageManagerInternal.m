@@ -183,7 +183,8 @@ static NSString * const kCenter = @"center";
 - (void)processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
     CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
-    CGFloat currentOffSetY = mainScrollView.contentOffset.y;
+    CGFloat mainOffSetY = mainScrollView.contentOffset.y;
+    CGFloat childOffSetY = self.childScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
         
         case CRLinkageScrollStatus_Idle:
@@ -197,10 +198,21 @@ static NSString * const kCenter = @"center";
         }
             break;
         case CRLinkageScrollStatus_ChildScroll:
-        {}
+        {
+            // childScroll: main不能滑，child可以滑动
+            [self mainHoldNeedRelax:YES];
+        }
             break;
         case CRLinkageScrollStatus_MainRefresh:
-        {}
+        {
+            if (mainOffSetY < bestOffSetY) {
+                // 这个区域，mainRefresh: main可以滑动，child不能滑
+                nil;
+            } else {
+                // 又开始往上滑了
+                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+            }
+        }
             break;
         case CRLinkageScrollStatus_MainRefreshToLimit:
         {}
@@ -218,7 +230,13 @@ static NSString * const kCenter = @"center";
         {}
             break;
         case CRLinkageScrollStatus_ChildRefresh:
-        {}
+        {
+            if (self.mainConfig.mainGestureType == CRGestureForMainScrollView && childOffSetY == 0) {
+                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+            } else {
+                [self mainHold];
+            }
+        }
             break;
         case CRLinkageScrollStatus_ChildRefreshToLimit:
         {}
@@ -246,13 +264,18 @@ static NSString * const kCenter = @"center";
         /// 往上滑
         case CRScrollDir_Up: {
             if (currentOffSetY >= bestOffSetY) {
-                // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
-                // 继续保持为mainScroll
                 isScrollToChild = YES;
-                if (self.childConfig.gestureType == CRGestureForMainScrollView) {
-                    nil;
-                } else {
-                    
+                switch (self.childConfig.gestureType) {
+                    case CRGestureForMainScrollView: {
+                        // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
+                        // 继续保持为mainScroll
+                        nil;
+                    } break;
+                    case CRGestureForBothScrollView:
+                    {
+                        // 切换为child滑动
+                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                    } break;
                 }
             }
         }
@@ -262,6 +285,18 @@ static NSString * const kCenter = @"center";
         case CRScrollDir_Down: {
             if (currentOffSetY <= bestOffSetY) {
                 isScrollToChild = YES;
+                switch (self.childConfig.gestureType) {
+                    case CRGestureForMainScrollView: {
+                        // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
+                        // 继续保持为mainScroll
+                        nil;
+                    } break;
+                    case CRGestureForBothScrollView:
+                    {
+                        // 切换为child滑动
+                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                    } break;
+                }
             }
         }
             break;
