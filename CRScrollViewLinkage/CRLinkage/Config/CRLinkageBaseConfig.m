@@ -6,6 +6,7 @@
 //
 
 #import "CRLinkageBaseConfig.h"
+#import "CRLinkageManagerInternal.h"
 
 @implementation CRLinkageBaseConfig
 
@@ -14,6 +15,7 @@
     self = [super init];
     if (self) {
         self.currentScrollView = nil;
+        self.linkageInternal = nil;
         
         /// 头部/底部拉动极限
         self.headerBounceLimit = nil;

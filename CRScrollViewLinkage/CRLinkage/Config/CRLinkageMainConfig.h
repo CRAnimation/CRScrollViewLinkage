@@ -8,7 +8,6 @@
 #import "CRLinkageBaseConfig.h"
 #import "CRLinkageDefine.h"
 #import "CRLinkageChildConfig.h"
-@class CRLinkageManagerInternal;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, readonly) CRLinkageChildConfig *currentChildConfig;
 @property (nonatomic, weak, readonly) UIScrollView *currentChildScrollView;
-@property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
 /// 头部允许下拉到负一楼
 @property (nonatomic, assign) BOOL headerAllowToFirstFloor;

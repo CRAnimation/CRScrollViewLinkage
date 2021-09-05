@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "CRLinkageChildConfig.h"
 #import "CRLinkageMainConfig.h"
+#import "UIScrollView+CRLinkage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

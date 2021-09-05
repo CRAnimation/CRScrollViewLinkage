@@ -16,9 +16,6 @@
 {
     self = [super init];
     if (self) {
-        // main专用
-        self.mainLinkageInternal = nil;
-        
         /// 头部允许下拉到负一楼
         self.headerAllowToFirstFloor = NO;
         /// 底部允许上拉到阁楼
@@ -35,7 +32,7 @@
 }
 
 - (UIScrollView *)currentChildScrollView {
-    return self.mainLinkageInternal.childScrollView;
+    return self.linkageInternal.childScrollView;
 }
 
 @end

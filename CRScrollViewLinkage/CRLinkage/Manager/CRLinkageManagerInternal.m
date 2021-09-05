@@ -235,8 +235,8 @@ static NSString * const kCenter = @"center";
 }
 
 - (void)_tryConfigOffSet {
-    if (self.childScrollView && self.mainScrollView) {
-        [self.childScrollView.linkageChildConfig caculateMainAnchorOffset:self.mainScrollView];
+    if (self.childScrollView) {
+        [self.childScrollView.linkageChildConfig caculateMainAnchorOffset];
     }
 }
 
@@ -303,6 +303,7 @@ static NSString * const kCenter = @"center";
         }
         _childScrollView = childScrollView;
         _childScrollView.linkageChildConfig = config;
+        _childScrollView.linkageChildConfig.linkageInternal = self;
         [self findChildNestedView];
         [self addChildObserver];
     }
@@ -322,7 +323,7 @@ static NSString * const kCenter = @"center";
         
         // 生成新的
         _mainScrollView = mainScrollView;
-        _mainScrollView.linkageMainConfig.mainLinkageInternal = self;
+        _mainScrollView.linkageMainConfig.linkageInternal = self;
         
         if (self.useLinkageHook) {
             [self.hookInstanceCook hookScrollViewInstance:mainScrollView];

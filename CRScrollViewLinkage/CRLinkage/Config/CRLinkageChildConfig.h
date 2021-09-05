@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat holdOffSetY;
 
 /// 计算出bestContentOffSet
-- (void)caculateMainAnchorOffset:(UIScrollView *)mainScrollView;
+- (void)caculateMainAnchorOffset;
     
 @end
 

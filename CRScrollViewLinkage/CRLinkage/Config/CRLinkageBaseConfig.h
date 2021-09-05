@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "CRLinkageDefine.h"
 #import "CRLinkageTool.h"
+@class CRLinkageManagerInternal;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// main专用
 @property (nonatomic, weak, nullable) UIScrollView *currentScrollView;
+@property (nonatomic, weak) CRLinkageManagerInternal *linkageInternal;
 
 /// 头部/底部拉动极限
 @property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;

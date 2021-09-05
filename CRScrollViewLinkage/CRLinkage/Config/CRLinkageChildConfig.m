@@ -7,6 +7,7 @@
 
 #import "CRLinkageChildConfig.h"
 #import "CRLinkageManager.h"
+#import "CRLinkageManagerInternal.h"
 
 @implementation CRLinkageChildConfig
 
@@ -44,7 +45,11 @@
 }
 
 /// 计算出bestContentOffSet
-- (void)caculateMainAnchorOffset:(UIScrollView *)mainScrollView {
+- (void)caculateMainAnchorOffset {
+    UIScrollView *mainScrollView = self.linkageInternal.mainScrollView;
+    if (!mainScrollView) {
+        return;
+    }
     CGRect childFrame = self.currentScrollView.frame;
     CGFloat mainScrollViewHeight = mainScrollView.frame.size.height;
     CGFloat resOffSet = 0;
@@ -63,6 +68,13 @@
             break;
     }
     self.bestContentOffSet = CGPointMake(0, resOffSet);
+}
+
+- (void)setChildHoldPosition:(CRChildHoldPosition)childHoldPosition {
+    if (_childHoldPosition != childHoldPosition) {
+        _childHoldPosition = childHoldPosition;
+        [self caculateMainAnchorOffset];
+    }
 }
 
 @end
