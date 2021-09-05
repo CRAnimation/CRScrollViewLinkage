@@ -9,6 +9,8 @@
 #import "CRLinkageHookInstanceCook.h"
 #import "UIScrollView+CRLinkage.h"
 #import "CRLinkageTool.h"
+#import "CRLinkageManagerInternal+Child.h"
+#import "CRLinkageManagerInternal+Main.h"
 
 static NSString * const kContentOffset = @"contentOffset";
 static NSString * const kCenter = @"center";
@@ -19,11 +21,8 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, strong, readwrite) UIScrollView *childScrollView;
 @property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 @property (nonatomic, assign) BOOL useLinkageHook;
-@property (nonatomic, assign) CRLinkageScrollStatus linkageScrollStatus;
 /// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
 @property (nonatomic, strong) UIView *childNestedView;
-@property (nonatomic, strong) CRLinkageMainConfig *mainConfig;
-@property (nonatomic, strong) CRLinkageChildConfig *childConfig;
 
 @end
 
@@ -152,9 +151,9 @@ static NSString * const kCenter = @"center";
         }
         
         if (tmpScrollView == self.mainScrollView) {
-            [self processMain:self.mainScrollView oldOffset:oldOffset newOffset:newOffset];
+            [self _processMain:self.mainScrollView oldOffset:oldOffset newOffset:newOffset];
         } else if (object == self.childScrollView) {
-            [self processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
+            [self _processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
         }
     } else if ([keyPath isEqualToString:kCenter]) {
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
@@ -171,435 +170,10 @@ static NSString * const kCenter = @"center";
     }
 }
 
-#pragma mark - Header/Footer bounce type
-- (CRBounceType)headerBounceType {
-    return self.childScrollView.linkageChildConfig.headerBounceType;
-}
-
-- (CRBounceType)footerBounceType {
-    return self.childScrollView.linkageChildConfig.footerBounceType;
-}
-
-#pragma mark ProcessMainScroll
-- (void)processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
-    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
-    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
-    CGFloat mainOffSetY = mainScrollView.contentOffset.y;
-    CGFloat childOffSetY = self.childScrollView.contentOffset.y;
-    switch (self.linkageScrollStatus) {
-        
-        case CRLinkageScrollStatus_Idle:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_Idle"];
-            [self mainHold];
-        }
-            break;
-        case CRLinkageScrollStatus_MainScroll:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainScroll"];
-            [self _processMainScrollWithMainScrollView:mainScrollView oldOffset:oldOffset newOffset:newOffset];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildScroll:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildScroll"];
-            // childScroll: main不能滑，child可以滑动
-            [self mainHoldNeedRelax:YES];
-        }
-            break;
-        case CRLinkageScrollStatus_MainRefresh:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainRefresh"];
-            if (mainOffSetY < bestOffSetY) {
-                // 这个区域，mainRefresh: main可以滑动，child不能滑
-                nil;
-            } else {
-                // 又开始往上滑了
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_MainRefreshToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
-            /// 下拉刷新到极限
-            if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
-                [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
-                                                     scrollViewType:CRScrollViewForMain
-                                                  bouncePostionType:CRBouncePositionToHeaderLimit];
-            }
-            
-            /// 头部允许下拉到负一楼
-            if (self.mainConfig.headerAllowToFirstFloor) {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainHoldOnFirstFloor;
-                [self autoScrollToFirstFloor];
-            }
-            /// 头部不允许下拉到负一楼
-            else {
-                /// 状态重置到初始状态
-                self.linkageScrollStatus = CRLinkageScrollStatus_Idle;
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_MainHoldOnFirstFloor:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
-            switch (scrollDir) {
-                case CRScrollDir_Hold: { nil; } break;
-                case CRScrollDir_Up:
-                {
-#warning Bear 这里要结合child一起处理
-                }
-                    break;
-                case CRScrollDir_Down:
-                {
-                    /// 下拉不再处理。固定在这个位置
-                    [self mainHold];
-                }
-                    break;
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_MainLoadMore:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainLoadMore"];
-            if (mainOffSetY < bestOffSetY) {
-                // 这个区域，mainRefresh: main可以滑动，child不能滑
-                nil;
-            } else {
-                // 又开始往上滑了
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_MainLoadMoreToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainHoldOnLoft:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildRefresh:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefresh"];
-            if (self.childConfig.gestureType == CRGestureForMainScrollView && childOffSetY == 0) {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            } else {
-                [self mainHold];
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_ChildRefreshToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildLoadMore:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMore"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildLoadMoreToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];
-        }
-            break;
-    }
-}
-
-#pragma mark ProcessMainScroll Detail
-- (void)_processMainScrollWithMainScrollView:(UIScrollView *)mainScrollView
-                                   oldOffset:(CGFloat)oldOffset
-                                   newOffset:(CGFloat)newOffset {
-    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
-    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
-    CGFloat currentOffSetY = mainScrollView.contentOffset.y;
-    BOOL isScrollToChild = NO;
-    switch (scrollDir) {
-        case CRScrollDir_Hold: { nil; } break;
-            
-        /// 往上滑
-        case CRScrollDir_Up: {
-            if (currentOffSetY >= bestOffSetY) {
-                isScrollToChild = YES;
-                switch (self.childConfig.gestureType) {
-                    case CRGestureForMainScrollView: {
-                        // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
-                        // 继续保持为mainScroll
-                        
-                        nil;
-                    } break;
-                    case CRGestureForBothScrollView:
-                    {
-                        // 切换为child滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                    } break;
-                }
-            } else {
-                // 继续保持为mainScroll
-                nil;
-            }
-        }
-            break;
-            
-        /// 往下滑
-        case CRScrollDir_Down: {
-            if (currentOffSetY <= bestOffSetY) {
-                isScrollToChild = YES;
-                switch (self.childConfig.gestureType) {
-                    case CRGestureForMainScrollView: {
-                        // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
-                        if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
-                            // 超过极限了
-                            self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
-                        } else {
-                            // 继续保持为mainScroll
-                            nil;
-                        }
-                        nil;
-                    } break;
-                    case CRGestureForBothScrollView:
-                    {
-                        // 切换为child滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                    } break;
-                }
-            } else {
-                // 继续保持为mainScroll
-                nil;
-            }
-        }
-            break;
-    }
-}
-
-#pragma mark 自动滑到负1楼
-/// main下拉超过极限，自动滑到负1楼
-- (void)autoScrollToLoft {
-    CGFloat bestMainOffSetY = 0 - CGRectGetHeight(self.mainScrollView.frame);
-    [self autoScrollToContentOffSetY:bestMainOffSetY];
-}
-
-#pragma mark 自动滑到阁楼
-/// main上拉超过极限，自动滑到阁楼
-- (void)autoScrollToFirstFloor {
-    CGFloat bestMainOffSetY = self.mainScrollView.contentSize.height;
-    [self autoScrollToContentOffSetY:bestMainOffSetY];
-    if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
-        [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
-                                             scrollViewType:CRScrollViewForMain
-                                          bouncePostionType:CRBouncePositionOverHeaderLimit];
-    }
-}
-
-- (void)autoScrollToContentOffSetY:(CGFloat)contentOffSetY {
-    CGFloat bestMainOffSetY = contentOffSetY;
-    CGFloat currentMainOffSetY = self.mainScrollView.contentOffset.y;
-    if (currentMainOffSetY != bestMainOffSetY) {
-        CGPoint tmpContentOffSet = self.mainScrollView.contentOffset;
-        tmpContentOffSet.y = bestMainOffSetY;
-        [self.mainScrollView setContentOffset:tmpContentOffSet animated:YES];
-    }
-}
-
+#warning Bear 这里后面查一下是不是功能和已有方法重复了
 - (BOOL)checkScrollViewIsTopBottom:(UIScrollView *)scrollView {
     BOOL scrollViewIsToBottom = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.size.height <= 0;
     return scrollViewIsToBottom;
-}
-
-- (void)processChild:(UIScrollView *)childScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
-    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
-    CGFloat currentOffSetY = childScrollView.contentOffset.y;
-    switch (self.linkageScrollStatus) {
-        case CRLinkageScrollStatus_Idle:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_Idle"];
-            [self childHold];
-        }
-            break;
-            
-            // mainScroll: main可以滑动，child不能滑
-        case CRLinkageScrollStatus_MainScroll:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainScroll"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildScroll:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildScroll"];
-            switch (scrollDir) {
-                case CRScrollDir_Hold: { nil; } break;
-                case CRScrollDir_Up:
-                {
-                    if ([self.childConfig isScrollOverHeader]) {
-                        // 拉到头了，切换为main滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-                    } else {
-                        // 区域内可滑:（value>=0）
-                        nil;
-                    }
-                }
-                    break;
-                case CRScrollDir_Down:
-                {
-                    
-                }
-                    break;
-            }
-        }
-            break;
-        case CRLinkageScrollStatus_MainRefresh:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefresh"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainRefreshToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainHoldOnFirstFloor:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainLoadMore:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMore"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainLoadMoreToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
-        }
-            break;
-        case CRLinkageScrollStatus_MainHoldOnLoft:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildRefresh:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefresh"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildRefreshToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildLoadMore:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMore"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildLoadMoreToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];
-        }
-            break;
-    }
-    switch (self.linkageScrollStatus) {
-
-        case CRLinkageScrollStatus_Idle:
-            [self childHold];
-            break;
-            
-            // mainScroll: main可以滑动，child不能滑
-        case CRLinkageScrollStatus_MainScroll:
-#warning Bear 这里的逻辑都再过一下
-            if ([self headerBounceType] == CRBounceForChild) {
-                // 刷新类型为child，mainContentOffset==0
-                if (self.mainScrollView.contentOffset.y == 0) {
-                    if (newOffset < 0) {
-                        // 尝试向下滑，则切换为childRefresh
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildRefresh;
-                    } else if (newOffset > 0) {
-                        enum TmpScrollType {
-                            TmpScrollTypeMain,
-                            TmpScrollTypeChild,
-                        };
-                        enum TmpScrollType tmpScrollType = TmpScrollTypeMain;
-                        BOOL mainScrollViewIsToBottom = [self checkScrollViewIsTopBottom:self.mainScrollView];
-                        BOOL childScrollViewIsToBottom = [self checkScrollViewIsTopBottom:self.childScrollView];
-                        
-                        // 向上
-                        if (self.mainScrollView.scrollEnabled == NO
-                            || self.mainScrollView.userInteractionEnabled == NO) {
-                            // main无法滑动，切换为childScroll
-                            tmpScrollType = TmpScrollTypeChild;
-                        } else if (self.childScrollView.scrollEnabled == NO
-                                   || self.childScrollView.userInteractionEnabled == NO) {
-                            // main可以滑动
-                            tmpScrollType = TmpScrollTypeMain;
-                        } else {
-                            // main,child都滑倒底了
-                            if (mainScrollViewIsToBottom && childScrollViewIsToBottom) {
-                                switch ([self footerBounceType]) {
-                                    case CRBounceForMain: { tmpScrollType = TmpScrollTypeMain; } break;
-                                    case CRBounceForChild: { tmpScrollType = TmpScrollTypeChild; } break;
-                                }
-                            } else if (mainScrollViewIsToBottom) {
-                                tmpScrollType = TmpScrollTypeChild;
-                            } else {
-                                tmpScrollType = TmpScrollTypeMain;
-                            }
-                        }
-                        
-                        switch (tmpScrollType) {
-                            case TmpScrollTypeMain:
-                                // main可以滑动
-                                [self childHold];
-                                break;
-                            case TmpScrollTypeChild:
-                                // main无法滑动，切换为childScroll
-                                self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                                break;
-                        }
-                    } else {
-                        [self childHold];
-                    }
-                } else {
-                    [self childHold];
-                }
-            } else {
-                // 向下滑，此时为临界状态，继续保持为mainScroll
-                [self childHold];
-            }
-            break;
-            
-            // childScroll: main不能滑，child可以滑动
-        case CRLinkageScrollStatus_ChildScroll:
-            // 区域内可滑:（value>=0）
-            if (currentOffSetY >= 0) {
-                nil;
-            }
-            // 拉到头了，切换为main滑动:(value<0)
-            else {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            }
-            break;
-            
-            // mainRefresh: main可以滑动，child不能滑
-        case CRLinkageScrollStatus_MainRefresh:
-            [self childHold];
-            break;
-            
-            // childRefresh: main不能滑，child可以滑动
-        case CRLinkageScrollStatus_ChildRefresh:
-            // 区域内可滑:（value<0）
-            if (currentOffSetY < 0) {
-                nil;
-            }
-            // 又开始往上滑了:(value>=0)
-            else {
-                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-            }
-            break;
-    }
 }
 
 #pragma mark - Tool Method
@@ -614,6 +188,7 @@ static NSString * const kCenter = @"center";
     return dir;
 }
 
+#pragma mark Hold
 - (void)mainHold {
     [self mainHoldNeedRelax:NO];
 }
@@ -778,6 +353,15 @@ static NSString * const kCenter = @"center";
 
 - (CRLinkageChildConfig *)childConfig {
     return self.childScrollView.linkageChildConfig;
+}
+
+#pragma mark - Header/Footer bounce type
+- (CRBounceType)headerBounceType {
+    return self.childScrollView.linkageChildConfig.headerBounceType;
+}
+
+- (CRBounceType)footerBounceType {
+    return self.childScrollView.linkageChildConfig.footerBounceType;
 }
 
 #pragma mark - Dealloc
