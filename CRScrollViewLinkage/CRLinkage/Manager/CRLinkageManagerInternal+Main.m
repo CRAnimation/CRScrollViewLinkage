@@ -74,20 +74,12 @@
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
-            switch (scrollDir) {
-                case CRScrollDir_Hold: { nil; } break;
-                case CRScrollDir_Up:
-                {
+            [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
 #warning Bear 这里要结合child一起处理
-                }
-                    break;
-                case CRScrollDir_Down:
-                {
-                    /// 下拉不再处理。固定在这个位置
-                    [self mainHold];
-                }
-                    break;
-            }
+            } downBlock:^{
+                /// 下拉不再处理。固定在这个位置
+                [self mainHold];
+            }];
         }
             break;
         case CRLinkageScrollStatus_MainLoadMore:
@@ -137,63 +129,52 @@
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
     CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
-    BOOL isScrollToChild = NO;
-    switch (scrollDir) {
-        case CRScrollDir_Hold: { nil; } break;
-            
+    [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
         /// 往上滑
-        case CRScrollDir_Up: {
-            if (currentOffSetY >= bestOffSetY) {
-                isScrollToChild = YES;
-                switch (self.childConfig.gestureType) {
-                    case CRGestureForMainScrollView: {
-                        // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
-                        // 继续保持为mainScroll
-                        
-                        nil;
-                    } break;
-                    case CRGestureForBothScrollView:
-                    {
-                        // 切换为child滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                    } break;
-                }
-            } else {
-                // 继续保持为mainScroll
-                nil;
+        if (currentOffSetY >= bestOffSetY) {
+            switch (self.childConfig.gestureType) {
+                case CRGestureForMainScrollView: {
+                    // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
+                    // 继续保持为mainScroll
+                    
+                    nil;
+                } break;
+                case CRGestureForBothScrollView:
+                {
+                    // 切换为child滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                } break;
             }
+        } else {
+            // 继续保持为mainScroll
+            nil;
         }
-            break;
-            
+    } downBlock:^{
         /// 往下滑
-        case CRScrollDir_Down: {
-            if (currentOffSetY <= bestOffSetY) {
-                isScrollToChild = YES;
-                switch (self.childConfig.gestureType) {
-                    case CRGestureForMainScrollView: {
-                        // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
-                        if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
-                            // 超过极限了
-                            self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
-                        } else {
-                            // 继续保持为mainScroll
-                            nil;
-                        }
+        if (currentOffSetY <= bestOffSetY) {
+            switch (self.childConfig.gestureType) {
+                case CRGestureForMainScrollView: {
+                    // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
+                    if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
+                        // 超过极限了
+                        self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
+                    } else {
+                        // 继续保持为mainScroll
                         nil;
-                    } break;
-                    case CRGestureForBothScrollView:
-                    {
-                        // 切换为child滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
-                    } break;
-                }
-            } else {
-                // 继续保持为mainScroll
-                nil;
+                    }
+                    nil;
+                } break;
+                case CRGestureForBothScrollView:
+                {
+                    // 切换为child滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                } break;
             }
+        } else {
+            // 继续保持为mainScroll
+            nil;
         }
-            break;
-    }
+    }];
 }
 
 #pragma mark 自动滑到负1楼
