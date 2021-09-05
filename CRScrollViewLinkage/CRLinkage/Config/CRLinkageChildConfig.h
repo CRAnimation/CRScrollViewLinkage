@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CRBounceType footerBounceType;
 
 /// 头部/底部拉动极限
-@property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
-@property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
+@property (nonatomic, strong) NSNumber *headerBounceLimit;
+@property (nonatomic, strong) NSNumber *footerBounceLimit;
 
 /// 手势滑动类型
 @property (nonatomic, assign) CRGestureType gestureType;
@@ -52,9 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset:(UIScrollView *)mainScrollView;
-- (BOOL)isScrollOverTop;
-- (BOOL)isScrollOverBottom;
 
+#pragma mark - Scroll Over Check
+- (BOOL)isScrollOverHeader;
+- (BOOL)isScrollOverHeaderLimit;
+- (BOOL)isScrollOverFooter;
+- (BOOL)isScrollOverFooterLimit;
+    
 @end
 
 NS_ASSUME_NONNULL_END

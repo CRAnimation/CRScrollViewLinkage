@@ -44,7 +44,7 @@
                     case CRBounceForChild:
                     {
                         /// 向下滑
-                        if ([mainConfig isScrollOverTop]) {
+                        if ([mainConfig isScrollOverHeader]) {
                             /// main到顶了，不接收该手势，让child接收。
                             /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到顶的情况下，停止一会。无法对child直接下拉刷新。）
                             return NO;
@@ -62,7 +62,7 @@
                     case CRBounceForChild:
                     {
                         /// 向上滑
-                        if ([mainConfig isScrollOverBottom]) {
+                        if ([mainConfig isScrollOverFooter]) {
                             /// main到底了，不接收该手势，让child接收。
                             /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到底的情况下，停止一会。无法对child直接上拉加载更多。）
                             return NO;

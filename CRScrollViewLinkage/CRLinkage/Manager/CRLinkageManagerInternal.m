@@ -8,6 +8,7 @@
 #import "CRLinkageManagerInternal.h"
 #import "CRLinkageHookInstanceCook.h"
 #import "UIScrollView+CRLinkage.h"
+#import "CRLinkageTool.h"
 
 static NSString * const kContentOffset = @"contentOffset";
 static NSString * const kCenter = @"center";
@@ -179,7 +180,7 @@ static NSString * const kCenter = @"center";
     return self.childScrollView.linkageChildConfig.footerBounceType;
 }
 
-#pragma mark - Process
+#pragma mark ProcessMainScroll
 - (void)processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
     CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
@@ -189,22 +190,26 @@ static NSString * const kCenter = @"center";
         
         case CRLinkageScrollStatus_Idle:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_Idle"];
             [self mainHold];
         }
             break;
         case CRLinkageScrollStatus_MainScroll:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainScroll"];
             [self _processMainScrollWithMainScrollView:mainScrollView oldOffset:oldOffset newOffset:newOffset];
         }
             break;
         case CRLinkageScrollStatus_ChildScroll:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildScroll"];
             // childScroll: main不能滑，child可以滑动
             [self mainHoldNeedRelax:YES];
         }
             break;
         case CRLinkageScrollStatus_MainRefresh:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainRefresh"];
             if (mainOffSetY < bestOffSetY) {
                 // 这个区域，mainRefresh: main可以滑动，child不能滑
                 nil;
@@ -216,6 +221,7 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_MainRefreshToLimit:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
             /// 下拉刷新到极限
             if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
                 [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
@@ -237,6 +243,7 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
             switch (scrollDir) {
                 case CRScrollDir_Hold: { nil; } break;
                 case CRScrollDir_Up:
@@ -255,6 +262,7 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_MainLoadMore:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainLoadMore"];
             if (mainOffSetY < bestOffSetY) {
                 // 这个区域，mainRefresh: main可以滑动，child不能滑
                 nil;
@@ -265,13 +273,18 @@ static NSString * const kCenter = @"center";
         }
             break;
         case CRLinkageScrollStatus_MainLoadMoreToLimit:
-        {}
+        {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
+        }
             break;
         case CRLinkageScrollStatus_MainHoldOnLoft:
-        {}
+        {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
+        }
             break;
         case CRLinkageScrollStatus_ChildRefresh:
         {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefresh"];
             if (self.childConfig.gestureType == CRGestureForMainScrollView && childOffSetY == 0) {
                 self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             } else {
@@ -280,18 +293,24 @@ static NSString * const kCenter = @"center";
         }
             break;
         case CRLinkageScrollStatus_ChildRefreshToLimit:
-        {}
+        {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
+        }
             break;
         case CRLinkageScrollStatus_ChildLoadMore:
-        {}
+        {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMore"];
+        }
             break;
         case CRLinkageScrollStatus_ChildLoadMoreToLimit:
-        {}
+        {
+            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];
+        }
             break;
     }
 }
 
-#pragma mark ProcessMainScroll
+#pragma mark ProcessMainScroll Detail
 - (void)_processMainScrollWithMainScrollView:(UIScrollView *)mainScrollView
                                    oldOffset:(CGFloat)oldOffset
                                    newOffset:(CGFloat)newOffset {
@@ -392,7 +411,97 @@ static NSString * const kCenter = @"center";
 }
 
 - (void)processChild:(UIScrollView *)childScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
+    CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
     CGFloat currentOffSetY = childScrollView.contentOffset.y;
+    switch (self.linkageScrollStatus) {
+        case CRLinkageScrollStatus_Idle:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_Idle"];
+            [self childHold];
+        }
+            break;
+            
+            // mainScroll: main可以滑动，child不能滑
+        case CRLinkageScrollStatus_MainScroll:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainScroll"];
+        }
+            break;
+        case CRLinkageScrollStatus_ChildScroll:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildScroll"];
+            switch (scrollDir) {
+                case CRScrollDir_Hold: { nil; } break;
+                case CRScrollDir_Up:
+                {
+                    if ([self.childConfig isScrollOverHeader]) {
+                        // 拉到头了，切换为main滑动
+                        self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                    } else {
+                        // 区域内可滑:（value>=0）
+                        nil;
+                    }
+                }
+                    break;
+                case CRScrollDir_Down:
+                {
+                    
+                }
+                    break;
+            }
+        }
+            break;
+        case CRLinkageScrollStatus_MainRefresh:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefresh"];
+        }
+            break;
+        case CRLinkageScrollStatus_MainRefreshToLimit:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
+        }
+            break;
+        case CRLinkageScrollStatus_MainHoldOnFirstFloor:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
+        }
+            break;
+        case CRLinkageScrollStatus_MainLoadMore:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMore"];
+        }
+            break;
+        case CRLinkageScrollStatus_MainLoadMoreToLimit:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
+        }
+            break;
+        case CRLinkageScrollStatus_MainHoldOnLoft:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
+        }
+            break;
+        case CRLinkageScrollStatus_ChildRefresh:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefresh"];
+        }
+            break;
+        case CRLinkageScrollStatus_ChildRefreshToLimit:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
+        }
+            break;
+        case CRLinkageScrollStatus_ChildLoadMore:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMore"];
+        }
+            break;
+        case CRLinkageScrollStatus_ChildLoadMoreToLimit:
+        {
+            [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];
+        }
+            break;
+    }
     switch (self.linkageScrollStatus) {
 
         case CRLinkageScrollStatus_Idle:
