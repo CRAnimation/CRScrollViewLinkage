@@ -36,10 +36,8 @@ typedef enum : NSUInteger {
 #pragma mark - CRBounceType
 typedef enum : NSUInteger {
     /// 只允许头部下拉刷新
-    CRBouncePositionToHeaderLimit,
     CRBouncePositionOverHeaderLimit,
     /// 只允许尾部上拉加载更多
-    CRBouncePositionToFooterLimit,
     CRBouncePositionOverFooterLimit,
 } CRBouncePostionType;
 
@@ -175,13 +173,8 @@ typedef enum : NSUInteger {
     //  main.canscroll = YES;
     //  child.canscroll = NO; hold=0;
     CRLinkageScrollStatus_ChildRefresh,
-    // child下拉滑到极限了
-    CRLinkageScrollStatus_ChildRefreshToLimit,
-    
     // child上拉
     CRLinkageScrollStatus_ChildLoadMore,
-    // child上拉到极限了
-    CRLinkageScrollStatus_ChildLoadMoreToLimit,
 } CRLinkageScrollStatus;
 
 @end

@@ -56,7 +56,7 @@
             if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
                 [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
                                                      scrollViewType:CRScrollViewForMain
-                                                  bouncePostionType:CRBouncePositionToHeaderLimit];
+                                                  bouncePostionType:CRBouncePositionOverHeaderLimit];
             }
             
             /// 头部允许下拉到负一楼
@@ -122,19 +122,9 @@
             }
         }
             break;
-        case CRLinkageScrollStatus_ChildRefreshToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
-        }
-            break;
         case CRLinkageScrollStatus_ChildLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMore"];
-        }
-            break;
-        case CRLinkageScrollStatus_ChildLoadMoreToLimit:
-        {
-            [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];
         }
             break;
     }
