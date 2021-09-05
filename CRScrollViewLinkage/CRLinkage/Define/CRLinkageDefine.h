@@ -36,9 +36,11 @@ typedef enum : NSUInteger {
 #pragma mark - CRBounceType
 typedef enum : NSUInteger {
     /// 只允许头部下拉刷新
-    CRBouncePositionForHeader,
+    CRBouncePositionToHeaderLimit,
+    CRBouncePositionOverHeaderLimit,
     /// 只允许尾部上拉加载更多
-    CRBouncePositionForFooter,
+    CRBouncePositionToFooterLimit,
+    CRBouncePositionOverFooterLimit,
 } CRBouncePostionType;
 
 

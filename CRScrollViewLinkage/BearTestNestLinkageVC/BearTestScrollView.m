@@ -6,7 +6,7 @@
 //
 
 #import "BearTestScrollView.h"
-#import "UIScrollView+LBLinkage.h"
+#import "UIScrollView+CRLinkage.h"
 #import "LBLinkageConfig.h"
 #import "LBLinkageManager.h"
 

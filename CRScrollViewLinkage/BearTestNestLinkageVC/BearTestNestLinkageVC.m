@@ -8,14 +8,14 @@
 #import "BearTestNestLinkageVC.h"
 #import <Masonry/Masonry.h>
 #import "BearChildView.h"
-#import "LBLinkageManager.h"
+#import "CRLinkageManagerInternal.h"
 #import "BearTestScrollView.h"
 
 @interface BearTestNestLinkageVC ()
 
 @property (nonatomic, strong) BearTestScrollView *mainScrollView;
 @property (nonatomic, strong) BearChildView *childView;
-@property (nonatomic, strong) LBLinkageManager *linkageManager;
+@property (nonatomic, strong) CRLinkageManagerInternal *linkageManagerInternal;
 @property (nonatomic, strong) UIButton *myBtn;
 @property (nonatomic, assign) CGFloat topHeight;
 
@@ -62,9 +62,8 @@
         make.width.mas_equalTo(screenWidth);
     }];
     
-    self.linkageManager = [LBLinkageManager new];
-    [self.linkageManager configMainScrollView:self.mainScrollView];
-    [self.linkageManager configChildScrollView:self.childView.myTableView childViewHeight:[BearChildView viewHeight]];
+    [self.linkageManagerInternal configMainScrollView:self.mainScrollView];
+    [self.linkageManagerInternal configChildScrollView:self.childView.myTableView childViewHeight:[BearChildView viewHeight]];
 }
 
 - (void)test {
@@ -93,6 +92,14 @@
     }
     
     return _myBtn;
+}
+
+- (CRLinkageManagerInternal *)linkageManagerInternal {
+    if (!_linkageManagerInternal) {
+        _linkageManagerInternal = [CRLinkageManagerInternal new];
+    }
+    
+    return _linkageManagerInternal;
 }
 
 @end

@@ -8,7 +8,7 @@
 #import "CRLinkageScrollViewHook.h"
 #import <objc/message.h>
 #import "LBLinkageConfig.h"
-#import "UIScrollView+LBLinkage.h"
+#import "UIScrollView+CRLinkage.h"
 #import "LBLinkageManager.h"
 
 @interface CRLinkageScrollViewHook() <UIGestureRecognizerDelegate, CRLinkageRuntimeMethodProtocol>
@@ -25,25 +25,59 @@
     }
     
     SEL originSel = @selector(gestureRecognizerShouldBegin:);
-    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
-        UIPanGestureRecognizer *tmpPanGesture = (UIPanGestureRecognizer *)gestureRecognizer;
-        UIScrollView *scrollView = (UIScrollView *)gestureRecognizer.view;
-        CGPoint velocity = [tmpPanGesture velocityInView:gestureRecognizer.view];
-        if ([scrollView.oldlinkageConfig.mainLinkageManager refreshType] == LKRefreshForChild) {
+    UIScrollView *tmpScrollView = (UIScrollView *)gestureRecognizer.view;
+    /// 只对main进行判断
+    if (tmpScrollView.isLinkageMainScrollView) {
+        UIScrollView *mainScrollView = tmpScrollView;
+        if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
+            UIPanGestureRecognizer *tmpPanGesture = (UIPanGestureRecognizer *)gestureRecognizer;
+            CGPoint velocity = [tmpPanGesture velocityInView:gestureRecognizer.view];
+            CRLinkageMainConfig *mainCondig = mainScrollView.linkageMainConfig;
+            CRLinkageChildConfig *childCondig = mainCondig.currentChildConfig;
+            CGFloat bestContentOffSetY = 0;
+            
+            /// 向下滑
             if (velocity.y > 0) {
-                /// 向下滑
-                if (self.contentOffset.y <= 0) {
-                    /// main到顶了，不接收该手势，让child接收。
-                    /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到顶的情况下，停止一会。无法对child直接下拉刷新。）
-                    return NO;
+                /// 查询childConfig的下拉配置
+                switch (childCondig.headerBounceType) {
+                    case CRBounceForMain: { nil; } break;
+                    /// child允许下拉
+                    case CRBounceForChild:
+                    {
+                        /// 向下滑
+                        bestContentOffSetY = 0;
+                        if (self.contentOffset.y <= bestContentOffSetY) {
+                            /// main到顶了，不接收该手势，让child接收。
+                            /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到顶的情况下，停止一会。无法对child直接下拉刷新。）
+                            return NO;
+                        }
+                    }
+                        break;
                 }
-            } else if (velocity.y < 0) {
-                /// 向上滑
+            }
+            /// 向上滑
+            else if (velocity.y < 0) {
+                /// 查询childConfig的上拉配置
+                switch (childCondig.footerBounceType) {
+                    case CRBounceForMain: { nil; } break;
+                    /// child允许上拉
+                    case CRBounceForChild:
+                    {
+                        /// 向上滑
+                        bestContentOffSetY = mainScrollView.contentSize.height - mainScrollView.frame.size.height;
+                        if (self.contentOffset.y >= bestContentOffSetY) {
+                            /// main到底了，不接收该手势，让child接收。
+                            /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到底的情况下，停止一会。无法对child直接上拉加载更多。）
+                            return NO;
+                        }
+                    }
+                        break;
+                }
             } else {
                 /// nil
             }
+            //        NSLog(@"velocityInView-- %@", NSStringFromCGPoint(velocity));
         }
-//        NSLog(@"velocityInView-- %@", NSStringFromCGPoint(velocity));
     }
 //    NSLog(@"--0 Main Scroll ShouldBegin");
     return [self manualCallSuperWithSel:originSel defaultReturn:YES paras:@[gestureRecognizer]];
@@ -55,27 +89,29 @@
     SEL originSel = @selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:);
     if ([gestureRecognizer.view isKindOfClass:[UIScrollView class]]
         && [otherGestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
-        UIScrollView *mainScrollView = (UIScrollView *)gestureRecognizer.view;
-        LBLinkageConfig *mainConfig = mainScrollView.oldlinkageConfig;
-        
-        UIScrollView *childScrollView = (UIScrollView *)otherGestureRecognizer.view;
-        
-        if (mainConfig.isMain && mainConfig.mainLinkageManager.childScrollView == childScrollView) {
-
-            BOOL mainIsPan = [self linkageCheckGestureRecognizer:gestureRecognizer];
-            BOOL otherIsPan = [self linkageCheckGestureRecognizer:otherGestureRecognizer];
-            if (!mainIsPan || !otherIsPan) {
-                return [self manualCallSuperWithSel:originSel defaultReturn:NO paras:@[gestureRecognizer, otherGestureRecognizer]];
+        UIScrollView *tmpScrollView = (UIScrollView *)gestureRecognizer.view;
+        if (tmpScrollView.isLinkageMainScrollView) {
+            UIScrollView *mainScrollView = tmpScrollView;
+            CRLinkageMainConfig *mainConfig = mainScrollView.linkageMainConfig;
+            CRLinkageChildConfig *childConfig = mainConfig.currentChildConfig;
+            UIScrollView *childScrollView = (UIScrollView *)otherGestureRecognizer.view;
+            if (mainConfig.currentChildScrollView == childScrollView) {
+                
+                BOOL mainIsPan = [self linkageCheckGestureRecognizer:gestureRecognizer];
+                BOOL otherIsPan = [self linkageCheckGestureRecognizer:otherGestureRecognizer];
+                if (!mainIsPan || !otherIsPan) {
+                    return [self manualCallSuperWithSel:originSel defaultReturn:NO paras:@[gestureRecognizer, otherGestureRecognizer]];
+                }
+                
+                BOOL resVal = [self gestureIsInBothArea:gestureRecognizer];
+                if (resVal) {
+                    childConfig.gestureType = CRGestureForBothScrollView;
+                } else {
+                    childConfig.gestureType = CRGestureForMainScrollView;
+                }
+                
+                return resVal;
             }
-
-            BOOL resVal = [self gestureIsInBothArea:gestureRecognizer];
-            if (resVal) {
-                mainScrollView.oldlinkageConfig.mainGestureType = LKGestureForBothScrollView;
-            } else {
-                mainScrollView.oldlinkageConfig.mainGestureType = LKGestureForMainScrollView;
-            }
-            
-            return resVal;
         }
     }
 
@@ -88,7 +124,12 @@
 - (BOOL)gestureIsInBothArea:(UIGestureRecognizer *)gestureRecognizer {
     if ([gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)gestureRecognizer.view;
-        CGFloat offsetY = scrollView.oldlinkageConfig.mainTopHeight;
+        CGFloat offsetY = 0;
+#warning Bear 这个是旧的代码，注意看下新代码有没有问题
+//        offsetY = scrollView.oldlinkageConfig.mainTopHeight;
+        if (!scrollView.isLinkageMainScrollView) {
+            offsetY = scrollView.linkageChildConfig.childTopFixHeight;
+        }
         CGSize contentSize = scrollView.contentSize;
         CGRect targetRect = CGRectMake(0,
                                        offsetY,

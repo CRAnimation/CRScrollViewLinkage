@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CRLinkageDefine.h"
+#import "CRLinkageChildConfig.h"
 @class CRLinkageManagerInternal;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,12 +16,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// main专用
 @property (nonatomic, weak) UIScrollView *mainScrollView;
+@property (nonatomic, weak, readonly) CRLinkageChildConfig *currentChildConfig;
+@property (nonatomic, weak, readonly) UIScrollView *currentChildScrollView;
 @property (nonatomic, assign) CRGestureType mainGestureType;
 @property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
 /// 头部/底部拉动极限
 @property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
 @property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
+/// 头部允许下拉到负一楼
+@property (nonatomic, assign) BOOL headerAllowToFirstFloor;
+/// 底部允许上拉到阁楼
+@property (nonatomic, assign) BOOL footerAllowToLoft;
 
 // main，child共用
 @property (nonatomic, assign) BOOL isCanScroll;

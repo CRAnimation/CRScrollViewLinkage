@@ -6,14 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
-@class CRLinkageChildConfig;
-@class CRLinkageMainConfig;
+#import "CRLinkageChildConfig.h"
+#import "CRLinkageMainConfig.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIScrollView (CRLinkage)
 
 @property (nonatomic, strong) CRLinkageChildConfig *linkageChildConfig;
 @property (nonatomic, strong) CRLinkageMainConfig *linkageMainConfig;
+@property (nonatomic, assign) BOOL isLinkageMainScrollView;
 
 @end
 

@@ -7,8 +7,6 @@
 
 #import "UIScrollView+CRLinkage.h"
 #import <objc/runtime.h>
-#import "CRLinkageChildConfig.h"
-#import "CRLinkageMainConfig.h"
 
 @implementation UIScrollView (CRLinkage)
 
@@ -37,6 +35,20 @@
 
 - (void)setLinkageMainConfig:(CRLinkageMainConfig *)linkageMainConfig {
     objc_setAssociatedObject(self, @selector(linkageMainConfig), linkageMainConfig, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)isLinkageMainScrollView {
+    NSNumber *resValue = objc_getAssociatedObject(self, _cmd);
+    if (!resValue) {
+        resValue = @(NO);
+        self.isLinkageMainScrollView = resValue;
+    }
+    
+    return [resValue boolValue];
+}
+
+- (void)setIsLinkageMainScrollView:(BOOL)isLinkageMainScrollView {
+    objc_setAssociatedObject(self, @selector(isLinkageMainScrollView), @(isLinkageMainScrollView), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

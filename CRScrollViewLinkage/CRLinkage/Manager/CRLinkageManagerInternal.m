@@ -220,15 +220,49 @@ static NSString * const kCenter = @"center";
             if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
                 [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
                                                      scrollViewType:CRScrollViewForMain
-                                                  bouncePostionType:CRBouncePositionForHeader];
+                                                  bouncePostionType:CRBouncePositionToHeaderLimit];
+            }
+            
+            /// 头部允许下拉到负一楼
+            if (self.mainConfig.headerAllowToFirstFloor) {
+                self.linkageScrollStatus = CRLinkageScrollStatus_MainHoldOnFirstFloor;
+                [self autoScrollToFirstFloor];
+            }
+            /// 头部不允许下拉到负一楼
+            else {
+                /// 状态重置到初始状态
+                self.linkageScrollStatus = CRLinkageScrollStatus_Idle;
             }
         }
             break;
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
-        {}
+        {
+            switch (scrollDir) {
+                case CRScrollDir_Hold: { nil; } break;
+                case CRScrollDir_Up:
+                {
+#warning Bear 这里要结合child一起处理
+                }
+                    break;
+                case CRScrollDir_Down:
+                {
+                    /// 下拉不再处理。固定在这个位置
+                    [self mainHold];
+                }
+                    break;
+            }
+        }
             break;
         case CRLinkageScrollStatus_MainLoadMore:
-        {}
+        {
+            if (mainOffSetY < bestOffSetY) {
+                // 这个区域，mainRefresh: main可以滑动，child不能滑
+                nil;
+            } else {
+                // 又开始往上滑了
+                self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+            }
+        }
             break;
         case CRLinkageScrollStatus_MainLoadMoreToLimit:
         {}
@@ -320,6 +354,35 @@ static NSString * const kCenter = @"center";
             }
         }
             break;
+    }
+}
+
+#pragma mark 自动滑到负1楼
+/// main下拉超过极限，自动滑到负1楼
+- (void)autoScrollToLoft {
+    CGFloat bestMainOffSetY = 0 - CGRectGetHeight(self.mainScrollView.frame);
+    [self autoScrollToContentOffSetY:bestMainOffSetY];
+}
+
+#pragma mark 自动滑到阁楼
+/// main上拉超过极限，自动滑到阁楼
+- (void)autoScrollToFirstFloor {
+    CGFloat bestMainOffSetY = self.mainScrollView.contentSize.height;
+    [self autoScrollToContentOffSetY:bestMainOffSetY];
+    if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+        [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
+                                             scrollViewType:CRScrollViewForMain
+                                          bouncePostionType:CRBouncePositionOverHeaderLimit];
+    }
+}
+
+- (void)autoScrollToContentOffSetY:(CGFloat)contentOffSetY {
+    CGFloat bestMainOffSetY = contentOffSetY;
+    CGFloat currentMainOffSetY = self.mainScrollView.contentOffset.y;
+    if (currentMainOffSetY != bestMainOffSetY) {
+        CGPoint tmpContentOffSet = self.mainScrollView.contentOffset;
+        tmpContentOffSet.y = bestMainOffSetY;
+        [self.mainScrollView setContentOffset:tmpContentOffSet animated:YES];
     }
 }
 
@@ -569,6 +632,7 @@ static NSString * const kCenter = @"center";
             CRLinkageMainConfig *config = [CRLinkageMainConfig new];
             config.mainScrollView = mainScrollView;
             _mainScrollView.linkageMainConfig = config;
+            _mainScrollView.isLinkageMainScrollView = YES;
             [self removeMainObserver];
         }
         
