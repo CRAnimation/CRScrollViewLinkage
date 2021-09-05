@@ -294,10 +294,14 @@ static NSString * const kCenter = @"center";
 @synthesize childScrollView = _childScrollView;
 - (void)setChildScrollView:(UIScrollView *)childScrollView {
     if (childScrollView != _childScrollView) {
-        CRLinkageChildConfig *config = [CRLinkageChildConfig new];
+        CRLinkageChildConfig *config;
+        if (childScrollView.linkageChildConfig) {
+            config = childScrollView.linkageChildConfig;
+        } else {
+            config = [CRLinkageChildConfig new];
+        }
         config.currentScrollView = childScrollView;
         if (_childScrollView != nil) {
-            config = _childScrollView.linkageChildConfig;
             [self removeChildObserver];
             [self clearChildNestedView];
         }

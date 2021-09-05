@@ -64,6 +64,8 @@
     
     [self.linkageManagerInternal configMainScrollView:self.mainScrollView];
     self.childView.myTableView.linkageChildConfig.childHoldPosition = CRChildHoldPosition_Top;
+    CRLinkageChildConfig *childConfig = self.childView.myTableView.linkageChildConfig;
+    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView childViewHeight:[BearChildView viewHeight]];
 }
 
