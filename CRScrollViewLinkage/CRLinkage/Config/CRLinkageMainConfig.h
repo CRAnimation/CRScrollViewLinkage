@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) UIScrollView *mainScrollView;
 @property (nonatomic, weak, readonly) CRLinkageChildConfig *currentChildConfig;
 @property (nonatomic, weak, readonly) UIScrollView *currentChildScrollView;
-@property (nonatomic, assign) CRGestureType mainGestureType;
 @property (nonatomic, weak) CRLinkageManagerInternal *mainLinkageInternal;
 
 /// 头部/底部拉动极限
@@ -32,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 // main，child共用
 @property (nonatomic, assign) BOOL isCanScroll;
 @property (nonatomic, assign) CGFloat holdOffSetY;
+
+- (BOOL)isScrollOverTop;
+- (BOOL)isScrollOverBottom;
 
 @end
 

@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
 
 /// 手势滑动类型
-#warning Bear 这里用来表示main上的手势是否允许多个scrollView接收（可以参考原先的代码）
 @property (nonatomic, assign) CRGestureType gestureType;
 
 
@@ -53,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset:(UIScrollView *)mainScrollView;
+- (BOOL)isScrollOverTop;
+- (BOOL)isScrollOverBottom;
 
 @end
 

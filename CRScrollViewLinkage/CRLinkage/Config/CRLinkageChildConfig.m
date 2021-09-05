@@ -69,4 +69,20 @@
     self.bestContentOffSet = CGPointMake(0, resOffSet);
 }
 
+- (BOOL)isScrollOverTop {
+    CGFloat bestContentOffSetY = 0;
+    if (self.currentScrollView.contentOffset.y <= bestContentOffSetY) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isScrollOverBottom {
+    CGFloat bestContentOffSetY = self.currentScrollView.contentSize.height - self.currentScrollView.frame.size.height;
+    if (self.currentScrollView.contentOffset.y >= bestContentOffSetY) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

@@ -18,7 +18,6 @@
     if (self) {
         // main专用
         self.mainScrollView = nil;
-        self.mainGestureType = CRGestureForMainScrollView;
         self.mainLinkageInternal = nil;
         
         /// 头部/底部拉动极限
@@ -41,6 +40,22 @@
 
 - (UIScrollView *)currentChildScrollView {
     return self.mainLinkageInternal.childScrollView;
+}
+
+- (BOOL)isScrollOverTop {
+    CGFloat bestContentOffSetY = 0;
+    if (self.mainScrollView.contentOffset.y <= bestContentOffSetY) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isScrollOverBottom {
+    CGFloat bestContentOffSetY = self.mainScrollView.contentSize.height - self.mainScrollView.frame.size.height;
+    if (self.mainScrollView.contentOffset.y >= bestContentOffSetY) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

@@ -272,7 +272,7 @@ static NSString * const kCenter = @"center";
             break;
         case CRLinkageScrollStatus_ChildRefresh:
         {
-            if (self.mainConfig.mainGestureType == CRGestureForMainScrollView && childOffSetY == 0) {
+            if (self.childConfig.gestureType == CRGestureForMainScrollView && childOffSetY == 0) {
                 self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             } else {
                 [self mainHold];

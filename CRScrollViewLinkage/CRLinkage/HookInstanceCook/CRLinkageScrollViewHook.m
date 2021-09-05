@@ -32,21 +32,19 @@
         if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
             UIPanGestureRecognizer *tmpPanGesture = (UIPanGestureRecognizer *)gestureRecognizer;
             CGPoint velocity = [tmpPanGesture velocityInView:gestureRecognizer.view];
-            CRLinkageMainConfig *mainCondig = mainScrollView.linkageMainConfig;
-            CRLinkageChildConfig *childCondig = mainCondig.currentChildConfig;
-            CGFloat bestContentOffSetY = 0;
+            CRLinkageMainConfig *mainConfig = mainScrollView.linkageMainConfig;
+            CRLinkageChildConfig *childConfig = mainConfig.currentChildConfig;
             
             /// 向下滑
             if (velocity.y > 0) {
                 /// 查询childConfig的下拉配置
-                switch (childCondig.headerBounceType) {
+                switch (childConfig.headerBounceType) {
                     case CRBounceForMain: { nil; } break;
                     /// child允许下拉
                     case CRBounceForChild:
                     {
                         /// 向下滑
-                        bestContentOffSetY = 0;
-                        if (self.contentOffset.y <= bestContentOffSetY) {
+                        if ([mainConfig isScrollOverTop]) {
                             /// main到顶了，不接收该手势，让child接收。
                             /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到顶的情况下，停止一会。无法对child直接下拉刷新。）
                             return NO;
@@ -58,14 +56,13 @@
             /// 向上滑
             else if (velocity.y < 0) {
                 /// 查询childConfig的上拉配置
-                switch (childCondig.footerBounceType) {
+                switch (childConfig.footerBounceType) {
                     case CRBounceForMain: { nil; } break;
                     /// child允许上拉
                     case CRBounceForChild:
                     {
                         /// 向上滑
-                        bestContentOffSetY = mainScrollView.contentSize.height - mainScrollView.frame.size.height;
-                        if (self.contentOffset.y >= bestContentOffSetY) {
+                        if ([mainConfig isScrollOverBottom]) {
                             /// main到底了，不接收该手势，让child接收。
                             /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到底的情况下，停止一会。无法对child直接上拉加载更多。）
                             return NO;
