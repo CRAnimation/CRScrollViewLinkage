@@ -21,81 +21,100 @@
         }
             break;
             
-            // mainScroll: main可以滑动，child不能滑
         case CRLinkageScrollStatus_MainScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainScroll"];
+            [self childHold];
         }
             break;
+            
+#pragma mark 处理child滑动
         case CRLinkageScrollStatus_ChildScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildScroll"];
-            switch (scrollDir) {
-                case CRScrollDir_Hold: { nil; } break;
-                case CRScrollDir_Up:
-                {
-                    if ([self.childConfig isScrollOverHeader]) {
-                        // 拉到头了，切换为main滑动
-                        self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
-                    } else {
-                        // 区域内可滑:（value>=0）
-                        nil;
-                    }
+            [self _processScrollDir:scrollDir holdBlock:nil upBlock:^{
+                if ([self.childConfig isScrollOverHeader]) {
+                    // 拉到头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
                 }
-                    break;
-                case CRScrollDir_Down:
-                {
-                    
+            } downBlock:^{
+                if ([self.childConfig isScrollOverFooter]) {
+                    // 拉到头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
                 }
-                    break;
-            }
+            }];
         }
             break;
         case CRLinkageScrollStatus_MainRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefresh"];
+            [self childHold];
         }
             break;
         case CRLinkageScrollStatus_MainRefreshToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
+            [self childHold];
         }
             break;
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
+            [self childHold];
         }
             break;
         case CRLinkageScrollStatus_MainLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMore"];
+            [self childHold];
         }
             break;
         case CRLinkageScrollStatus_MainLoadMoreToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
+            [self childHold];
         }
             break;
         case CRLinkageScrollStatus_MainHoldOnLoft:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
+            [self childHold];
         }
             break;
+            
+#pragma mark 处理child下拉刷新
         case CRLinkageScrollStatus_ChildRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefresh"];
+//            [self _processScrollDir:scrollDir holdBlock:^{
+//                <#code#>
+//            } upBlock:^{
+//                <#code#>
+//            } downBlock:^{
+//                <#code#>
+//            }];
+//            [self ]
         }
             break;
+#pragma mark 处理child下拉到极限
         case CRLinkageScrollStatus_ChildRefreshToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefreshToLimit"];
         }
             break;
+#pragma mark 处理child上拉加载更多
         case CRLinkageScrollStatus_ChildLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMore"];
         }
             break;
+#pragma mark 处理child上拉到极限
         case CRLinkageScrollStatus_ChildLoadMoreToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMoreToLimit"];

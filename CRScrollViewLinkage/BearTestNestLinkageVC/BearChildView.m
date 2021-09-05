@@ -14,6 +14,11 @@
 
 @implementation BearChildView
 
+- (void)dealloc
+{
+    NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
+}
+
 + (CGFloat)viewHeight {
     return 700;
 }

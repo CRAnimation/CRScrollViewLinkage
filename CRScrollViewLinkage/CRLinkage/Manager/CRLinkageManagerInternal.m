@@ -188,6 +188,33 @@ static NSString * const kCenter = @"center";
     return dir;
 }
 
+- (void)_processScrollDir:(CRScrollDir)scrollDir
+                holdBlock:(void (^ __nullable)(void))holdBlock
+                  upBlock:(void (^)(void))upBlock
+                downBlock:(void (^)(void))downBlock {
+    switch (scrollDir) {
+        case CRScrollDir_Hold: {
+            if (holdBlock) {
+                holdBlock();
+            }
+        } break;
+        case CRScrollDir_Up:
+        {
+            if (upBlock) {
+                upBlock();
+            }
+        }
+            break;
+        case CRScrollDir_Down:
+        {
+            if (downBlock) {
+                downBlock();
+            }
+        }
+            break;
+    }
+}
+
 #pragma mark Hold
 - (void)mainHold {
     [self mainHoldNeedRelax:NO];
@@ -368,6 +395,7 @@ static NSString * const kCenter = @"center";
 - (void)dealloc {
     [self removeMainObserver];
     [self removeChildObserver];
+    NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
 }
 
 @end

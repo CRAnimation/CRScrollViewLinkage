@@ -16,6 +16,11 @@
 
 @implementation BearTestScrollView
 
+- (void)dealloc
+{
+    NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
+}
+
 //- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
 //    NSLog(@"--success");
 //    return YES;
