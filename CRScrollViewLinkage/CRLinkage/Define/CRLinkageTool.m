@@ -16,4 +16,31 @@
     NSLog(@"--- %@ %@", isMain ? @"main" : @"child", log);
 }
 
++ (void)processScrollDir:(CRScrollDir)scrollDir
+               holdBlock:(void (^ __nullable)(void))holdBlock
+                 upBlock:(void (^)(void))upBlock
+               downBlock:(void (^)(void))downBlock {
+    switch (scrollDir) {
+        case CRScrollDir_Hold: {
+            if (holdBlock) {
+                holdBlock();
+            }
+        } break;
+        case CRScrollDir_Up:
+        {
+            if (upBlock) {
+                upBlock();
+            }
+        }
+            break;
+        case CRScrollDir_Down:
+        {
+            if (downBlock) {
+                downBlock();
+            }
+        }
+            break;
+    }
+}
+
 @end

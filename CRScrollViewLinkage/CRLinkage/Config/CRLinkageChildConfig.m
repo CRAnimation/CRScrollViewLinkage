@@ -23,10 +23,6 @@
         self.headerBounceType = CRBounceForMain;
         self.footerBounceType = CRBounceForMain;
         
-        /// 头部/底部拉动极限
-        self.headerBounceLimit = nil;
-        self.footerBounceLimit = nil;
-        
         self.childHoldPosition = CRChildHoldPosition_Center;
         self.positionRatio = 0.5;
         
@@ -67,43 +63,6 @@
             break;
     }
     self.bestContentOffSet = CGPointMake(0, resOffSet);
-}
-
-#pragma mark - Scroll Over Check
-- (BOOL)isScrollOverHeader {
-    return [self _isScrollOverHeaderWithLimit:0];
-}
-- (BOOL)isScrollOverHeaderLimit {
-    if (self.headerBounceLimit) {
-        return [self _isScrollOverHeaderWithLimit:self.headerBounceLimit.floatValue];
-    }
-    return NO;
-}
-
-- (BOOL)isScrollOverFooter {
-    return [self _isScrollOverFooterWithLimit:0];
-}
-- (BOOL)isScrollOverFooterLimit {
-    if (self.footerBounceLimit) {
-        return [self _isScrollOverFooterWithLimit:self.footerBounceLimit.floatValue];
-    }
-    return NO;
-}
-
-#pragma mark - Private
-- (BOOL)_isScrollOverHeaderWithLimit:(CGFloat)limit {
-    CGFloat bestContentOffSetY = 0 + limit;
-    if (self.currentScrollView.contentOffset.y <= bestContentOffSetY) {
-        return YES;
-    }
-    return NO;
-}
-- (BOOL)_isScrollOverFooterWithLimit:(CGFloat)limit {
-    CGFloat bestContentOffSetY = self.currentScrollView.contentSize.height - self.currentScrollView.frame.size.height + limit;
-    if (self.currentScrollView.contentOffset.y >= bestContentOffSetY) {
-        return YES;
-    }
-    return NO;
 }
 
 @end

@@ -32,17 +32,17 @@
         case CRLinkageScrollStatus_ChildScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildScroll"];
-            [self _processScrollDir:scrollDir holdBlock:nil upBlock:^{
-                if ([self.childConfig isScrollOverHeader]) {
-                    // 拉到头了，切换为main滑动
+            [self.childConfig processChildScrollDir:scrollDir isLimit:NO overHeaderOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
                     self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
                 } else {
                     // 区域内可滑
                     nil;
                 }
-            } downBlock:^{
-                if ([self.childConfig isScrollOverFooter]) {
-                    // 拉到头了，切换为main滑动
+            } overFooterOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
                     self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
                 } else {
                     // 区域内可滑
@@ -92,14 +92,23 @@
         case CRLinkageScrollStatus_ChildRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildRefresh"];
-//            [self _processScrollDir:scrollDir holdBlock:^{
-//                <#code#>
-//            } upBlock:^{
-//                <#code#>
-//            } downBlock:^{
-//                <#code#>
-//            }];
-//            [self ]
+            [self.childConfig processChildScrollDir:scrollDir isLimit:YES overHeaderOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
+                }
+            } overFooterOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
+                }
+            }];
         }
             break;
 #pragma mark 处理child下拉到极限
@@ -112,6 +121,23 @@
         case CRLinkageScrollStatus_ChildLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_ChildLoadMore"];
+            [self.childConfig processChildScrollDir:scrollDir isLimit:YES overHeaderOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
+                }
+            } overFooterOrLimitBlock:^(BOOL isOver) {
+                if (isOver) {
+                    // 拉过头了，切换为main滑动
+                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                } else {
+                    // 区域内可滑
+                    nil;
+                }
+            }];
         }
             break;
 #pragma mark 处理child上拉到极限

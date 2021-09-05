@@ -5,13 +5,13 @@
 //  Created by Bear on 2021/8/25.
 //
 
-#import <UIKit/UIKit.h>
+#import "CRLinkageBaseConfig.h"
 #import "CRLinkageDefine.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRLinkageChildConfig : NSObject
+@interface CRLinkageChildConfig : CRLinkageBaseConfig
 
 /// 头部/尾部固定预留高度
 @property (nonatomic, assign) CGFloat childTopFixHeight;
@@ -20,10 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 上拉/下拉回弹类型
 @property (nonatomic, assign) CRBounceType headerBounceType;
 @property (nonatomic, assign) CRBounceType footerBounceType;
-
-/// 头部/底部拉动极限
-@property (nonatomic, strong) NSNumber *headerBounceLimit;
-@property (nonatomic, strong) NSNumber *footerBounceLimit;
 
 /// 手势滑动类型
 @property (nonatomic, assign) CRGestureType gestureType;
@@ -34,8 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// childHoldPosition为customRatio类型时生效。（默认：0.5）
 @property (nonatomic, assign) CGFloat positionRatio;
 
-/// 当前scrollView
-@property (nonatomic, weak) UIScrollView *currentScrollView;
 /// 上一个scrollView（类似双向链表的结构）
 @property (nonatomic, weak) UIScrollView *lastScrollView;
 /// 下一个scrollView
@@ -52,12 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset:(UIScrollView *)mainScrollView;
-
-#pragma mark - Scroll Over Check
-- (BOOL)isScrollOverHeader;
-- (BOOL)isScrollOverHeaderLimit;
-- (BOOL)isScrollOverFooter;
-- (BOOL)isScrollOverFooterLimit;
     
 @end
 

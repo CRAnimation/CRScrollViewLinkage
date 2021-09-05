@@ -188,33 +188,6 @@ static NSString * const kCenter = @"center";
     return dir;
 }
 
-- (void)_processScrollDir:(CRScrollDir)scrollDir
-                holdBlock:(void (^ __nullable)(void))holdBlock
-                  upBlock:(void (^)(void))upBlock
-                downBlock:(void (^)(void))downBlock {
-    switch (scrollDir) {
-        case CRScrollDir_Hold: {
-            if (holdBlock) {
-                holdBlock();
-            }
-        } break;
-        case CRScrollDir_Up:
-        {
-            if (upBlock) {
-                upBlock();
-            }
-        }
-            break;
-        case CRScrollDir_Down:
-        {
-            if (downBlock) {
-                downBlock();
-            }
-        }
-            break;
-    }
-}
-
 #pragma mark Hold
 - (void)mainHold {
     [self mainHoldNeedRelax:NO];
@@ -341,7 +314,7 @@ static NSString * const kCenter = @"center";
         if (_mainScrollView != nil) {
             // 清空旧的
             CRLinkageMainConfig *config = [CRLinkageMainConfig new];
-            config.mainScrollView = mainScrollView;
+            config.currentScrollView = mainScrollView;
             _mainScrollView.linkageMainConfig = config;
             _mainScrollView.isLinkageMainScrollView = YES;
             [self removeMainObserver];

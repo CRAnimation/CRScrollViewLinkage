@@ -53,10 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Tool Method
 /// 判断方向
 - (CRScrollDir)_checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset;
-- (void)_processScrollDir:(CRScrollDir)scrollDir
-                holdBlock:(void (^ __nullable)(void))holdBlock
-                  upBlock:(void (^)(void))upBlock
-                downBlock:(void (^)(void))downBlock;
+
 #pragma mark Hold
 - (void)mainHold;
 - (void)mainHoldNeedRelax:(BOOL)needRelax;
