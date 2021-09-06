@@ -13,6 +13,7 @@
 #import "CRLinkageManagerInternal+Main.h"
 
 static NSString * const kContentOffset = @"contentOffset";
+static NSString * const kBounds = @"bounds";
 static NSString * const kCenter = @"center";
 
 @interface CRLinkageManagerInternal()
@@ -51,8 +52,7 @@ static NSString * const kCenter = @"center";
 /// @param mainScrollView mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
-    [self _tryConfigLinkageScrollType];
-    [self _tryConfigOffSet];
+    [self _updateConfig];
 }
 
 /// 配置child（默认使用childScrollView的高度）
@@ -70,8 +70,7 @@ static NSString * const kCenter = @"center";
     self.childScrollView = childScrollView;
 //    CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
 //    [self childScrollViewUpdateTopHeight:tmpTopHeight];
-    [self _tryConfigLinkageScrollType];
-    [self _tryConfigOffSet];
+    [self _updateConfig];
 }
 
 #warning Bear 检查下这个方法是否需要
@@ -121,6 +120,7 @@ static NSString * const kCenter = @"center";
 
 - (void)addChildObserver {
     [self.childScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+    [self.childScrollView addObserver:self forKeyPath:kBounds options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
     if (self.childNestedView) {
         [self.childNestedView addObserver:self forKeyPath:kCenter options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
     }
@@ -128,6 +128,7 @@ static NSString * const kCenter = @"center";
 
 - (void)removeChildObserver {
     [self.childScrollView removeObserver:self forKeyPath:kContentOffset];
+    [self.childScrollView removeObserver:self forKeyPath:kBounds];
     if (self.childNestedView) {
         [self.childNestedView removeObserver:self forKeyPath:kCenter];
     }
@@ -166,6 +167,18 @@ static NSString * const kCenter = @"center";
         
         if (object == self.childNestedView) {
 //            [self childScrollViewUpdateTopHeight:self.childNestedView.frame.origin.y];
+        }
+    } else if ([keyPath isEqualToString:kBounds]) {
+        NSValue *oldValue = change[NSKeyValueChangeOldKey];
+        NSValue *newValue = change[NSKeyValueChangeNewKey];
+        CGRect oldFrame = [oldValue CGRectValue];
+        CGRect newFrame = [newValue CGRectValue];
+        if (CGRectEqualToRect(oldFrame, newFrame)) {
+            return;
+        }
+        
+        if (object == self.childScrollView) {
+            [self _tryConfigOffSet];
         }
     }
 }
@@ -229,7 +242,7 @@ static NSString * const kCenter = @"center";
 
 
 #pragma mark - Reset Func
-- (void)updateConfig {
+- (void)_updateConfig {
     [self _tryConfigOffSet];
     [self _tryConfigLinkageScrollType];
 }
