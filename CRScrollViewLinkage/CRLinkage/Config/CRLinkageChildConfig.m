@@ -16,13 +16,15 @@
     self = [super init];
     if (self) {
         
+        self.frameObserveType = CRChildFrameObserveType_NearMain;
+        
         /// 头部/尾部固定预留高度
         self.childTopFixHeight = 0;
         self.childBottomFixHeight = 0;
         
         /// 上拉/下拉回弹类型
-        self.headerBounceType = CRBounceForMain;
-        self.footerBounceType = CRBounceForMain;
+        self.headerBounceType = CRBounceType_Main;
+        self.footerBounceType = CRBounceType_Main;
         
         self.childHoldPosition = CRChildHoldPosition_Center;
         self.positionRatio = 0.5;
@@ -75,6 +77,10 @@
         _childHoldPosition = childHoldPosition;
         [self caculateMainAnchorOffset];
     }
+}
+
+- (void)configFrameObservedView:(UIView * _Nullable)frameObservedView {
+    self._frameObservedView = frameObservedView;
 }
 
 @end

@@ -22,8 +22,6 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, strong, readwrite) UIScrollView *childScrollView;
 @property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 @property (nonatomic, assign) BOOL useLinkageHook;
-/// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
-@property (nonatomic, strong) UIView *childNestedView;
 
 @end
 
@@ -89,26 +87,6 @@ static NSString * const kCenter = @"center";
     }
 }
 
-- (void)findChildNestedView {
-    if (!self.mainScrollView) {
-        return;
-    }
-    
-    UIView *tmpView = self.childScrollView;
-    UIResponder *tmpResponder = tmpView.nextResponder;
-    while (tmpResponder != nil && ![tmpResponder isKindOfClass:[UIWindow class]] && tmpResponder != self.mainScrollView) {
-        tmpView = (UIView *)tmpResponder;
-        tmpResponder = tmpResponder.nextResponder;
-    }
-    if (tmpResponder == self.mainScrollView) {
-        self.childNestedView = tmpView;
-    }
-}
-
-- (void)clearChildNestedView {
-    self.childNestedView = nil;
-}
-
 #pragma mark - KVO
 - (void)addMainObserver {
     [self.mainScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
@@ -120,17 +98,17 @@ static NSString * const kCenter = @"center";
 
 - (void)addChildObserver {
     [self.childScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
-    [self.childScrollView addObserver:self forKeyPath:kBounds options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
-    if (self.childNestedView) {
-        [self.childNestedView addObserver:self forKeyPath:kCenter options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+    if (self.childFrameObservedView) {
+        [self.childFrameObservedView addObserver:self forKeyPath:kBounds options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+        [self.childFrameObservedView addObserver:self forKeyPath:kCenter options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
     }
 }
 
 - (void)removeChildObserver {
     [self.childScrollView removeObserver:self forKeyPath:kContentOffset];
-    [self.childScrollView removeObserver:self forKeyPath:kBounds];
-    if (self.childNestedView) {
-        [self.childNestedView removeObserver:self forKeyPath:kCenter];
+    if (self.childFrameObservedView) {
+        [self.childFrameObservedView removeObserver:self forKeyPath:kBounds];
+        [self.childFrameObservedView removeObserver:self forKeyPath:kCenter];
     }
 }
 
@@ -165,8 +143,8 @@ static NSString * const kCenter = @"center";
             return;
         }
         
-        if (object == self.childNestedView) {
-//            [self childScrollViewUpdateTopHeight:self.childNestedView.frame.origin.y];
+        if (object == self.childFrameObservedView) {
+//            [self childScrollViewUpdateTopHeight:self.childFrameObservedView.frame.origin.y];
         }
     } else if ([keyPath isEqualToString:kBounds]) {
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
@@ -177,7 +155,7 @@ static NSString * const kCenter = @"center";
             return;
         }
         
-        if (object == self.childScrollView) {
+        if (object == self.childFrameObservedView) {
             [self _tryConfigOffSet];
         }
     }
@@ -316,12 +294,12 @@ static NSString * const kCenter = @"center";
         config.currentScrollView = childScrollView;
         if (_childScrollView != nil) {
             [self removeChildObserver];
-            [self clearChildNestedView];
+            [self childClearFrameObservedView];
         }
         _childScrollView = childScrollView;
         _childScrollView.linkageChildConfig = config;
         _childScrollView.linkageChildConfig.linkageInternal = self;
-        [self findChildNestedView];
+        [self childGenerateFrameObservedView];
         [self addChildObserver];
     }
 }

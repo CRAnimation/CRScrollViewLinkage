@@ -13,6 +13,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRLinkageChildConfig : CRLinkageBaseConfig
 
+/**
+ * 需要被监听frame的view
+ * 默认：NearMain
+ */
+@property (nonatomic, assign) CRChildFrameObserveType frameObserveType;
+/**
+ * 需要被监听frame的view
+ */
+@property (nonatomic, weak, setter=configFrameObservedView:, nullable) UIView *_frameObservedView;
+/**
+ * 自定义需要被监听frame的view
+ * frameObserveType为custom时生效
+ */
+@property (nonatomic, weak) UIView *customframeObservedView;
+
 /// 头部/尾部固定预留高度
 @property (nonatomic, assign) CGFloat childTopFixHeight;
 @property (nonatomic, assign) CGFloat childBottomFixHeight;
@@ -46,7 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset;
-    
+- (void)configFrameObservedView:(UIView * _Nullable)frameObservedView;
+
 @end
 
 NS_ASSUME_NONNULL_END

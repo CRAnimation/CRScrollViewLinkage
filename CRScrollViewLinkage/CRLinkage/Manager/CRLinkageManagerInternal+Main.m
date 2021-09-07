@@ -55,7 +55,7 @@
             /// 下拉刷新到极限
             if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
                 [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
-                                                     scrollViewType:CRScrollViewForMain
+                                                     scrollViewType:CRScrollViewType_Main
                                                   bouncePostionType:CRBouncePositionOverHeaderLimit];
             }
             
@@ -107,7 +107,7 @@
         case CRLinkageScrollStatus_ChildRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefresh"];
-            if (self.childConfig.gestureType == CRGestureForMainScrollView && childOffSetY == 0) {
+            if (self.childConfig.gestureType == CRGestureType_Main && childOffSetY == 0) {
                 self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             } else {
                 [self mainHold];
@@ -133,13 +133,13 @@
         /// 往上滑
         if (currentOffSetY >= bestOffSetY) {
             switch (self.childConfig.gestureType) {
-                case CRGestureForMainScrollView: {
+                case CRGestureType_Main: {
                     // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
                     // 继续保持为mainScroll
                     
                     nil;
                 } break;
-                case CRGestureForBothScrollView:
+                case CRGestureType_BothScrollView:
                 {
                     // 切换为child滑动
                     self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
@@ -153,7 +153,7 @@
         /// 往下滑
         if (currentOffSetY <= bestOffSetY) {
             switch (self.childConfig.gestureType) {
-                case CRGestureForMainScrollView: {
+                case CRGestureType_Main: {
                     // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
                     if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
                         // 超过极限了
@@ -164,7 +164,7 @@
                     }
                     nil;
                 } break;
-                case CRGestureForBothScrollView:
+                case CRGestureType_BothScrollView:
                 {
                     // 切换为child滑动
                     self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
@@ -191,7 +191,7 @@
     [self autoScrollToContentOffSetY:bestMainOffSetY];
     if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
         [self.delegate scrollViewTriggerLimitWithScrollView:self.mainScrollView
-                                             scrollViewType:CRScrollViewForMain
+                                             scrollViewType:CRScrollViewType_Main
                                           bouncePostionType:CRBouncePositionOverHeaderLimit];
     }
 }

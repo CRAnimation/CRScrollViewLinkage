@@ -11,26 +11,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRLinkageDefine : NSObject
 
+#pragma mark - CRChildFrameObserveType
+/// 需要被监听frame的view
+typedef enum : NSUInteger {
+    /// 取最接近MainScrollView的那个view
+    CRChildFrameObserveType_NearMain,
+    /// 监听childScrollView的frame
+    CRChildFrameObserveType_Child,
+    /// 监听自定义view的frame
+    CRChildFrameObserveType_CustomView,
+} CRChildFrameObserveType;
 
 #pragma mark - CRScrollViewType
 typedef enum : NSUInteger {
-    CRScrollViewForMain,
-    CRScrollViewForChild,
+    CRScrollViewType_Main,
+    CRScrollViewType_Child,
 } CRScrollViewType;
 
 #pragma mark - CRGestureType
 typedef enum : NSUInteger {
-    CRGestureForMainScrollView = 0,
-    CRGestureForBothScrollView = 1,
+    CRGestureType_Main = 0,
+    CRGestureType_BothScrollView = 1,
 } CRGestureType;
 
 
 #pragma mark - CRBounceType
 typedef enum : NSUInteger {
     /// 只允许mainScrollview上拉/下拉加载更多
-    CRBounceForMain,
+    CRBounceType_Main,
     /// 只允许childScrollview上拉/下拉加载更多
-    CRBounceForChild,
+    CRBounceType_Child,
 } CRBounceType;
 
 #pragma mark - CRBounceType

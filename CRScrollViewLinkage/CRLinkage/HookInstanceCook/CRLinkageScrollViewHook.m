@@ -39,9 +39,9 @@
             if (velocity.y > 0) {
                 /// 查询childConfig的下拉配置
                 switch (childConfig.headerBounceType) {
-                    case CRBounceForMain: { nil; } break;
+                    case CRBounceType_Main: { nil; } break;
                     /// child允许下拉
-                    case CRBounceForChild:
+                    case CRBounceType_Child:
                     {
                         /// 向下滑
                         if ([mainConfig isScrollOverHeader]) {
@@ -57,9 +57,9 @@
             else if (velocity.y < 0) {
                 /// 查询childConfig的上拉配置
                 switch (childConfig.footerBounceType) {
-                    case CRBounceForMain: { nil; } break;
+                    case CRBounceType_Main: { nil; } break;
                     /// child允许上拉
-                    case CRBounceForChild:
+                    case CRBounceType_Child:
                     {
                         /// 向上滑
                         if ([mainConfig isScrollOverFooter]) {
@@ -102,9 +102,9 @@
                 
                 BOOL resVal = [self gestureIsInBothArea:gestureRecognizer];
                 if (resVal) {
-                    childConfig.gestureType = CRGestureForBothScrollView;
+                    childConfig.gestureType = CRGestureType_BothScrollView;
                 } else {
-                    childConfig.gestureType = CRGestureForMainScrollView;
+                    childConfig.gestureType = CRGestureType_Main;
                 }
                 
                 return resVal;
