@@ -45,12 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param childScrollView childScrollView
 - (void)configChildScrollView:(UIScrollView *)childScrollView;
 
-/// 配置child
-/// 可以根据场景多次调用，修改当前相应的child
-/// @param childScrollView childScrollView
-/// @param childViewHeight 指定Child的高度（因为可能childScroll会放在其他容器中，这时需要使用容器高度，尽量保证每次都一样。）
-- (void)configChildScrollView:(UIScrollView *)childScrollView childViewHeight:(CGFloat)childViewHeight;
-
 #pragma mark - Tool Method
 /// 判断方向
 - (CRScrollDir)_checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset;

@@ -145,7 +145,8 @@
     switch (self.childConfig.frameObserveType) {
         case CRChildFrameObserveType_NearMain:
         {
-            self.childConfig._frameObservedView = [self _findNearestMainView];
+            UIView *nearestMainView = [self _findNearestMainView];
+            self.childConfig._frameObservedView = nearestMainView;
         }
             break;
         case CRChildFrameObserveType_Child:

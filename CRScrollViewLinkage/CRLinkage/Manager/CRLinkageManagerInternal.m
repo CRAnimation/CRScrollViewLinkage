@@ -57,17 +57,7 @@ static NSString * const kCenter = @"center";
 /// 可以根据场景多次调用，修改当前相应的child
 /// @param childScrollView childScrollView
 - (void)configChildScrollView:(UIScrollView *)childScrollView {
-    [self configChildScrollView:childScrollView childViewHeight:childScrollView.frame.size.height];
-}
-
-/// 配置child
-/// 可以根据场景多次调用，修改当前相应的child
-/// @param childScrollView childScrollView
-/// @param childViewHeight 指定Child的高度（因为可能childScroll会放在其他容器中，这时需要使用容器高度，尽量保证每次都一样。）
-- (void)configChildScrollView:(UIScrollView *)childScrollView childViewHeight:(CGFloat)childViewHeight {
     self.childScrollView = childScrollView;
-//    CGFloat tmpTopHeight = self.childScrollView.frame.origin.y;
-//    [self childScrollViewUpdateTopHeight:tmpTopHeight];
     [self _updateConfig];
 }
 

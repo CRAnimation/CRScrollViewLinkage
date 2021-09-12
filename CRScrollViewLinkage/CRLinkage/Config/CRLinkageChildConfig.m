@@ -52,7 +52,8 @@
     if (!mainScrollView) {
         return;
     }
-    CGRect childFrame = self.currentScrollView.frame;
+    CGRect mainFrame = mainScrollView.frame;
+    CGRect childFrame = self._frameObservedView.frame;
     CGFloat mainScrollViewHeight = mainScrollView.frame.size.height;
     CGFloat resOffSet = 0;
     switch (self.childHoldPosition) {
@@ -80,7 +81,7 @@
 }
 
 - (void)configFrameObservedView:(UIView * _Nullable)frameObservedView {
-    self._frameObservedView = frameObservedView;
+    __frameObservedView = frameObservedView;
 }
 
 @end
