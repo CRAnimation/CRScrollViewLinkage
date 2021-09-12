@@ -55,6 +55,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isCanScroll;
 @property (nonatomic, assign) CGFloat holdOffSetY;
 
+
+#warning Bear 这里的建议弄成soft属性，在切换child时，可以清空。并且只能internal进行操作。
 /**
  * 在mainScrollView中，contentOffSet滑动到该位置时，应该切换到child
  */
@@ -62,6 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset;
 - (void)configFrameObservedView:(UIView * _Nullable)frameObservedView;
+/// 记录headerLimit被触发过一次。如果向下滑，则会复位为NO
+@property (nonatomic, assign) BOOL _haveTriggeredHeaderLimit;
+/// 记录footerLimit被触发过一次。如果向下滑，则会复位为NO
+@property (nonatomic, assign) BOOL _haveTriggeredFooterLimit;
 
 @end
 

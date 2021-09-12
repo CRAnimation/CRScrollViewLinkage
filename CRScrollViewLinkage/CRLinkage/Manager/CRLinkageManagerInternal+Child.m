@@ -11,6 +11,7 @@
 @implementation CRLinkageManagerInternal (Child)
 
 - (void)_processChild:(UIScrollView *)childScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
+    __weak typeof(self) weakSelf = self;
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
 //    CGFloat currentOffSetY = childScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
@@ -35,7 +36,7 @@
             [self.childConfig processChildScrollDir:scrollDir isLimit:NO overHeaderOrLimitBlock:^(BOOL isOver) {
                 if (isOver) {
                     // 拉过头了，切换为main滑动
-                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                    weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
                 } else {
                     // 区域内可滑
                     nil;
@@ -43,7 +44,7 @@
             } overFooterOrLimitBlock:^(BOOL isOver) {
                 if (isOver) {
                     // 拉过头了，切换为main滑动
-                    self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+                    weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
                 } else {
                     // 区域内可滑
                     nil;
@@ -107,13 +108,15 @@
 
 #pragma mark - 处理child下拉刷新/上拉加载更多
 - (void)_processChildRefreshAndLoadMoreScrollDir:(CRScrollDir)scrollDir {
+    __weak typeof(self) weakSelf = self;
     [self.childConfig processChildScrollDir:scrollDir isLimit:YES overHeaderOrLimitBlock:^(BOOL isOver) {
         if (isOver) {
+            weakSelf.childConfig._haveTriggeredHeaderLimit = YES;
             // 拉过头了，切换为main滑动
-            self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+            weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             // 通知代理
-            if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
-                [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
+            if ([weakSelf.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                [weakSelf.delegate scrollViewTriggerLimitWithScrollView:weakSelf.childScrollView
                                                      scrollViewType:CRScrollViewType_Child
                                                   bouncePostionType:CRBouncePositionOverHeaderLimit];
             }
@@ -123,11 +126,12 @@
         }
     } overFooterOrLimitBlock:^(BOOL isOver) {
         if (isOver) {
+            weakSelf.childConfig._haveTriggeredFooterLimit = YES;
             // 拉过头了，切换为main滑动
-            self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
+            weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             // 通知代理
-            if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
-                [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
+            if ([weakSelf.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                [weakSelf.delegate scrollViewTriggerLimitWithScrollView:weakSelf.childScrollView
                                                      scrollViewType:CRScrollViewType_Child
                                                   bouncePostionType:CRBouncePositionOverFooterLimit];
             }

@@ -66,6 +66,8 @@
     CRLinkageChildConfig *childConfig = self.childView.myTableView.linkageChildConfig;
     childConfig.childHoldPosition = CRChildHoldPosition_Top;
     childConfig.childTopFixHeight = 100;
+    childConfig.headerBounceType = CRBounceType_Child;
+    childConfig.headerBounceLimit = @(50);
 //    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView];
 }

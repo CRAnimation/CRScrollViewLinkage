@@ -51,23 +51,33 @@
        overFooterOrLimitBlock:(void (^)(BOOL isOver))overFooterOrLimitBlock {
     if (isLimit) {
         [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
-            // 拉到头了，需要处理
-            if (overHeaderOrLimitBlock) {
-                overHeaderOrLimitBlock([self isScrollOverHeaderLimit]);
+            /// 向上滑，判断是否触发footer极限
+            if (overFooterOrLimitBlock) {
+                BOOL result = [self isScrollOverFooterLimit];
+                overFooterOrLimitBlock(result);
             }
         } downBlock:^{
-            if (overFooterOrLimitBlock) {
-                overFooterOrLimitBlock([self isScrollOverFooterLimit]);
+            /// 向下滑，判断是否触发header极限
+            if (overHeaderOrLimitBlock) {
+                BOOL result = [self isScrollOverHeaderLimit];
+                if (result) {
+                    NSLog(@"--1");
+                }
+                overHeaderOrLimitBlock(result);
             }
         }];
     } else {
         [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
-            if (overHeaderOrLimitBlock) {
-                overHeaderOrLimitBlock([self isScrollOverHeader]);
+            /// 向上滑，判断是否触发footer
+            if (overFooterOrLimitBlock) {
+                BOOL result = [self isScrollOverFooter];
+                overFooterOrLimitBlock(result);
             }
         } downBlock:^{
-            if (overFooterOrLimitBlock) {
-                overFooterOrLimitBlock([self isScrollOverFooter]);
+            /// 向下滑，判断是否触发header
+            if (overHeaderOrLimitBlock) {
+                BOOL result = [self isScrollOverHeader];
+                overHeaderOrLimitBlock(result);
             }
         }];
     }
@@ -87,6 +97,17 @@
         return YES;
     }
     return NO;
+}
+
+#pragma mark - Setter & Getter
+- (void)setHeaderBounceLimit:(NSNumber *)headerBounceLimit {
+    if (headerBounceLimit) {
+        int tmpIntValue = [headerBounceLimit intValue];
+        if (tmpIntValue > 0) {
+            headerBounceLimit = @(-tmpIntValue);
+        }
+    }
+    _headerBounceLimit = headerBounceLimit;
 }
 
 @end

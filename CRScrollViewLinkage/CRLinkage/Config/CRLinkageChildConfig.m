@@ -32,6 +32,9 @@
         // main，child共用
         self.isCanScroll = NO;
         self.holdOffSetY = 0;
+        
+        self._haveTriggeredHeaderLimit = NO;
+        self._haveTriggeredFooterLimit = NO;
     }
     return self;
 }

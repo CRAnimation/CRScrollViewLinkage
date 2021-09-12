@@ -24,6 +24,8 @@
             [self mainHold];
         }
             break;
+            
+#pragma mark 处理main滑动
         case CRLinkageScrollStatus_MainScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_MainScroll"];
@@ -107,7 +109,15 @@
         case CRLinkageScrollStatus_ChildRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildRefresh"];
-            if (self.childConfig.gestureType == CRGestureType_Main && childOffSetY == 0) {
+            
+#warning Bear 这里临时解决那种特殊的问题。
+            if (childOffSetY == 0) {
+                [self.childScrollView setContentOffset:CGPointMake(0, 1) animated:NO];
+            }
+#warning Bear 这里后面检查下有没有问题
+            BOOL status1 = self.childConfig.gestureType == CRGestureType_Main && childOffSetY == 0;
+            BOOL status2 = self.childConfig._haveTriggeredHeaderLimit == YES;
+            if (status1 || status2) {
                 self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             } else {
                 [self mainHold];
@@ -131,6 +141,11 @@
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
     [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
         /// 往上滑
+        
+        if (self.childConfig._haveTriggeredHeaderLimit == YES) {
+            /// 复位
+            self.childConfig._haveTriggeredHeaderLimit = NO;
+        }
         /// 当前offset超过预期
         if (currentOffSetY >= bestOffSetY) {
             switch (self.childConfig.gestureType) {
@@ -150,25 +165,59 @@
             // 继续保持为mainScroll
             nil;
         }
+        
+#warning Bear 这里到时候记得补一下类似这样的逻辑（参考下面的即可）
+//        if (self.childConfig._haveTriggeredHeaderLimit == YES) {
+//            /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
+//            nil;
+//        }
+        
     } downBlock:^{
         /// 往下滑
+        
+        if (self.childConfig._haveTriggeredFooterLimit == YES) {
+            /// 复位
+            self.childConfig._haveTriggeredFooterLimit = NO;
+        }
+        
         if (currentOffSetY <= bestOffSetY) {
             switch (self.childConfig.gestureType) {
                 case CRGestureType_Main: {
-                    // 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
+                    /// 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
                     if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
-                        // 超过极限了
+                        /// 超过极限了
                         self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
                     } else {
-                        // 继续保持为mainScroll
+                        /// 继续保持为mainScroll
                         nil;
                     }
                     nil;
                 } break;
                 case CRGestureType_BothScrollView:
                 {
-                    // 切换为child滑动
-                    self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                    /// 两个scrollView都可以滑动
+                    switch (self.childConfig.headerBounceType) {
+                        /// child不允许下拉刷新
+                        case CRBounceType_Main:
+                        {
+                            /// 不做处理，main继续滑动
+                            nil;
+                        }
+                            break;
+                            
+                        /// child允许下拉刷新
+                        case CRBounceType_Child:
+                        {
+                            if (self.childConfig._haveTriggeredHeaderLimit == YES) {
+                                /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
+                                nil;
+                            } else {
+                                /// 切换为child滑动
+                                self.linkageScrollStatus = CRLinkageScrollStatus_ChildRefresh;
+                            }
+                        }
+                            break;
+                    }
                 } break;
             }
         } else {

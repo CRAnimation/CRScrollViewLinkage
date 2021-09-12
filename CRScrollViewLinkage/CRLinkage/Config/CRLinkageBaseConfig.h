@@ -18,8 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) UIScrollView *currentScrollView;
 @property (nonatomic, weak) CRLinkageManagerInternal *linkageInternal;
 
-/// 头部/底部拉动极限
+/// 头部拉动极限（填入正数即可，里面会自动转成负数）
 @property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
+/// 底部拉动极限（填入正数）
 @property (nonatomic, strong, nullable) NSNumber *footerBounceLimit;
 
 #pragma mark - Scroll Over Check
