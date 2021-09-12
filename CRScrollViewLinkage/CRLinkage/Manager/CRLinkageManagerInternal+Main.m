@@ -207,6 +207,7 @@
     }
 }
 
+#pragma mark Hold
 - (void)mainHold {
     [CRLinkageTool holdScrollView:self.mainScrollView offSet:self.childConfig.bestMainAnchorOffset];
 }

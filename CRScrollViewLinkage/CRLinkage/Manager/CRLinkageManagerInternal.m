@@ -122,7 +122,7 @@ static NSString * const kCenter = @"center";
         if (tmpScrollView == self.mainScrollView) {
             [self _processMain:self.mainScrollView oldOffset:oldOffset newOffset:newOffset];
         } else if (object == self.childScrollView) {
-//            [self _processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
+            [self _processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
         }
     } else if ([keyPath isEqualToString:kCenter]) {
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
@@ -169,38 +169,6 @@ static NSString * const kCenter = @"center";
     }
     return dir;
 }
-
-- (void)childHold {
-    [self childHoldNeedRelax:NO];
-}
-
-- (void)childHoldNeedRelax:(BOOL)needRelax {
-    [self scrollHoldDetail:self.childScrollView needRelax:needRelax];
-}
-
-
-- (void)scrollHoldDetail:(UIScrollView *)scrollView needRelax:(BOOL)needRelax {
-    CGFloat offsetY = scrollView.linkageChildConfig.holdOffSetY;
-    CGFloat currentOffsetY = scrollView.contentOffset.y;
-//    CGFloat delta = 1;
-    if (currentOffsetY != offsetY) {
-        /// 这里面的后面再继续优化
-//        if (needRelax) {
-//            if (fabs(currentOffsetY - offsetY) > 20) {
-//                return;
-//            }
-////            if (fabs(currentOffsetY - offsetY) > delta) {
-////                if (offsetY > currentOffsetY) {
-////                    offsetY = currentOffsetY + delta;
-////                } else if (offsetY < currentOffsetY) {
-////                    offsetY = currentOffsetY - delta;
-////                }
-////            }
-//        }
-        scrollView.contentOffset = CGPointMake(0, offsetY);
-    }
-}
-
 
 #pragma mark - Reset Func
 - (void)_updateConfig {

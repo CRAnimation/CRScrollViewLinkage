@@ -191,5 +191,9 @@
     return self.childConfig._frameObservedView;
 }
 
+#pragma mark Hold
+- (void)childHold {
+    [CRLinkageTool holdScrollView:self.childScrollView offSet:CGPointZero];
+}
 
 @end

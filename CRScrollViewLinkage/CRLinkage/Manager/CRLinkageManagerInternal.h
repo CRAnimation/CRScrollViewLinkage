@@ -49,10 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 判断方向
 - (CRScrollDir)_checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset;
 
-#pragma mark Hold
-- (void)childHold;
-- (void)childHoldNeedRelax:(BOOL)needRelax;
-
 - (CRLinkageMainConfig *)mainConfig;
 - (CRLinkageChildConfig *)childConfig;
 - (CRBounceType)headerBounceType;
