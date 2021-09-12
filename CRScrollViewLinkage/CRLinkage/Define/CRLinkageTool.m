@@ -47,7 +47,7 @@
 + (void)holdScrollView:(UIScrollView *)scrollView offSet:(CGPoint)offSet {
     CGPoint currentOffset = scrollView.contentOffset;
     if (!CGPointEqualToPoint(currentOffset, offSet)) {
-        scrollView.contentOffset = offSet;
+        [scrollView setContentOffset:offSet animated:NO];
     }
 }
 
