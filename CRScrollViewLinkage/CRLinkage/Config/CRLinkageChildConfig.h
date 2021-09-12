@@ -50,15 +50,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 下一个scrollView
 @property (nonatomic, weak) UIScrollView *nextScrollView;
 
-/**
- * 在mainScrollView中，contentOffSet滑动到该位置时，应该切换到child
- */
-@property (nonatomic, assign) CGPoint bestContentOffSet;
-
+#warning Bear 这两个属性可能用不上了，最后检查下
 // main，child共用
 @property (nonatomic, assign) BOOL isCanScroll;
 @property (nonatomic, assign) CGFloat holdOffSetY;
 
+/**
+ * 在mainScrollView中，contentOffSet滑动到该位置时，应该切换到child
+ */
+@property (nonatomic, assign) CGPoint bestMainAnchorOffset;
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset;
 - (void)configFrameObservedView:(UIView * _Nullable)frameObservedView;

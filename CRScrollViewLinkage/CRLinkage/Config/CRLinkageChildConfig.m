@@ -70,7 +70,7 @@
             resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.positionRatio;
             break;
     }
-    self.bestContentOffSet = CGPointMake(0, resOffSet);
+    self.bestMainAnchorOffset = CGPointMake(0, resOffSet);
 }
 
 - (void)setChildHoldPosition:(CRChildHoldPosition)childHoldPosition {

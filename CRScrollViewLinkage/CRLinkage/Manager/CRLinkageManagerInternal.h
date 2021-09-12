@@ -50,8 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (CRScrollDir)_checkDirByOldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset;
 
 #pragma mark Hold
-- (void)mainHold;
-- (void)mainHoldNeedRelax:(BOOL)needRelax;
 - (void)childHold;
 - (void)childHoldNeedRelax:(BOOL)needRelax;
 

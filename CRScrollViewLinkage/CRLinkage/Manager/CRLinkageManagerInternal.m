@@ -122,7 +122,7 @@ static NSString * const kCenter = @"center";
         if (tmpScrollView == self.mainScrollView) {
             [self _processMain:self.mainScrollView oldOffset:oldOffset newOffset:newOffset];
         } else if (object == self.childScrollView) {
-            [self _processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
+//            [self _processChild:self.childScrollView oldOffset:oldOffset newOffset:newOffset];
         }
     } else if ([keyPath isEqualToString:kCenter]) {
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
@@ -134,6 +134,7 @@ static NSString * const kCenter = @"center";
         }
         
         if (object == self.childFrameObservedView) {
+            [self _tryUpdateOffSet];
 //            [self childScrollViewUpdateTopHeight:self.childFrameObservedView.frame.origin.y];
         }
     } else if ([keyPath isEqualToString:kBounds]) {
@@ -146,7 +147,7 @@ static NSString * const kCenter = @"center";
         }
         
         if (object == self.childFrameObservedView) {
-            [self _tryConfigOffSet];
+            [self _tryUpdateOffSet];
         }
     }
 }
@@ -169,15 +170,6 @@ static NSString * const kCenter = @"center";
     return dir;
 }
 
-#pragma mark Hold
-- (void)mainHold {
-    [self mainHoldNeedRelax:NO];
-}
-
-- (void)mainHoldNeedRelax:(BOOL)needRelax {
-    [self scrollHoldDetail:self.mainScrollView needRelax:needRelax];
-}
-
 - (void)childHold {
     [self childHoldNeedRelax:NO];
 }
@@ -185,6 +177,7 @@ static NSString * const kCenter = @"center";
 - (void)childHoldNeedRelax:(BOOL)needRelax {
     [self scrollHoldDetail:self.childScrollView needRelax:needRelax];
 }
+
 
 - (void)scrollHoldDetail:(UIScrollView *)scrollView needRelax:(BOOL)needRelax {
     CGFloat offsetY = scrollView.linkageChildConfig.holdOffSetY;
@@ -211,11 +204,11 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Reset Func
 - (void)_updateConfig {
-    [self _tryConfigOffSet];
+    [self _tryUpdateOffSet];
     [self _tryConfigLinkageScrollType];
 }
 
-- (void)_tryConfigOffSet {
+- (void)_tryUpdateOffSet {
     if (self.childScrollView) {
         [self.childScrollView.linkageChildConfig caculateMainAnchorOffset];
     }
@@ -247,7 +240,7 @@ static NSString * const kCenter = @"center";
             // childScroll: main不能滑，child可以滑动
         case CRLinkageScrollStatus_ChildScroll:
             mainConfig.isCanScroll = NO;
-            mainConfig.holdOffSetY = childConfig.bestContentOffSet.y;
+            mainConfig.holdOffSetY = childConfig.bestMainAnchorOffset.y;
             
             childConfig.isCanScroll = YES;
             break;

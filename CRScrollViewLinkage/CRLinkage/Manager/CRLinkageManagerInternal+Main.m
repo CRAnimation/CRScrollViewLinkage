@@ -13,7 +13,7 @@
 #pragma mark ProcessMainScroll
 - (void)_processMain:(UIScrollView *)mainScrollView oldOffset:(CGFloat)oldOffset newOffset:(CGFloat)newOffset {
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
-    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
+    CGFloat bestOffSetY = self.childConfig.bestMainAnchorOffset.y;
     CGFloat mainOffSetY = mainScrollView.contentOffset.y;
     CGFloat childOffSetY = self.childScrollView.contentOffset.y;
     switch (self.linkageScrollStatus) {
@@ -34,7 +34,7 @@
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildScroll"];
             // childScroll: main不能滑，child可以滑动
-            [self mainHoldNeedRelax:YES];
+            [self mainHold];
         }
             break;
         case CRLinkageScrollStatus_MainRefresh:
@@ -127,10 +127,11 @@
                                    oldOffset:(CGFloat)oldOffset
                                    newOffset:(CGFloat)newOffset {
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
-    CGFloat bestOffSetY = self.childConfig.bestContentOffSet.y;
+    CGFloat bestOffSetY = self.childConfig.bestMainAnchorOffset.y;
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
     [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
         /// 往上滑
+        /// 当前offset超过预期
         if (currentOffSetY >= bestOffSetY) {
             switch (self.childConfig.gestureType) {
                 case CRGestureType_Main: {
@@ -204,6 +205,10 @@
         tmpContentOffSet.y = bestMainOffSetY;
         [self.mainScrollView setContentOffset:tmpContentOffSet animated:YES];
     }
+}
+
+- (void)mainHold {
+    [CRLinkageTool holdScrollView:self.mainScrollView offSet:self.childConfig.bestMainAnchorOffset];
 }
 
 @end

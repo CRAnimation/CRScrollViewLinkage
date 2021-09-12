@@ -19,40 +19,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F83B8FF3-D7F4-46F3-B03B-0E87850AFB89"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DE112F19-5A1E-406E-987D-8960DA0F00C4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "EBACA095-8DAD-4433-95A6-125561D640D8"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CRScrollViewLinkage/CRLinkage/Config/CRLinkageChildConfig.m"
@@ -74,8 +42,8 @@
             filePath = "CRScrollViewLinkage/BearTestNestLinkageVC/BearTestNestLinkageVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "-createUI"
             landmarkType = "7">
          </BreakpointContent>
@@ -115,22 +83,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6AF3E468-A2BC-4AD8-BCEB-5415C2B3DA0C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "-observeValueForKeyPath:ofObject:change:context:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "AF5CC423-ED9C-4958-B797-B2752380AEDF"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -148,7 +100,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4F827BA4-BBF4-4058-9B45-DD68FE28E44A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CRScrollViewLinkage/CRLinkage/Config/CRLinkageChildConfig.m"
@@ -164,7 +116,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "8D0C6E11-7661-401E-9E6C-D4BB0C1A4CBE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Child.m"
@@ -189,6 +141,230 @@
             startingLineNumber = "19"
             endingLineNumber = "19"
             landmarkName = "-_processMain:oldOffset:newOffset:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "957278E5-5A6C-4C67-8A8C-3808887403B0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Config/CRLinkageChildConfig.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "-configFrameObservedView:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "243066DA-2191-4586-8C1A-1406D9CF6A7E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "-observeValueForKeyPath:ofObject:change:context:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E99ED740-AE59-44A9-AEFA-E5E5BE96A6E4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "-observeValueForKeyPath:ofObject:change:context:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FCA85005-9B3A-4150-9675-3A3833F7139E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FCA85005-9B3A-4150-9675-3A3833F7139E - 745436a1e2140b5f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "FCA85005-9B3A-4150-9675-3A3833F7139E - 8151730e39475d0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__91-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]_block_invoke"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "168">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "186DA1A1-FD6F-4D6D-8655-E4E92949DEBD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "186DA1A1-FD6F-4D6D-8655-E4E92949DEBD - 745436a1e2140ef3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "132"
+                  endingLineNumber = "132"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "186DA1A1-FD6F-4D6D-8655-E4E92949DEBD - 8151730e394758d9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__91-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]_block_invoke"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "83731724-DDFD-434F-9750-77599FAAB0D7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5EE3E89F-C681-43C9-B360-E450C136F48B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5EE3E89F-C681-43C9-B360-E450C136F48B - 745436a1e2140b5f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "5EE3E89F-C681-43C9-B360-E450C136F48B - 8151730e39475d0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__91-[CRLinkageManagerInternal(Main) _processMainScrollWithMainScrollView:oldOffset:newOffset:]_block_invoke"
+                  moduleName = "CRScrollViewLinkage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bear/Documents/Project/iOSCode/MyDemo/CRScrollViewLinkage/CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "168">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DC46957C-CDB0-4B55-93D9-C5F83543B54A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CRScrollViewLinkage/CRLinkage/Manager/CRLinkageManagerInternal+Main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "-_processMainScrollWithMainScrollView:oldOffset:newOffset:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

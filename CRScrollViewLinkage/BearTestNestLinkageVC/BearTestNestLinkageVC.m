@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.topHeight = 310;
+    self.topHeight = 300;
     [self createUI];
     [self test];
 }
@@ -63,9 +63,10 @@
     }];
     
     [self.linkageManagerInternal configMainScrollView:self.mainScrollView];
-    self.childView.myTableView.linkageChildConfig.childHoldPosition = CRChildHoldPosition_Top;
     CRLinkageChildConfig *childConfig = self.childView.myTableView.linkageChildConfig;
-    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
+    childConfig.childHoldPosition = CRChildHoldPosition_Top;
+    childConfig.childTopFixHeight = 100;
+//    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView];
 }
 
