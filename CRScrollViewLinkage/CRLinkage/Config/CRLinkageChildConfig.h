@@ -73,8 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Triggered Limit
 // config
-- (void)configHaveTriggeredHeaderLimit;
-- (void)configHaveTriggeredFooterLimit;
+- (void)_configHaveTriggeredHeaderLimit;
+- (void)_configHaveTriggeredFooterLimit;
 /// get
 - (BOOL)_getHaveTriggeredFooterLimit;
 - (BOOL)_getHaveTriggeredHeaderLimit;

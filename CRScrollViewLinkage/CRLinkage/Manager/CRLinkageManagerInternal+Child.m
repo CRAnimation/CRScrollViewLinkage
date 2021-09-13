@@ -111,7 +111,7 @@
     __weak typeof(self) weakSelf = self;
     [self.childConfig processChildScrollDir:scrollDir isLimit:YES overHeaderOrLimitBlock:^(BOOL isOver) {
         if (isOver) {
-            [weakSelf.childConfig configHaveTriggeredHeaderLimit];
+            [weakSelf.childConfig _configHaveTriggeredHeaderLimit];
             // 拉过头了，切换为main滑动
             weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             // 通知代理
@@ -126,7 +126,7 @@
         }
     } overFooterOrLimitBlock:^(BOOL isOver) {
         if (isOver) {
-            [weakSelf.childConfig configHaveTriggeredFooterLimit];
+            [weakSelf.childConfig _configHaveTriggeredFooterLimit];
             // 拉过头了，切换为main滑动
             weakSelf.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             // 通知代理

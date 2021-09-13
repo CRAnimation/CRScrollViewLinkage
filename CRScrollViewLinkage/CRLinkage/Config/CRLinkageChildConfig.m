@@ -101,10 +101,10 @@
 
 #pragma mark - Triggered Limit
 // config
-- (void)configHaveTriggeredHeaderLimit {
+- (void)_configHaveTriggeredHeaderLimit {
     self._haveTriggeredHeaderLimit = YES;
 }
-- (void)configHaveTriggeredFooterLimit {
+- (void)_configHaveTriggeredFooterLimit {
     self._haveTriggeredFooterLimit = YES;
 }
 /// get
