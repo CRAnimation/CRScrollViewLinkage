@@ -70,7 +70,10 @@
             resOffSet = CGRectGetMaxY(childFrame) + self.childBottomFixHeight - mainScrollViewHeight;
             break;
         case CRChildHoldPosition_CustomRatio:
-            resOffSet = CGRectGetMinY(childFrame) + (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.positionRatio;
+        {
+            CGFloat deltaHeight = (mainScrollViewHeight - CGRectGetHeight(childFrame)) * self.positionRatio;
+            resOffSet = CGRectGetMinY(childFrame) - deltaHeight;
+        }
             break;
     }
     self.bestMainAnchorOffset = CGPointMake(0, resOffSet);

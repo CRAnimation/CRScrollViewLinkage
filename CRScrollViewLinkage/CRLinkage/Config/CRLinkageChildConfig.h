@@ -42,7 +42,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// child固定类型（第一个child一定是top类型，最后一个child一定是bottom类型）
 @property (nonatomic, assign) CRChildHoldPosition childHoldPosition;
-/// childHoldPosition为customRatio类型时生效。（默认：0.5）
+/**
+ * childHoldPosition为customRatio类型时生效。（0～1.0）
+ * 默认：0.5，剧中
+ * 0等同于childHoldPosition==Top
+ * 1等同于childHoldPosition==Bottom
+ * 数字越小越靠近顶部，反之靠近底部。
+ */
 @property (nonatomic, assign) CGFloat positionRatio;
 
 /// 上一个scrollView（类似双向链表的结构）

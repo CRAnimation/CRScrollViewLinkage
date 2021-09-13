@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationController.navigationBarHidden = YES;
     self.topHeight = 300;
     [self createUI];
     [self test];
@@ -64,10 +65,14 @@
     
     [self.linkageManagerInternal configMainScrollView:self.mainScrollView];
     CRLinkageChildConfig *childConfig = self.childView.myTableView.linkageChildConfig;
-    childConfig.childHoldPosition = CRChildHoldPosition_Top;
-    childConfig.childTopFixHeight = 100;
+//    childConfig.childHoldPosition = CRChildHoldPosition_Top;
+    //    childConfig.childTopFixHeight = 50;
+//    childConfig.childHoldPosition = CRChildHoldPosition_Center;
+//    childConfig.childHoldPosition = CRChildHoldPosition_Bottom;
+    childConfig.childHoldPosition = CRChildHoldPosition_CustomRatio;
+    childConfig.positionRatio = 0.5;
     childConfig.headerBounceType = CRBounceType_Child;
-    childConfig.headerBounceLimit = @(50);
+    childConfig.headerBounceLimit = @(100);
 //    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView];
 }
