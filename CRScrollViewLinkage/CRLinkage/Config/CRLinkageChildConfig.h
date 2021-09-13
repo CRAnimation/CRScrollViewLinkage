@@ -75,6 +75,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 记录footerLimit被触发过一次。如果向下滑，则会复位为NO
 @property (nonatomic, assign) BOOL _haveTriggeredFooterLimit;
 
+- (void)_resetTriggeredHeader;
+- (void)_resetTriggeredFooter;
+
 @end
 
 NS_ASSUME_NONNULL_END

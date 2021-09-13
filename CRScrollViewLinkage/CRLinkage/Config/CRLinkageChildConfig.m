@@ -90,4 +90,31 @@
     __frameObservedView = frameObservedView;
 }
 
+
+//childConfig._haveTriggeredHeaderLimit == YES
+
+- (void)_resetTriggeredHeader {
+    if (self._haveTriggeredHeaderLimit == YES) {
+        /// 复位
+        self._haveTriggeredHeaderLimit = NO;
+    }
+}
+
+- (void)_resetTriggeredFooter {
+    if (self._haveTriggeredFooterLimit == YES) {
+        /// 复位
+        self._haveTriggeredFooterLimit = NO;
+    }
+}
+
+- (void)set_haveTriggeredHeaderLimit:(BOOL)_haveTriggeredHeaderLimit {
+    __haveTriggeredHeaderLimit = _haveTriggeredHeaderLimit;
+    NSLog(@"--_haveTriggeredHeaderLimit:%@", _haveTriggeredHeaderLimit ? @"YES" : @"NO");
+}
+
+- (void)set_haveTriggeredFooterLimit:(BOOL)_haveTriggeredFooterLimit {
+    __haveTriggeredFooterLimit = _haveTriggeredFooterLimit;
+    NSLog(@"--_haveTriggeredFooterLimit:%@", _haveTriggeredFooterLimit ? @"YES" : @"NO");
+}
+
 @end

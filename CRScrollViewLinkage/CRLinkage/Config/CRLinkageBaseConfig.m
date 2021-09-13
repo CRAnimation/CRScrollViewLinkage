@@ -86,14 +86,14 @@
 #pragma mark - Private
 - (BOOL)_isScrollOverHeaderWithLimit:(CGFloat)limit {
     CGFloat bestContentOffSetY = 0 + limit;
-    if (self.currentScrollView.contentOffset.y <= bestContentOffSetY) {
+    if (self.currentScrollView.contentOffset.y < bestContentOffSetY) {
         return YES;
     }
     return NO;
 }
 - (BOOL)_isScrollOverFooterWithLimit:(CGFloat)limit {
     CGFloat bestContentOffSetY = self.currentScrollView.contentSize.height - self.currentScrollView.frame.size.height + limit;
-    if (self.currentScrollView.contentOffset.y >= bestContentOffSetY) {
+    if (self.currentScrollView.contentOffset.y > bestContentOffSetY) {
         return YES;
     }
     return NO;

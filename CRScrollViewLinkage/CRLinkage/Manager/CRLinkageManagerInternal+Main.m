@@ -142,10 +142,6 @@
     [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
         /// 往上滑
         
-        if (self.childConfig._haveTriggeredHeaderLimit == YES) {
-            /// 复位
-            self.childConfig._haveTriggeredHeaderLimit = NO;
-        }
         /// 当前offset超过预期
         if (currentOffSetY >= bestOffSetY) {
             switch (self.childConfig.gestureType) {
@@ -174,11 +170,6 @@
         
     } downBlock:^{
         /// 往下滑
-        
-        if (self.childConfig._haveTriggeredFooterLimit == YES) {
-            /// 复位
-            self.childConfig._haveTriggeredFooterLimit = NO;
-        }
         
         if (currentOffSetY <= bestOffSetY) {
             switch (self.childConfig.gestureType) {

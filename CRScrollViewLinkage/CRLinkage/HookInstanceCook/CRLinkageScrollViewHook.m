@@ -37,6 +37,8 @@
             
             /// 向下滑
             if (velocity.y > 0) {
+                [childConfig _resetTriggeredFooter];
+                
                 /// 查询childConfig的下拉配置
                 switch (childConfig.headerBounceType) {
                     case CRBounceType_Main: { nil; } break;
@@ -44,7 +46,11 @@
                     case CRBounceType_Child:
                     {
                         /// 向下滑
-                        if ([mainConfig isScrollOverHeader]) {
+                        /// main到顶了
+                        BOOL status1 = [mainConfig isScrollOverHeader];
+                        /// child还没超出过极限
+                        BOOL neverTriggeredHeaderLimit = !childConfig._haveTriggeredHeaderLimit;
+                        if (status1 && neverTriggeredHeaderLimit) {
                             /// main到顶了，不接收该手势，让child接收。
                             /// （不这么写的话，child的gestureRecognizerShouldBegin不会被触发。在mian到顶的情况下，停止一会。无法对child直接下拉刷新。）
                             return NO;
@@ -55,6 +61,8 @@
             }
             /// 向上滑
             else if (velocity.y < 0) {
+                [childConfig _resetTriggeredHeader];
+                
                 /// 查询childConfig的上拉配置
                 switch (childConfig.footerBounceType) {
                     case CRBounceType_Main: { nil; } break;
