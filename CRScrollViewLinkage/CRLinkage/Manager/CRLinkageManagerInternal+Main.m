@@ -116,7 +116,7 @@
             }
 #warning Bear 这里后面检查下有没有问题
             BOOL status1 = self.childConfig.gestureType == CRGestureType_Main && childOffSetY == 0;
-            BOOL status2 = self.childConfig._haveTriggeredHeaderLimit == YES;
+            BOOL status2 = [self.childConfig _getHaveTriggeredHeaderLimit];
             if (status1 || status2) {
                 self.linkageScrollStatus = CRLinkageScrollStatus_MainScroll;
             } else {
@@ -199,7 +199,7 @@
                         /// child允许下拉刷新
                         case CRBounceType_Child:
                         {
-                            if (self.childConfig._haveTriggeredHeaderLimit == YES) {
+                            if ([self.childConfig _getHaveTriggeredHeaderLimit]) {
                                 /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
                                 nil;
                             } else {

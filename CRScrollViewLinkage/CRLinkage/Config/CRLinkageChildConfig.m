@@ -9,6 +9,15 @@
 #import "CRLinkageManager.h"
 #import "CRLinkageManagerInternal.h"
 
+@interface CRLinkageChildConfig()
+
+/// 记录headerLimit被触发过一次。如果向下滑，则会复位为NO
+@property (nonatomic, assign) BOOL _haveTriggeredHeaderLimit;
+/// 记录footerLimit被触发过一次。如果向下滑，则会复位为NO
+@property (nonatomic, assign) BOOL _haveTriggeredFooterLimit;
+
+@end
+
 @implementation CRLinkageChildConfig
 
 - (instancetype)init
@@ -90,28 +99,40 @@
     __frameObservedView = frameObservedView;
 }
 
-
-//childConfig._haveTriggeredHeaderLimit == YES
-
-- (void)_resetTriggeredHeader {
+#pragma mark - Triggered Limit
+// config
+- (void)configHaveTriggeredHeaderLimit {
+    self._haveTriggeredHeaderLimit = YES;
+}
+- (void)configHaveTriggeredFooterLimit {
+    self._haveTriggeredFooterLimit = YES;
+}
+/// get
+- (BOOL)_getHaveTriggeredFooterLimit {
+    return self._haveTriggeredFooterLimit;
+}
+- (BOOL)_getHaveTriggeredHeaderLimit {
+    return self._haveTriggeredHeaderLimit;
+}
+/// reset
+- (void)_resetTriggeredHeaderLimit {
     if (self._haveTriggeredHeaderLimit == YES) {
-        /// 复位
         self._haveTriggeredHeaderLimit = NO;
     }
 }
-
-- (void)_resetTriggeredFooter {
+- (void)_resetTriggeredFooterLimit {
     if (self._haveTriggeredFooterLimit == YES) {
-        /// 复位
         self._haveTriggeredFooterLimit = NO;
     }
 }
 
+@synthesize _haveTriggeredHeaderLimit = __haveTriggeredHeaderLimit;
 - (void)set_haveTriggeredHeaderLimit:(BOOL)_haveTriggeredHeaderLimit {
     __haveTriggeredHeaderLimit = _haveTriggeredHeaderLimit;
     NSLog(@"--_haveTriggeredHeaderLimit:%@", _haveTriggeredHeaderLimit ? @"YES" : @"NO");
 }
 
+@synthesize _haveTriggeredFooterLimit = __haveTriggeredFooterLimit;
 - (void)set_haveTriggeredFooterLimit:(BOOL)_haveTriggeredFooterLimit {
     __haveTriggeredFooterLimit = _haveTriggeredFooterLimit;
     NSLog(@"--_haveTriggeredFooterLimit:%@", _haveTriggeredFooterLimit ? @"YES" : @"NO");

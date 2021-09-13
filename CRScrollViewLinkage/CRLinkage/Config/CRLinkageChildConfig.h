@@ -70,13 +70,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// 计算出bestContentOffSet
 - (void)caculateMainAnchorOffset;
 - (void)configFrameObservedView:(UIView * _Nullable)frameObservedView;
-/// 记录headerLimit被触发过一次。如果向下滑，则会复位为NO
-@property (nonatomic, assign) BOOL _haveTriggeredHeaderLimit;
-/// 记录footerLimit被触发过一次。如果向下滑，则会复位为NO
-@property (nonatomic, assign) BOOL _haveTriggeredFooterLimit;
 
-- (void)_resetTriggeredHeader;
-- (void)_resetTriggeredFooter;
+#pragma mark - Triggered Limit
+// config
+- (void)configHaveTriggeredHeaderLimit;
+- (void)configHaveTriggeredFooterLimit;
+/// get
+- (BOOL)_getHaveTriggeredFooterLimit;
+- (BOOL)_getHaveTriggeredHeaderLimit;
+/// reset
+- (void)_resetTriggeredHeaderLimit;
+- (void)_resetTriggeredFooterLimit;
 
 @end
 
