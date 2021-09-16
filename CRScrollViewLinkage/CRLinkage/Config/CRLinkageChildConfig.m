@@ -108,11 +108,11 @@
     self._haveTriggeredFooterLimit = YES;
 }
 /// get
-- (BOOL)_getHaveTriggeredFooterLimit {
-    return self._haveTriggeredFooterLimit;
-}
 - (BOOL)_getHaveTriggeredHeaderLimit {
     return self._haveTriggeredHeaderLimit;
+}
+- (BOOL)_getHaveTriggeredFooterLimit {
+    return self._haveTriggeredFooterLimit;
 }
 /// reset
 - (void)_resetTriggeredHeaderLimit {

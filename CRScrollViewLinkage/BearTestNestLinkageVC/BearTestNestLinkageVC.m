@@ -13,6 +13,7 @@
 
 @interface BearTestNestLinkageVC ()
 
+@property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, strong) BearTestScrollView *mainScrollView;
 @property (nonatomic, strong) BearChildView *childView;
 @property (nonatomic, strong) CRLinkageManagerInternal *linkageManagerInternal;
@@ -30,12 +31,20 @@
     self.topHeight = 300;
     [self createUI];
     [self test];
+    
+    [self.view addSubview:self.backBtn];
+    [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).offset(20);
+        make.left.equalTo(self.view.mas_left).offset(20);
+//        make.leading.trailing.inset(20);
+        make.width.height.mas_equalTo(50);
+    }];
 }
 
 - (void)createUI {
     CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
     CGFloat topHeight = self.topHeight;
-    CGFloat contentHeight = topHeight + [BearChildView viewHeight];
+    CGFloat contentHeight = topHeight + [BearChildView viewHeight] + 500;
     
     self.mainScrollView = [BearTestScrollView new];
     self.mainScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -73,6 +82,8 @@
     childConfig.positionRatio = 0.5;
     childConfig.headerBounceType = CRBounceType_Child;
     childConfig.headerBounceLimit = @(100);
+    childConfig.footerBounceType = CRBounceType_Child;
+    childConfig.footerBounceLimit = @(100);
 //    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView];
 }
@@ -111,6 +122,15 @@
     }
     
     return _linkageManagerInternal;
+}
+
+- (UIButton *)backBtn {
+    if (!_backBtn) {
+        _backBtn = [[UIButton alloc] init];
+        _backBtn.backgroundColor = [UIColor greenColor];
+    }
+    
+    return _backBtn;
 }
 
 @end

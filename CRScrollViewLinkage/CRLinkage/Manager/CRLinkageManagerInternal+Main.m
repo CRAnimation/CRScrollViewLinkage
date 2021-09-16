@@ -127,6 +127,7 @@
         case CRLinkageScrollStatus_ChildLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:YES log:@"CRLinkageScrollStatus_ChildLoadMore"];
+            [self mainHold];
         }
             break;
     }
@@ -144,8 +145,10 @@
         
         /// 当前offset超过预期
         if (currentOffSetY >= bestOffSetY) {
+            NSLog(@"--1");
             switch (self.childConfig.gestureType) {
                 case CRGestureType_Main: {
+                    NSLog(@"--1.1");
                     // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
                     // 继续保持为mainScroll
                     
@@ -153,11 +156,32 @@
                 } break;
                 case CRGestureType_BothScrollView:
                 {
-                    // 切换为child滑动
-                    self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                    NSLog(@"--1.2");
+                    /// 两个scrollView都可以滑动
+                    switch (self.childConfig.footerBounceType) {
+                        /// child不允许上拉加载更多
+                        case CRBounceType_Main:
+                        {
+                            /// 不做处理，main继续滑动
+                            nil;
+                        }
+                            break;
+                        case CRBounceType_Child:
+                        {
+                            if ([self.childConfig _getHaveTriggeredFooterLimit]) {
+                                /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
+                                nil;
+                            } else {
+                                /// 切换为child滑动
+                                self.linkageScrollStatus = CRLinkageScrollStatus_ChildLoadMore;
+                            }
+                        }
+                            break;
+                    }
                 } break;
             }
         } else {
+            NSLog(@"--2");
             // 继续保持为mainScroll
             nil;
         }
@@ -175,7 +199,7 @@
             switch (self.childConfig.gestureType) {
                 case CRGestureType_Main: {
                     /// 只滑了main的私有区域，即使到底了，也不能切换为childScroll。
-                    if (self.mainConfig.footerBounceLimit && newOffset > -self.mainConfig.footerBounceLimit.floatValue) {
+                    if (self.mainConfig.headerBounceLimit && newOffset > -self.mainConfig.headerBounceLimit.floatValue) {
                         /// 超过极限了
                         self.linkageScrollStatus = CRLinkageScrollStatus_MainRefreshToLimit;
                     } else {

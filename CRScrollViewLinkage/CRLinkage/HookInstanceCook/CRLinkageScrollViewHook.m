@@ -111,8 +111,10 @@
                 BOOL resVal = [self gestureIsInBothArea:gestureRecognizer];
                 if (resVal) {
                     childConfig.gestureType = CRGestureType_BothScrollView;
+                    NSLog(@"--- BothScrollView");
                 } else {
                     childConfig.gestureType = CRGestureType_Main;
+                    NSLog(@"--- Main");
                 }
                 
                 return resVal;
