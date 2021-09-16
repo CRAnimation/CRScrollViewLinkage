@@ -18,14 +18,35 @@
         case CRLinkageScrollStatus_Idle:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_Idle"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
             
         case CRLinkageScrollStatus_MainScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainScroll"];
-            [self childHold];
+            CGFloat bestMainAnchorOffsetY = self.childConfig.bestMainAnchorOffset.y;
+            CGFloat currentMainOffSetY = self.mainScrollView.contentOffset.y;
+            [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
+                if (bestMainAnchorOffsetY) {
+                    <#statements#>
+                }
+                if ([self.childConfig _getHaveTriggeredFooterLimit]) {
+                    NSLog(@"---a1.1");
+                    [self childHoldOnBottom];
+                } else {
+                    NSLog(@"---a1.2");
+                    [self childHoldOnCustom:oldOffset];
+                }
+            } downBlock:^{
+                if ([self.childConfig _getHaveTriggeredHeaderLimit]) {
+                    NSLog(@"---b1.1");
+                    [self childHoldOnTop];
+                } else {
+                    NSLog(@"---b1.2");
+                    [self childHoldOnCustom:oldOffset];
+                }
+            }];
         }
             break;
             
@@ -55,37 +76,37 @@
         case CRLinkageScrollStatus_MainRefresh:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefresh"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
         case CRLinkageScrollStatus_MainRefreshToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainRefreshToLimit"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
         case CRLinkageScrollStatus_MainHoldOnFirstFloor:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnFirstFloor"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
         case CRLinkageScrollStatus_MainLoadMore:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMore"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
         case CRLinkageScrollStatus_MainLoadMoreToLimit:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainLoadMoreToLimit"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
         case CRLinkageScrollStatus_MainHoldOnLoft:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainHoldOnLoft"];
-            [self childHold];
+            [self childHoldOnTop];
         }
             break;
             
@@ -196,8 +217,28 @@
 }
 
 #pragma mark Hold
-- (void)childHold {
-    [CRLinkageTool holdScrollView:self.childScrollView offSet:CGPointZero];
+- (void)childHoldOnTop {
+    [self configChildContentOffSet:CGPointZero];
 }
+
+- (void)childHoldOnBottom {
+    CGFloat tmpOffSet = self.childScrollView.contentSize.height - self.childScrollView.frame.size.height;
+    [self configChildContentOffSet:CGPointMake(0, tmpOffSet)];
+}
+
+- (void)childHoldOnCustom:(CGFloat)offSetY {
+    [self configChildContentOffSet:CGPointMake(0, offSetY)];
+}
+
+- (void)configChildContentOffSet:(CGPoint)offSet {
+    if ([self checkEqualLastChildHoldPoint:offSet]) {
+        return;
+    }
+    
+    [CRLinkageTool holdScrollView:self.childScrollView offSet:offSet];
+    [self setLastChildHoldPoint:offSet];
+}
+
+
 
 @end

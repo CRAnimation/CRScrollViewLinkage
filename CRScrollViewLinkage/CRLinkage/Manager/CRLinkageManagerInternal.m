@@ -23,6 +23,11 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 @property (nonatomic, assign) BOOL useLinkageHook;
 
+@property (nonatomic, assign) CGPoint lastMainHoldPoint;
+@property (nonatomic, assign) CGPoint lastChildHoldPoint;
+@property (nonatomic, assign) BOOL haveLastMainHoldPoint;
+@property (nonatomic, assign) BOOL haveLastChildHoldPoint;
+
 @end
 
 @implementation CRLinkageManagerInternal
@@ -302,7 +307,7 @@ static NSString * const kCenter = @"center";
     return self.childScrollView.linkageChildConfig;
 }
 
-#pragma mark - Header/Footer bounce type
+#pragma mark Header/Footer bounce type
 - (CRBounceType)headerBounceType {
     return self.childScrollView.linkageChildConfig.headerBounceType;
 }
@@ -311,11 +316,38 @@ static NSString * const kCenter = @"center";
     return self.childScrollView.linkageChildConfig.footerBounceType;
 }
 
+#pragma mark Last Hold Point
+- (void)setLastMainHoldPoint:(CGPoint)lastMainHoldPoint {
+    _lastMainHoldPoint = lastMainHoldPoint;
+    self.haveLastMainHoldPoint = YES;
+}
+- (void)setLastChildHoldPoint:(CGPoint)lastChildHoldPoint {
+    _lastChildHoldPoint = lastChildHoldPoint;
+    self.haveLastChildHoldPoint = YES;
+}
+
+- (BOOL)checkEqualLastMainHoldPoint:(CGPoint)lastPoint {
+    if (self.haveLastMainHoldPoint && CGPointEqualToPoint(self.lastMainHoldPoint, lastPoint)) {
+        return NO;
+    }
+    self.haveLastMainHoldPoint = NO;
+    return YES;
+}
+- (BOOL)checkEqualLastChildHoldPoint:(CGPoint)lastPoint {
+    if (self.haveLastChildHoldPoint && CGPointEqualToPoint(self.lastChildHoldPoint, lastPoint)) {
+        return NO;
+    }
+    self.haveLastChildHoldPoint = NO;
+    return YES;
+}
+
 #pragma mark - Dealloc
 - (void)dealloc {
     [self removeMainObserver];
     [self removeChildObserver];
     NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
 }
+
+
 
 @end

@@ -56,6 +56,12 @@ NS_ASSUME_NONNULL_BEGIN
 #warning Bear 这里后面查一下是不是功能和已有方法重复了
 - (BOOL)checkScrollViewIsTopBottom:(UIScrollView *)scrollView;
 
+#pragma mark Last Hold Point
+- (void)setLastMainHoldPoint:(CGPoint)lastMainHoldPoint;
+- (void)setLastChildHoldPoint:(CGPoint)lastChildHoldPoint;
+- (BOOL)checkEqualLastMainHoldPoint:(CGPoint)lastPoint;
+- (BOOL)checkEqualLastChildHoldPoint:(CGPoint)lastPoint;
+
 @end
 
 NS_ASSUME_NONNULL_END
