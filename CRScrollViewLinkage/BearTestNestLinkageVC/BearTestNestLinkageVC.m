@@ -11,7 +11,7 @@
 #import "CRLinkageManagerInternal.h"
 #import "BearTestScrollView.h"
 
-@interface BearTestNestLinkageVC ()
+@interface BearTestNestLinkageVC () <CRLinkageManagerInternalDelegate>
 
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, strong) BearTestScrollView *mainScrollView;
@@ -119,6 +119,8 @@
 - (CRLinkageManagerInternal *)linkageManagerInternal {
     if (!_linkageManagerInternal) {
         _linkageManagerInternal = [CRLinkageManagerInternal new];
+        _linkageManagerInternal.delegate = self;
+        _linkageManagerInternal.enable = YES;
     }
     
     return _linkageManagerInternal;
@@ -136,6 +138,12 @@
 
 - (void)backEvent {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - CRLinkageManagerInternalDelegate
+- (void)scrollViewTriggerLimitWithScrollView:(UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType {
+    self.linkageManagerInternal.enable = NO;
+    NSLog(@"--1 scrollViewType:%lu, bouncePostionType:%lu", (unsigned long)scrollViewType, (unsigned long)bouncePostionType);
 }
 
 @end

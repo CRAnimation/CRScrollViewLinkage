@@ -180,8 +180,13 @@
                         case CRBounceType_Child:
                         {
                             if ([self.childConfig _getHaveTriggeredFooterLimit]) {
-                                /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
-                                nil;
+                                [self.childConfig _resetTriggeredFooterLimit];
+                                /// child上拉加载到极限
+                                if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                                    [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
+                                                                         scrollViewType:CRScrollViewType_Child
+                                                                      bouncePostionType:CRBouncePositionOverFooterLimit];
+                                }
                             } else {
                                 /// 切换为child滑动
                                 self.linkageScrollStatus = CRLinkageScrollStatus_ChildLoadMore;
@@ -235,8 +240,13 @@
                         case CRBounceType_Child:
                         {
                             if ([self.childConfig _getHaveTriggeredHeaderLimit]) {
-                                /// 已经触发了childConfig的haveTriggered的配置，则让main正常处理
-                                nil;
+                                [self.childConfig _resetTriggeredHeaderLimit];
+                                /// child上拉加载到极限
+                                if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                                    [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
+                                                                         scrollViewType:CRScrollViewType_Child
+                                                                      bouncePostionType:CRBouncePositionOverHeaderLimit];
+                                }
                             } else {
                                 /// 切换为child滑动
                                 self.linkageScrollStatus = CRLinkageScrollStatus_ChildRefresh;

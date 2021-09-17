@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
 @property (nonatomic, strong, readonly) UIScrollView *childScrollView;
 @property (nonatomic, assign) CRLinkageScrollStatus linkageScrollStatus;
+@property (nonatomic, assign) BOOL enable;
+
 /**
  * 自定义滑动时，头部允许滑动的范围高度
  * 默认：nil，此时会自动根据childScrollView计算。
