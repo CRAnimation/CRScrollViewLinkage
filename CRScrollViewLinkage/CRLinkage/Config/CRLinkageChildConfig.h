@@ -39,6 +39,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 手势滑动类型
 @property (nonatomic, assign) CRGestureType gestureType;
 
+/// 虚拟锁住位置开关
+@property (nonatomic, assign) BOOL virtualLockOffSet;
+/// 虚拟锁住位置的值
+@property (nonatomic, assign) CGFloat holdVirtualOffSet;
+
 
 /// child固定类型（第一个child一定是top类型，最后一个child一定是bottom类型）
 @property (nonatomic, assign) CRChildHoldPosition childHoldPosition;

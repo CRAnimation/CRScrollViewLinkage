@@ -128,9 +128,14 @@
     if (!_backBtn) {
         _backBtn = [[UIButton alloc] init];
         _backBtn.backgroundColor = [UIColor greenColor];
+        [_backBtn addTarget:self action:@selector(backEvent) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return _backBtn;
+}
+
+- (void)backEvent {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

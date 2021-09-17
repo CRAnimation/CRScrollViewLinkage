@@ -16,6 +16,17 @@
     CGFloat bestOffSetY = self.childConfig.bestMainAnchorOffset.y;
     CGFloat mainOffSetY = mainScrollView.contentOffset.y;
     CGFloat childOffSetY = self.childScrollView.contentOffset.y;
+    
+    if (self.linkageScrollStatus == CRLinkageScrollStatus_MainScroll) {
+        /// 让child固定在某个位置
+        if (self.childConfig.virtualLockOffSet == NO) {
+            self.childConfig.virtualLockOffSet = YES;
+            self.childConfig.holdVirtualOffSet = self.childScrollView.contentOffset.y;
+        }
+    } else {
+        self.childConfig.virtualLockOffSet = NO;
+    }
+    
     switch (self.linkageScrollStatus) {
         
         case CRLinkageScrollStatus_Idle:

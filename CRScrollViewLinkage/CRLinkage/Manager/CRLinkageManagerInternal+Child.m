@@ -25,28 +25,44 @@
         case CRLinkageScrollStatus_MainScroll:
         {
             [CRLinkageTool showStatusLogWithIsMain:NO log:@"CRLinkageScrollStatus_MainScroll"];
-            CGFloat bestMainAnchorOffsetY = self.childConfig.bestMainAnchorOffset.y;
-            CGFloat currentMainOffSetY = self.mainScrollView.contentOffset.y;
-            [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
-                if (bestMainAnchorOffsetY) {
-                    <#statements#>
-                }
-                if ([self.childConfig _getHaveTriggeredFooterLimit]) {
-                    NSLog(@"---a1.1");
-                    [self childHoldOnBottom];
-                } else {
-                    NSLog(@"---a1.2");
-                    [self childHoldOnCustom:oldOffset];
-                }
-            } downBlock:^{
-                if ([self.childConfig _getHaveTriggeredHeaderLimit]) {
-                    NSLog(@"---b1.1");
-                    [self childHoldOnTop];
-                } else {
-                    NSLog(@"---b1.2");
-                    [self childHoldOnCustom:oldOffset];
-                }
-            }];
+            if (self.childConfig.virtualLockOffSet) {
+                [self childHoldOnCustom:self.childConfig.holdVirtualOffSet];
+            }
+//            return;
+            
+//            CGFloat bestMainAnchorOffsetY = self.childConfig.bestMainAnchorOffset.y;
+//            CGFloat currentMainOffSetY = self.mainScrollView.contentOffset.y;
+//            [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
+//                /// 判断下，child有没有达到预定的位置，达到了，就怎么样。
+//                /// 不过这个方法可以封装下，上滑的时候，有没有到预定位置。下滑的时候，有没有到预定位置，这些。
+//
+//                /// 往上滑过去了
+//                if (currentMainOffSetY > bestMainAnchorOffsetY) {
+//                    NSLog(@"---a1.1");
+//                    [self childHoldOnBottom];
+//                }
+////                if ([self.childConfig _getHaveTriggeredFooterLimit]) {
+////                    NSLog(@"---a1.1");
+////                    [self childHoldOnBottom];
+////                } else {
+////                    NSLog(@"---a1.2");
+////                    [self childHoldOnCustom:oldOffset];
+////                }
+//            } downBlock:^{
+//                /// 往下滑过去了
+//                if (currentMainOffSetY < bestMainAnchorOffsetY) {
+//                    NSLog(@"---b1.1");
+//                    [self childHoldOnTop];
+//                }
+//
+////                if ([self.childConfig _getHaveTriggeredHeaderLimit]) {
+////                    NSLog(@"---b1.1");
+////                    [self childHoldOnTop];
+////                } else {
+////                    NSLog(@"---b1.2");
+////                    [self childHoldOnCustom:oldOffset];
+////                }
+//            }];
         }
             break;
             
@@ -231,9 +247,9 @@
 }
 
 - (void)configChildContentOffSet:(CGPoint)offSet {
-    if ([self checkEqualLastChildHoldPoint:offSet]) {
-        return;
-    }
+//    if ([self checkEqualLastChildHoldPoint:offSet]) {
+//        return;
+//    }
     
     [CRLinkageTool holdScrollView:self.childScrollView offSet:offSet];
     [self setLastChildHoldPoint:offSet];
