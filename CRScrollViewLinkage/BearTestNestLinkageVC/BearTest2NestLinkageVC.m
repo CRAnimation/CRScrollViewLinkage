@@ -10,6 +10,7 @@
 #import "BearChildView.h"
 #import "CRLinkageManager.h"
 #import "BearTestScrollView.h"
+#import "UIScrollView+CRLinkage.h"
 
 @interface BearTest2NestLinkageVC ()
 
@@ -85,6 +86,13 @@
 
 - (BearChildView *)generateChildView {
     BearChildView *childView = [BearChildView new];
+    CRLinkageChildConfig *childConfig = childView.myTableView.linkageChildConfig;
+    childConfig.childHoldPosition = CRChildHoldPosition_CustomRatio;
+    childConfig.positionRatio = 0.5;
+    childConfig.headerBounceType = CRBounceType_Child;
+    childConfig.headerBounceLimit = @(100);
+    childConfig.footerBounceType = CRBounceType_Child;
+    childConfig.footerBounceLimit = @(100);
     return childView;
 }
 
