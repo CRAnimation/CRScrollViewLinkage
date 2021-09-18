@@ -55,7 +55,7 @@
         oldInternal.internalActive = NO;
     }
     
-    CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:self.currentChildScrollView];
+    CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:childScrollView];
     newInternal.internalActive = YES;
     self.currentChildScrollView = childScrollView;
 }

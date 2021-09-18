@@ -239,10 +239,11 @@ static NSString * const kCenter = @"center";
 }
 
 - (void)setInternalActive:(BOOL)internalActive {
-    if (_internalActive = internalActive) {
-        return;;
+    if (_internalActive == internalActive) {
+        return;
     }
     if (internalActive) {
+        [self _tryUpdateOffSet];
         [self addChildObserver];
         [self addMainObserver];
     } else {
@@ -299,6 +300,7 @@ static NSString * const kCenter = @"center";
             // 重新挂载手势代理，不然如果原本（包括父类）没有实现shouldRecognizeSimultaneouslyWithGestureRecognizer方法的话，通过runtime添加该方法不会被触发。
             _mainScrollView.panGestureRecognizer.delegate = _mainScrollView.panGestureRecognizer.delegate;
         }
+        [self childGenerateFrameObservedView];
 //        [self addMainObserver];
     }
 }
