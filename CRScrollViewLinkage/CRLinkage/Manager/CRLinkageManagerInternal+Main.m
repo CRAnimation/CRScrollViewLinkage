@@ -144,6 +144,10 @@
     }
 }
 
+- (void)processMainLog:(NSString *)log {
+    [CRLinkageTool showDetailWithStatus:CRLinkageScrollStatus_MainScroll isMain:YES log:log];
+}
+
 #pragma mark ProcessMainScroll Detail
 - (void)_processMainScrollWithMainScrollView:(UIScrollView *)mainScrollView
                                    oldOffset:(CGFloat)oldOffset
@@ -151,53 +155,64 @@
     CRScrollDir scrollDir = [self _checkDirByOldOffset:oldOffset newOffset:newOffset];
     CGFloat bestOffSetY = self.childConfig.bestMainAnchorOffset.y;
     CGFloat currentOffSetY = mainScrollView.contentOffset.y;
+    
     [CRLinkageTool processScrollDir:scrollDir holdBlock:nil upBlock:^{
         /// 往上滑
-        
         /// 当前offset超过预期
         if (currentOffSetY >= bestOffSetY) {
-            NSLog(@"--1");
+            [self processMainLog:@"up-1"];
             switch (self.childConfig.gestureType) {
                 case CRGestureType_Main: {
-                    NSLog(@"--1.1");
+                    [self processMainLog:@"up-1.1"];
                     // 只滑了main的私有区域，即使到顶了，也不能切换为childScroll。
                     // 继续保持为mainScroll
-                    
                     nil;
                 } break;
                 case CRGestureType_BothScrollView:
                 {
-                    NSLog(@"--1.2");
+                    [self processMainLog:@"up-1.2"];
                     /// 两个scrollView都可以滑动
-                    switch (self.childConfig.footerBounceType) {
-                        /// child不允许上拉加载更多
-                        case CRBounceType_Main:
-                        {
-                            /// 不做处理，main继续滑动
-                            nil;
-                        }
-                            break;
-                        case CRBounceType_Child:
-                        {
-                            if ([self.childConfig _getHaveTriggeredFooterLimit]) {
-                                [self.childConfig _resetTriggeredFooterLimit];
-                                /// child上拉加载到极限
-                                if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
-                                    [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
-                                                                         scrollViewType:CRScrollViewType_Child
-                                                                      bouncePostionType:CRBouncePositionOverFooterLimit];
-                                }
-                            } else {
-                                /// 切换为child滑动
-                                self.linkageScrollStatus = CRLinkageScrollStatus_ChildLoadMore;
+                    if (![self.childConfig isScrollOverFooter]) {
+                        [self processMainLog:@"up-1.2.1"];
+                        /// child没到底，可以继续上滑
+                        self.linkageScrollStatus = CRLinkageScrollStatus_ChildScroll;
+                    } else {
+                        [self processMainLog:@"up-1.2.2"];
+                        /// child没到底
+                        switch (self.childConfig.footerBounceType) {
+                            /// child不允许上拉加载更多
+                            case CRBounceType_Main:
+                            {
+                                [self processMainLog:@"up-1.2.2.1"];
+                                /// 不做处理，main继续滑动
+                                nil;
                             }
+                                break;
+                            case CRBounceType_Child:
+                            {
+                                [self processMainLog:@"up-1.2.2.2"];
+                                if ([self.childConfig _getHaveTriggeredFooterLimit]) {
+                                    [self processMainLog:@"up-1.2.2.2.1"];
+                                    [self.childConfig _resetTriggeredFooterLimit];
+                                    /// child上拉加载到极限
+                                    if ([self.delegate respondsToSelector:@selector(scrollViewTriggerLimitWithScrollView:scrollViewType:bouncePostionType:)]) {
+                                        [self.delegate scrollViewTriggerLimitWithScrollView:self.childScrollView
+                                                                             scrollViewType:CRScrollViewType_Child
+                                                                          bouncePostionType:CRBouncePositionOverFooterLimit];
+                                    }
+                                } else {
+                                    [self processMainLog:@"up-1.2.2.2.2"];
+                                    /// 切换为child滑动
+                                    self.linkageScrollStatus = CRLinkageScrollStatus_ChildLoadMore;
+                                }
+                            }
+                                break;
                         }
-                            break;
                     }
                 } break;
             }
         } else {
-            NSLog(@"--2");
+            [self processMainLog:@"up-2"];
             // 继续保持为mainScroll
             nil;
         }

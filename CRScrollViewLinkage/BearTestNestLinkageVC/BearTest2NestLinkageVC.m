@@ -63,7 +63,7 @@
     CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
     CGFloat gapY = 300;
     
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 1; i++) {
         BearChildView *childView = [self generateChildView];
         [self.childViewArray addObject:childView.myTableView];
         [self.mainScrollView addSubview:childView];

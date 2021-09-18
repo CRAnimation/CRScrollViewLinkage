@@ -183,6 +183,10 @@
 /// child的顶层容器view（child和main之间，离main最近的那个view。没有嵌套的话，就是childScrollView本身）
 ///  child生成需要被监听frame的view
 - (void)childGenerateFrameObservedView {
+    if (!self.childScrollView && !self.mainScrollView) {
+        return;
+    }
+    
     switch (self.childConfig.frameObserveType) {
         case CRChildFrameObserveType_NearMain:
         {
@@ -206,6 +210,7 @@
 - (UIView * _Nullable)_findNearestMainView {
     UIView *resultView = nil;
     if (!self.mainScrollView) {
+        resultView = self.childScrollView;
         return resultView;
     }
     
