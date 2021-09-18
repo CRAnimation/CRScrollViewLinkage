@@ -47,16 +47,16 @@
     }];
 }
 
-#pragma mark 配置childScrollView
-/// 配置childScrollView
-- (void)configCurrentChildScrollView:(UIScrollView *)childScrollView {
+#pragma mark 激活childScrollView
+/// 激活childScrollView
+- (void)activeCurrentChildScrollView:(UIScrollView *)childScrollView {
     CRLinkageManagerInternal *oldInternal = [self getLinkageManagerInternalByChild:self.currentChildScrollView];
     if (oldInternal) {
-        oldInternal.enable = NO;
+        oldInternal.internalActive = NO;
     }
     
     CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:self.currentChildScrollView];
-    newInternal.enable = YES;
+    newInternal.internalActive = YES;
     self.currentChildScrollView = childScrollView;
 }
 
@@ -108,7 +108,7 @@
 #pragma mark - CRLinkageManagerInternalDelegate
 - (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus {
     UIScrollView *newChildScrollView = [self findNextScrollView:linkageRelayStatus currentScrollView:self.currentChildScrollView];
-    [self configCurrentChildScrollView:newChildScrollView];
+    [self activeCurrentChildScrollView:newChildScrollView];
 }
 
 - (void)scrollViewTriggerLimitWithScrollView:(nonnull UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType { 
@@ -251,6 +251,14 @@
 //
 //    return _childScrollViews;
 //}
+
+- (NSMutableArray<CRLinkageManagerInternal *> *)linkageInternalArray {
+    if (!_linkageInternalArray) {
+        _linkageInternalArray = [NSMutableArray new];
+    }
+    
+    return _linkageInternalArray;
+}
 
 #pragma mark - LinkageInternal Method
 - (CRLinkageManagerInternal *)getLinkageManagerInternalByChild:(UIScrollView *)childScrollView {

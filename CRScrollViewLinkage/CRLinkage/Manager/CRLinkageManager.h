@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 #warning Bear 测试过程中，main后配
 - (void)configMainScrollView:(UIScrollView *)mainScrollView;
 
+#pragma mark 激活childScrollView
+/// 激活childScrollView
+- (void)activeCurrentChildScrollView:(UIScrollView *)childScrollView;
+
 /// 添加/删除/重置childScrollView
 //- (void)addChildScrollView:(UIScrollView *)childScrollView;
 //- (void)removeChildScrollView:(UIScrollView *)childScrollView;

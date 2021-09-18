@@ -109,10 +109,6 @@ static NSString * const kCenter = @"center";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:kContentOffset]) {
-        if (self.enable == NO) {
-            return;
-        }
-        
         UIScrollView *tmpScrollView = (UIScrollView *)object;
         //    if (tmpScrollView == self.mainScrollView) {
         //        NSLog(@"--main");
@@ -242,6 +238,20 @@ static NSString * const kCenter = @"center";
     _linkageScrollStatus = linkageScrollStatus;
 }
 
+- (void)setInternalActive:(BOOL)internalActive {
+    if (_internalActive = internalActive) {
+        return;;
+    }
+    if (internalActive) {
+        [self addChildObserver];
+        [self addMainObserver];
+    } else {
+        [self removeChildObserver];
+        [self removeMainObserver];
+    }
+    _internalActive = internalActive;
+}
+
 @synthesize childScrollView = _childScrollView;
 - (void)setChildScrollView:(UIScrollView *)childScrollView {
     if (childScrollView != _childScrollView) {
@@ -255,14 +265,15 @@ static NSString * const kCenter = @"center";
         }
         config.currentScrollView = childScrollView;
         if (_childScrollView != nil) {
-            [self removeChildObserver];
+#warning Bear 切换child的时候，记得这里把旧的KVO移除掉
+//            [self removeChildObserver];
             [self childClearFrameObservedView];
         }
         _childScrollView = childScrollView;
         _childScrollView.linkageChildConfig = config;
         _childScrollView.linkageChildConfig.linkageInternal = self;
         [self childGenerateFrameObservedView];
-        [self addChildObserver];
+//        [self addChildObserver];
     }
 }
 
@@ -275,7 +286,8 @@ static NSString * const kCenter = @"center";
             config.currentScrollView = mainScrollView;
             _mainScrollView.linkageMainConfig = config;
             _mainScrollView.isLinkageMainScrollView = YES;
-            [self removeMainObserver];
+#warning Bear 记得这里把旧的KVO移除掉
+//            [self removeMainObserver];
         }
         
         // 生成新的
@@ -287,7 +299,7 @@ static NSString * const kCenter = @"center";
             // 重新挂载手势代理，不然如果原本（包括父类）没有实现shouldRecognizeSimultaneouslyWithGestureRecognizer方法的话，通过runtime添加该方法不会被触发。
             _mainScrollView.panGestureRecognizer.delegate = _mainScrollView.panGestureRecognizer.delegate;
         }
-        [self addMainObserver];
+//        [self addMainObserver];
     }
 }
 
@@ -349,8 +361,7 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - Dealloc
 - (void)dealloc {
-    [self removeMainObserver];
-    [self removeChildObserver];
+    self.internalActive = NO;
     NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
 }
 

@@ -86,6 +86,8 @@
     childConfig.footerBounceLimit = @(100);
 //    CRChildHoldPosition position = self.childView.myTableView.linkageChildConfig.childHoldPosition;
     [self.linkageManagerInternal configChildScrollView:self.childView.myTableView];
+    
+    self.linkageManagerInternal.internalActive = YES;
 }
 
 - (void)test {
@@ -120,7 +122,6 @@
     if (!_linkageManagerInternal) {
         _linkageManagerInternal = [CRLinkageManagerInternal new];
         _linkageManagerInternal.delegate = self;
-        _linkageManagerInternal.enable = YES;
     }
     
     return _linkageManagerInternal;
@@ -142,7 +143,7 @@
 
 #pragma mark - CRLinkageManagerInternalDelegate
 - (void)scrollViewTriggerLimitWithScrollView:(UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType {
-    self.linkageManagerInternal.enable = NO;
+    self.linkageManagerInternal.internalActive = NO;
     NSLog(@"--1 scrollViewType:%lu, bouncePostionType:%lu", (unsigned long)scrollViewType, (unsigned long)bouncePostionType);
 }
 

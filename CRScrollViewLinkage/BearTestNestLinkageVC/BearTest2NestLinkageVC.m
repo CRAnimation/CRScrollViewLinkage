@@ -79,6 +79,8 @@
     
     self.mainScrollView.contentSize = CGSizeMake(screenWidth, newY);
     [self.linkageManager configChildScrollViews:self.childViewArray];
+    [self.linkageManager configMainScrollView:self.mainScrollView];
+    [self.linkageManager activeCurrentChildScrollView:self.childViewArray[0]];
 }
 
 - (BearChildView *)generateChildView {
