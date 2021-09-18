@@ -18,10 +18,8 @@
 }
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
-@property (nonatomic, strong) NSMutableArray <UIScrollView *> *childScrollViews;
 @property (nonatomic, strong) UIScrollView *currentChildScrollView;
-
-@property (nonatomic, strong) CRLinkageManagerInternal *linkageInternal;
+@property (nonatomic, strong) NSMutableArray <CRLinkageManagerInternal *> *linkageInternalArray;
 
 @end
 
@@ -44,64 +42,103 @@
 /// 配置mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
-    [self.linkageInternal configMainScrollView:mainScrollView];
+    [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj configMainScrollView:mainScrollView];
+    }];
 }
 
 #pragma mark 配置childScrollView
 /// 配置childScrollView
 - (void)configCurrentChildScrollView:(UIScrollView *)childScrollView {
+    CRLinkageManagerInternal *oldInternal = [self getLinkageManagerInternalByChild:self.currentChildScrollView];
+    if (oldInternal) {
+        oldInternal.enable = NO;
+    }
+    
+    CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:self.currentChildScrollView];
+    newInternal.enable = YES;
     self.currentChildScrollView = childScrollView;
-    [self.linkageInternal configChildScrollView:childScrollView];
 }
 
 #pragma mark 添加/删除/重置childScrollView
-- (void)addChildScrollView:(UIScrollView *)childScrollView {
-    pthread_mutex_lock(&_arrayLock);
-    [self.childScrollViews addObject:childScrollView];
-    pthread_mutex_unlock(&_arrayLock);
-}
+//- (void)addChildScrollView:(UIScrollView *)childScrollView {
+//    pthread_mutex_lock(&_arrayLock);
+//    [self.childScrollViews addObject:childScrollView];
+//    pthread_mutex_unlock(&_arrayLock);
+//}
+//
+//- (void)removeChildScrollView:(UIScrollView *)childScrollView {
+//    pthread_mutex_lock(&_arrayLock);
+//    [self.childScrollViews removeObject:childScrollView];
+//    pthread_mutex_unlock(&_arrayLock);
+//}
 
-- (void)removeChildScrollView:(UIScrollView *)childScrollView {
-    pthread_mutex_lock(&_arrayLock);
-    [self.childScrollViews removeObject:childScrollView];
-    pthread_mutex_unlock(&_arrayLock);
-}
-
-- (void)resetChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews {
-    pthread_mutex_lock(&_arrayLock);
-    [self.childScrollViews removeAllObjects];
-    [self.childScrollViews addObjectsFromArray:childScrollViews];
-    pthread_mutex_unlock(&_arrayLock);
-}
-
-- (void)clearChildScrollViews {
-    pthread_mutex_lock(&_arrayLock);
-    [self.childScrollViews removeAllObjects];
-    pthread_mutex_unlock(&_arrayLock);
-}
-
-- (void)childChanged {
-    [self clearOrderCache];
-}
-
-#pragma mark - Private
-- (void)clearOrderCache {
-    pthread_mutex_lock(&_arrayLock);
-    NSArray *originArray = [self.childScrollViews copy];
-    pthread_mutex_unlock(&_arrayLock);
-    
-#warning Bear 这里线程安全优化下
-    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
-        tmpScrollView.linkageChildConfig.lastScrollView = nil;
-        tmpScrollView.linkageChildConfig.nextScrollView = nil;
+- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews {
+    __weak typeof(self) weakSelf = self;
+    [childScrollViews enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull tmpChildScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+        CRLinkageManagerInternal *tmpLinkageInternal = [weakSelf generateLinkageInternal];
+        [tmpLinkageInternal configChildScrollView:tmpChildScrollView];
+        [weakSelf.linkageInternalArray addObject:tmpLinkageInternal];
     }];
 }
+
+//- (void)clearChildScrollViews {
+//    pthread_mutex_lock(&_arrayLock);
+//    [self.childScrollViews removeAllObjects];
+//    pthread_mutex_unlock(&_arrayLock);
+//}
+
+//- (void)childChanged {
+//    [self clearOrderCache];
+//}
+
+#pragma mark - Private
+//- (void)clearOrderCache {
+//    pthread_mutex_lock(&_arrayLock);
+//    NSArray *originArray = [self.childScrollViews copy];
+//    pthread_mutex_unlock(&_arrayLock);
+//
+//#warning Bear 这里线程安全优化下
+//    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+//        tmpScrollView.linkageChildConfig.lastScrollView = nil;
+//        tmpScrollView.linkageChildConfig.nextScrollView = nil;
+//    }];
+//}
 
 #pragma mark - CRLinkageManagerInternalDelegate
 - (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus {
     UIScrollView *newChildScrollView = [self findNextScrollView:linkageRelayStatus currentScrollView:self.currentChildScrollView];
     [self configCurrentChildScrollView:newChildScrollView];
 }
+
+- (void)scrollViewTriggerLimitWithScrollView:(nonnull UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType { 
+    switch (scrollViewType) {
+        case CRScrollViewType_Main:
+        {
+            nil;
+        }
+            break;
+        case CRScrollViewType_Child:
+        {
+            UIView *nextScrollView;
+            switch (bouncePostionType) {
+                case CRBouncePositionOverHeaderLimit:
+                {
+                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToNextScrollView currentScrollView:scrollView];
+                }
+                    break;
+                case CRBouncePositionOverFooterLimit:
+                {
+                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToLastScrollView currentScrollView:scrollView];
+                }
+                    break;
+            }
+            
+        }
+            break;
+    }
+}
+
 
 #pragma mark - Func
 - (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
@@ -130,7 +167,7 @@
     }
     
     pthread_mutex_lock(&_arrayLock);
-    NSArray *originArray = [self.childScrollViews copy];
+    NSArray *originArray = [self getChilds];
     pthread_mutex_unlock(&_arrayLock);
     
     if (linkageRelayStatus == CRLinkageRelayStatus_RemainCurrent || originArray.count == 0) {
@@ -191,29 +228,44 @@
 }
 
 #pragma mark - Setter & Getter
-- (NSArray <UIScrollView *> *)getChildScrollViews {
-    pthread_mutex_lock(&_arrayLock);
-    NSArray *tmpArray = [self.childScrollViews copy];
-    pthread_mutex_unlock(&_arrayLock);
-    
-    return tmpArray;
+//- (NSArray <UIScrollView *> *)getChildScrollViews {
+//    pthread_mutex_lock(&_arrayLock);
+//    NSArray *tmpArray = [self.childScrollViews copy];
+//    pthread_mutex_unlock(&_arrayLock);
+//
+//    return tmpArray;
+//}
+
+- (NSArray <UIScrollView *> *)getChilds {
+    NSMutableArray *resArray = [NSMutableArray new];
+    [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [resArray addObject:obj];
+    }];
+    return [resArray copy];
 }
 
-- (NSMutableArray <UIScrollView *> *)childScrollViews {
-    if (!_childScrollViews) {
-        _childScrollViews = [NSMutableArray new];
+//- (NSMutableArray <UIScrollView *> *)childScrollViews {
+//    if (!_childScrollViews) {
+//        _childScrollViews = [NSMutableArray new];
+//    }
+//
+//    return _childScrollViews;
+//}
+
+#pragma mark - LinkageInternal Method
+- (CRLinkageManagerInternal *)getLinkageManagerInternalByChild:(UIScrollView *)childScrollView {
+    for (CRLinkageManagerInternal *linkageManagerInternal in self.linkageInternalArray) {
+        if (linkageManagerInternal.childScrollView == childScrollView) {
+            return linkageManagerInternal;
+        }
     }
-    
-    return _childScrollViews;
+    return nil;
 }
 
-- (CRLinkageManagerInternal *)linkageInternal {
-    if (!_linkageInternal) {
-        _linkageInternal = [CRLinkageManagerInternal new];
-        _linkageInternal.delegate = self;
-    }
-    
-    return _linkageInternal;
+- (CRLinkageManagerInternal *)generateLinkageInternal {
+    CRLinkageManagerInternal *linkageInternal = [CRLinkageManagerInternal new];
+    linkageInternal.delegate = self;
+    return linkageInternal;
 }
 
 @end

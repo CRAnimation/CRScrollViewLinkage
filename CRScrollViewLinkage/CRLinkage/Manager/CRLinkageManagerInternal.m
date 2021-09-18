@@ -246,6 +246,8 @@ static NSString * const kCenter = @"center";
 - (void)setChildScrollView:(UIScrollView *)childScrollView {
     if (childScrollView != _childScrollView) {
         CRLinkageChildConfig *config;
+//        childScrollView.linkageChildConfig;
+//        [childScrollView getlink]
         if (childScrollView.linkageChildConfig) {
             config = childScrollView.linkageChildConfig;
         } else {

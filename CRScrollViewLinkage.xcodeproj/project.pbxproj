@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		092AE64926F574EC00F56268 /* BearTest2NestLinkageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 092AE64826F574EC00F56268 /* BearTest2NestLinkageVC.m */; };
 		0983DBBB26D3AC3400E667FF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBBA26D3AC3400E667FF /* AppDelegate.m */; };
 		0983DBBE26D3AC3400E667FF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBBD26D3AC3400E667FF /* SceneDelegate.m */; };
 		0983DBC126D3AC3400E667FF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0983DBC026D3AC3400E667FF /* ViewController.m */; };
@@ -60,6 +61,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		092AE64726F574EC00F56268 /* BearTest2NestLinkageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BearTest2NestLinkageVC.h; sourceTree = "<group>"; };
+		092AE64826F574EC00F56268 /* BearTest2NestLinkageVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BearTest2NestLinkageVC.m; sourceTree = "<group>"; };
 		0983DBB626D3AC3300E667FF /* CRScrollViewLinkage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CRScrollViewLinkage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0983DBB926D3AC3400E667FF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0983DBBA26D3AC3400E667FF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -274,6 +277,8 @@
 			children = (
 				0983DC0E26D3AE6600E667FF /* BearTestNestLinkageVC.h */,
 				0983DC0F26D3AE6700E667FF /* BearTestNestLinkageVC.m */,
+				092AE64726F574EC00F56268 /* BearTest2NestLinkageVC.h */,
+				092AE64826F574EC00F56268 /* BearTest2NestLinkageVC.m */,
 				0983DBF226D3AC6500E667FF /* BearChildTableView.h */,
 				0983DBF526D3AC6600E667FF /* BearChildTableView.m */,
 				0983DBF426D3AC6600E667FF /* BearChildView.h */,
@@ -624,6 +629,7 @@
 				0983DBF826D3AC6600E667FF /* BearTestScrollView.m in Sources */,
 				0983DBC126D3AC3400E667FF /* ViewController.m in Sources */,
 				09E1307926DBCF9000805E46 /* CRLinkageMainConfig.m in Sources */,
+				092AE64926F574EC00F56268 /* BearTest2NestLinkageVC.m in Sources */,
 				0983DC0D26D3AC8400E667FF /* CRLinkageScrollViewHook.m in Sources */,
 				0983DBBB26D3AC3400E667FF /* AppDelegate.m in Sources */,
 				09E130DB26E4C0D500805E46 /* CRLinkageManagerInternal+Main.m in Sources */,

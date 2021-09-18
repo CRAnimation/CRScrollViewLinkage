@@ -16,16 +16,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 配置mainScrollView
 /// @param mainScrollView mainScrollView
+#warning Bear 测试过程中，main后配
 - (void)configMainScrollView:(UIScrollView *)mainScrollView;
-/// 配置childScrollView
-- (void)configCurrentChildScrollView:(UIScrollView *)childScrollView;
 
 /// 添加/删除/重置childScrollView
-- (void)addChildScrollView:(UIScrollView *)childScrollView;
-- (void)removeChildScrollView:(UIScrollView *)childScrollView;
-- (void)resetChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews;
-- (void)clearChildScrollViews;
-- (NSArray <UIScrollView *> *)getChildScrollViews;
+//- (void)addChildScrollView:(UIScrollView *)childScrollView;
+//- (void)removeChildScrollView:(UIScrollView *)childScrollView;
+#warning Bear 测试过程中，child先配
+- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews;
+//- (void)clearChildScrollViews;
+//- (NSArray <UIScrollView *> *)getChildScrollViews;
 
 /// childScrollView发生添加/移除/移动时，需要调用该方法
 - (void)childChanged;

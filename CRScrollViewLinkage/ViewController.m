@@ -21,6 +21,7 @@
     [super viewDidLoad];
     
     [self.dataArray addObject:@"BearTestNestLinkageVC"];
+    [self.dataArray addObject:@"BearTest2NestLinkageVC"];
     [self.dataArray addObject:@"ScrollViewGestureTestVC"];
     
     [self createUI];

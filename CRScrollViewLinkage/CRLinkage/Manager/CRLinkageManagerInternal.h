@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol CRLinkageManagerInternalDelegate <NSObject>
 
-/// 联动器需要扭转状态
-- (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus;
 /// scrollView触发拉动极限
 - (void)scrollViewTriggerLimitWithScrollView:(UIScrollView *)scrollView
                               scrollViewType:(CRScrollViewType)scrollViewType
