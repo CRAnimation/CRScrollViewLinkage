@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 //- (void)addChildScrollView:(UIScrollView *)childScrollView;
 //- (void)removeChildScrollView:(UIScrollView *)childScrollView;
 #warning Bear 测试过程中，child先配
-- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews;
+- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews activeChildIndex:(NSInteger)activeChildIndex;
 //- (void)clearChildScrollViews;
 //- (NSArray <UIScrollView *> *)getChildScrollViews;
 

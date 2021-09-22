@@ -55,10 +55,11 @@
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
     
+    
     if (self.useLinkageHook) {
         [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
         // 重新挂载手势代理，不然如果原本（包括父类）没有实现shouldRecognizeSimultaneouslyWithGestureRecognizer方法的话，通过runtime添加该方法不会被触发。
-        _mainScrollView.panGestureRecognizer.delegate = _mainScrollView.panGestureRecognizer.delegate;
+        mainScrollView.panGestureRecognizer.delegate = mainScrollView.panGestureRecognizer.delegate;
     }
     
     [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -77,6 +78,7 @@
     CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:childScrollView];
     newInternal.internalActive = YES;
     self.currentChildScrollView = childScrollView;
+    [self.mainScrollView.linkageMainConfig updateCurrentChildScrollView:childScrollView];
 }
 
 #pragma mark 添加/删除/重置childScrollView
@@ -92,13 +94,18 @@
 //    pthread_mutex_unlock(&_arrayLock);
 //}
 
-- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews {
+- (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews activeChildIndex:(NSInteger)activeChildIndex {
     __weak typeof(self) weakSelf = self;
     [childScrollViews enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull tmpChildScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
         CRLinkageManagerInternal *tmpLinkageInternal = [weakSelf generateLinkageInternal];
         [tmpLinkageInternal configChildScrollView:tmpChildScrollView];
         [weakSelf.linkageInternalArray addObject:tmpLinkageInternal];
     }];
+    
+    if (childScrollViews.count > activeChildIndex) {
+        UIScrollView *tmpChildScrollView = childScrollViews[activeChildIndex];
+        [self activeCurrentChildScrollView:tmpChildScrollView];
+    }
 }
 
 //- (void)clearChildScrollViews {

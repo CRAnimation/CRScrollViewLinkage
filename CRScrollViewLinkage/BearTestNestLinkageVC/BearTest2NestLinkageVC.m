@@ -79,7 +79,7 @@
     }
     
     self.mainScrollView.contentSize = CGSizeMake(screenWidth, newY);
-    [self.linkageManager configChildScrollViews:self.childViewArray];
+    [self.linkageManager configChildScrollViews:self.childViewArray activeChildIndex:0];
     [self.linkageManager configMainScrollView:self.mainScrollView];
     [self.linkageManager activeCurrentChildScrollView:self.childViewArray[0]];
 }

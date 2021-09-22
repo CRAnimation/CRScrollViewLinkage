@@ -98,11 +98,11 @@ static NSString * const kCenter = @"center";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:kContentOffset]) {
         UIScrollView *tmpScrollView = (UIScrollView *)object;
-        //    if (tmpScrollView == self.mainScrollView) {
-        //        NSLog(@"--main");
-        //    } else if (object == self.childScrollView) {
-        //        NSLog(@"--child");
-        //    }
+            if (tmpScrollView == self.mainScrollView) {
+                NSLog(@"--main");
+            } else if (object == self.childScrollView) {
+                NSLog(@"--child");
+            }
         
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
         NSValue *newValue = change[NSKeyValueChangeNewKey];
