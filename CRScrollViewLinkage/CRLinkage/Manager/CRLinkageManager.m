@@ -6,6 +6,7 @@
 //
 
 #import "CRLinkageManager.h"
+#import "CRLinkageHookInstanceCook.h"
 #import "CRLinkageManagerInternal.h"
 #import "CRLinkageChildConfig.h"
 #import "CRLinkageMainConfig.h"
@@ -20,15 +21,26 @@
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
 @property (nonatomic, strong) UIScrollView *currentChildScrollView;
 @property (nonatomic, strong) NSMutableArray <CRLinkageManagerInternal *> *linkageInternalArray;
+@property (nonatomic, assign) BOOL useLinkageHook;
+@property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 
 @end
 
 @implementation CRLinkageManager
 
+/// init
 - (instancetype)init
+{
+    return [self initWithUseLinkageHook:YES];
+}
+
+/// init
+/// @param useLinkageHook 是否使用默认hook方法（用来hook shouldRecognizeSimultaneouslyWithGestureRecognizer）
+- (instancetype)initWithUseLinkageHook:(BOOL)useLinkageHook
 {
     self = [super init];
     if (self) {
+        self.useLinkageHook = useLinkageHook;
         pthread_mutexattr_t attr;
         pthread_mutexattr_init(&attr);
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);
@@ -42,6 +54,13 @@
 /// 配置mainScrollView
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
+    
+    if (self.useLinkageHook) {
+        [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
+        // 重新挂载手势代理，不然如果原本（包括父类）没有实现shouldRecognizeSimultaneouslyWithGestureRecognizer方法的话，通过runtime添加该方法不会被触发。
+        _mainScrollView.panGestureRecognizer.delegate = _mainScrollView.panGestureRecognizer.delegate;
+    }
+    
     [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj configMainScrollView:mainScrollView];
     }];
@@ -258,6 +277,13 @@
     }
     
     return _linkageInternalArray;
+}
+
+- (CRLinkageHookInstanceCook *)hookInstanceCook {
+    if (!_hookInstanceCook) {
+        _hookInstanceCook = [CRLinkageHookInstanceCook new];
+    }
+    return _hookInstanceCook;
 }
 
 #pragma mark - LinkageInternal Method

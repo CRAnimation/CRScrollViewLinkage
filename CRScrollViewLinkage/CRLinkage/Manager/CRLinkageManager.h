@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
 
+/// init
+/// @param useLinkageHook 是否使用默认hook方法（用来hook shouldRecognizeSimultaneouslyWithGestureRecognizer）
+- (instancetype)initWithUseLinkageHook:(BOOL)useLinkageHook;
+
 /// 配置mainScrollView
 /// @param mainScrollView mainScrollView
 #warning Bear 测试过程中，main后配

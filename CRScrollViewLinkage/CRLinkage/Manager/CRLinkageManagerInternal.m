@@ -6,7 +6,6 @@
 //
 
 #import "CRLinkageManagerInternal.h"
-#import "CRLinkageHookInstanceCook.h"
 #import "UIScrollView+CRLinkage.h"
 #import "CRLinkageTool.h"
 #import "CRLinkageManagerInternal+Child.h"
@@ -20,8 +19,6 @@ static NSString * const kCenter = @"center";
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
 @property (nonatomic, strong, readwrite) UIScrollView *childScrollView;
-@property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
-@property (nonatomic, assign) BOOL useLinkageHook;
 
 @property (nonatomic, assign) CGPoint lastMainHoldPoint;
 @property (nonatomic, assign) CGPoint lastChildHoldPoint;
@@ -32,19 +29,10 @@ static NSString * const kCenter = @"center";
 
 @implementation CRLinkageManagerInternal
 
-/// init
 - (instancetype)init
-{
-    return [self initWithUseLinkageHook:YES];
-}
-
-/// init
-/// @param useLinkageHook 是否使用默认hook方法（用来hook shouldRecognizeSimultaneouslyWithGestureRecognizer）
-- (instancetype)initWithUseLinkageHook:(BOOL)useLinkageHook
 {
     self = [super init];
     if (self) {
-        self.useLinkageHook = useLinkageHook;
         self.linkageScrollStatus = CRLinkageScrollStatus_Idle;
 //        self.customTopHeight = nil;
     }
@@ -295,21 +283,9 @@ static NSString * const kCenter = @"center";
         _mainScrollView = mainScrollView;
         _mainScrollView.linkageMainConfig.linkageInternal = self;
         
-        if (self.useLinkageHook) {
-            [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
-            // 重新挂载手势代理，不然如果原本（包括父类）没有实现shouldRecognizeSimultaneouslyWithGestureRecognizer方法的话，通过runtime添加该方法不会被触发。
-            _mainScrollView.panGestureRecognizer.delegate = _mainScrollView.panGestureRecognizer.delegate;
-        }
         [self childGenerateFrameObservedView];
 //        [self addMainObserver];
     }
-}
-
-- (CRLinkageHookInstanceCook *)hookInstanceCook {
-    if (!_hookInstanceCook) {
-        _hookInstanceCook = [CRLinkageHookInstanceCook new];
-    }
-    return _hookInstanceCook;
 }
 
 //- (void)setCustomTopHeight:(NSNumber *)customTopHeight {
