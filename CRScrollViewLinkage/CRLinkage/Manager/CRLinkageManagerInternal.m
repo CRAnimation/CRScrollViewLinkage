@@ -25,6 +25,9 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, assign) BOOL haveLastMainHoldPoint;
 @property (nonatomic, assign) BOOL haveLastChildHoldPoint;
 
+@property (nonatomic, assign) BOOL haveAddMainObserver;
+@property (nonatomic, assign) BOOL haveAddChildObserver;
+
 @end
 
 @implementation CRLinkageManagerInternal
@@ -72,14 +75,23 @@ static NSString * const kCenter = @"center";
 
 #pragma mark - KVO
 - (void)addMainObserver {
+    if (self.haveAddMainObserver) {
+        return;
+    }
     [self.mainScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)removeMainObserver {
-    [self.mainScrollView removeObserver:self forKeyPath:kContentOffset];
+    if (self.haveAddMainObserver) {
+        self.haveAddMainObserver = NO;
+        [self.mainScrollView removeObserver:self forKeyPath:kContentOffset];
+    }
 }
 
 - (void)addChildObserver {
+    if (self.haveAddChildObserver) {
+        return;
+    }
     [self.childScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
     if (self.childFrameObservedView) {
         [self.childFrameObservedView addObserver:self forKeyPath:kBounds options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
@@ -88,10 +100,13 @@ static NSString * const kCenter = @"center";
 }
 
 - (void)removeChildObserver {
-    [self.childScrollView removeObserver:self forKeyPath:kContentOffset];
-    if (self.childFrameObservedView) {
-        [self.childFrameObservedView removeObserver:self forKeyPath:kBounds];
-        [self.childFrameObservedView removeObserver:self forKeyPath:kCenter];
+    if (self.haveAddChildObserver) {
+        self.haveAddChildObserver = NO;
+        [self.childScrollView removeObserver:self forKeyPath:kContentOffset];
+        if (self.childFrameObservedView) {
+            [self.childFrameObservedView removeObserver:self forKeyPath:kBounds];
+            [self.childFrameObservedView removeObserver:self forKeyPath:kCenter];
+        }
     }
 }
 
@@ -260,7 +275,7 @@ static NSString * const kCenter = @"center";
         }
         _childScrollView = childScrollView;
         _childScrollView.linkageChildConfig = config;
-        _childScrollView.linkageChildConfig.linkageInternal = self;
+        [_childScrollView.linkageChildConfig configLinkageInternalForChild:self];
         [self childGenerateFrameObservedView];
 //        [self addChildObserver];
     }
@@ -269,20 +284,8 @@ static NSString * const kCenter = @"center";
 @synthesize mainScrollView = _mainScrollView;
 - (void)setMainScrollView:(UIScrollView *)mainScrollView {
     if (mainScrollView != _mainScrollView) {
-        if (_mainScrollView != nil) {
-            // 清空旧的
-            CRLinkageMainConfig *config = [CRLinkageMainConfig new];
-            config.currentScrollView = mainScrollView;
-            _mainScrollView.linkageMainConfig = config;
-            _mainScrollView.isLinkageMainScrollView = YES;
-#warning Bear 记得这里把旧的KVO移除掉
-//            [self removeMainObserver];
-        }
-        
         // 生成新的
         _mainScrollView = mainScrollView;
-        _mainScrollView.linkageMainConfig.linkageInternal = self;
-        
         [self childGenerateFrameObservedView];
 //        [self addMainObserver];
     }

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// main专用
 @property (nonatomic, weak, nullable) UIScrollView *currentScrollView;
-@property (nonatomic, weak) CRLinkageManagerInternal *linkageInternal;
+@property (nonatomic, weak, readonly) CRLinkageManagerInternal *linkageInternal;
 
 /// 头部拉动极限（填入正数即可，里面会自动转成负数）
 @property (nonatomic, strong, nullable) NSNumber *headerBounceLimit;
@@ -33,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
                       isLimit:(BOOL)isLimit
        overHeaderOrLimitBlock:(void (^)(BOOL isOver))overHeaderOrLimitBlock
        overFooterOrLimitBlock:(void (^)(BOOL isOver))overFooterOrLimitBlock;
+
+#pragma mark - ConfigLinkageInternal
+- (void)configLinkageInternalForMain:( CRLinkageManagerInternal *)linkageInternal;
+- (void)configLinkageInternalForChild:( CRLinkageManagerInternal *)linkageInternal;
+
 @end
 
 NS_ASSUME_NONNULL_END

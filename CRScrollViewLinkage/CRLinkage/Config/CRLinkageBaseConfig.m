@@ -8,6 +8,12 @@
 #import "CRLinkageBaseConfig.h"
 #import "CRLinkageManagerInternal.h"
 
+@interface CRLinkageBaseConfig()
+
+@property (nonatomic, weak, readwrite) CRLinkageManagerInternal *linkageInternal;
+
+@end
+
 @implementation CRLinkageBaseConfig
 
 - (instancetype)init
@@ -81,6 +87,15 @@
             }
         }];
     }
+}
+
+#pragma mark - ConfigLinkageInternal
+- (void)configLinkageInternalForMain:( CRLinkageManagerInternal *)linkageInternal {
+    self.linkageInternal = linkageInternal;
+}
+
+- (void)configLinkageInternalForChild:( CRLinkageManagerInternal *)linkageInternal {
+    self.linkageInternal = linkageInternal;
 }
 
 #pragma mark - Private

@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSMutableArray <CRLinkageManagerInternal *> *linkageInternalArray;
 @property (nonatomic, assign) BOOL useLinkageHook;
 @property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
+@property (nonatomic, assign) NSInteger currentActiveIndex;
 
 @end
 
@@ -40,6 +41,7 @@
 {
     self = [super init];
     if (self) {
+        self.currentActiveIndex = -1;
         self.useLinkageHook = useLinkageHook;
         pthread_mutexattr_t attr;
         pthread_mutexattr_init(&attr);
@@ -55,6 +57,10 @@
 - (void)configMainScrollView:(UIScrollView *)mainScrollView {
     self.mainScrollView = mainScrollView;
     
+    CRLinkageMainConfig *config = [CRLinkageMainConfig new];
+    config.currentScrollView = mainScrollView;
+    self.mainScrollView.linkageMainConfig = config;
+    self.mainScrollView.isLinkageMainScrollView = YES;
     
     if (self.useLinkageHook) {
         [self.hookInstanceCook hookScrollViewInstance:mainScrollView];
@@ -65,6 +71,14 @@
     [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj configMainScrollView:mainScrollView];
     }];
+    
+    [self tryCommonConfig];
+}
+
+- (void)tryCommonConfig {
+    if (self.mainScrollView && self.currentActiveIndex >= 0 && self.linkageInternalArray.count > 0) {
+        [self.mainScrollView.linkageMainConfig configLinkageInternalForMain:self.linkageInternalArray[self.currentActiveIndex]];
+    }
 }
 
 #pragma mark 激活childScrollView
@@ -78,7 +92,7 @@
     CRLinkageManagerInternal *newInternal = [self getLinkageManagerInternalByChild:childScrollView];
     newInternal.internalActive = YES;
     self.currentChildScrollView = childScrollView;
-    [self.mainScrollView.linkageMainConfig updateCurrentChildScrollView:childScrollView];
+    [self.mainScrollView.linkageMainConfig configLinkageInternalForMain:newInternal];
 }
 
 #pragma mark 添加/删除/重置childScrollView
@@ -95,6 +109,7 @@
 //}
 
 - (void)configChildScrollViews:(NSArray <UIScrollView *> *)childScrollViews activeChildIndex:(NSInteger)activeChildIndex {
+    self.currentActiveIndex = activeChildIndex;
     __weak typeof(self) weakSelf = self;
     [childScrollViews enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull tmpChildScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
         CRLinkageManagerInternal *tmpLinkageInternal = [weakSelf generateLinkageInternal];
@@ -106,6 +121,7 @@
         UIScrollView *tmpChildScrollView = childScrollViews[activeChildIndex];
         [self activeCurrentChildScrollView:tmpChildScrollView];
     }
+    [self tryCommonConfig];
 }
 
 //- (void)clearChildScrollViews {
@@ -135,6 +151,7 @@
 - (void)linkageNeedRelayStatus:(CRLinkageRelayStatus)linkageRelayStatus {
     UIScrollView *newChildScrollView = [self findNextScrollView:linkageRelayStatus currentScrollView:self.currentChildScrollView];
     [self activeCurrentChildScrollView:newChildScrollView];
+    [self.mainScrollView.linkageMainConfig configLinkageInternalForMain:newChildScrollView.linkageChildConfig.linkageInternal];
 }
 
 - (void)scrollViewTriggerLimitWithScrollView:(nonnull UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType { 
