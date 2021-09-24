@@ -7,6 +7,10 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString * const kContentOffset = @"contentOffset";
+static NSString * const kBounds = @"bounds";
+static NSString * const kCenter = @"center";
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRLinkageDefine : NSObject

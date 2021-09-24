@@ -11,10 +11,6 @@
 #import "CRLinkageManagerInternal+Child.h"
 #import "CRLinkageManagerInternal+Main.h"
 
-static NSString * const kContentOffset = @"contentOffset";
-static NSString * const kBounds = @"bounds";
-static NSString * const kCenter = @"center";
-
 @interface CRLinkageManagerInternal()
 
 @property (nonatomic, strong, readwrite) UIScrollView *mainScrollView;
@@ -25,7 +21,6 @@ static NSString * const kCenter = @"center";
 @property (nonatomic, assign) BOOL haveLastMainHoldPoint;
 @property (nonatomic, assign) BOOL haveLastChildHoldPoint;
 
-@property (nonatomic, assign) BOOL haveAddMainObserver;
 @property (nonatomic, assign) BOOL haveAddChildObserver;
 
 @end
@@ -74,20 +69,6 @@ static NSString * const kCenter = @"center";
 }
 
 #pragma mark - KVO
-- (void)addMainObserver {
-    if (self.haveAddMainObserver) {
-        return;
-    }
-    [self.mainScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
-}
-
-- (void)removeMainObserver {
-    if (self.haveAddMainObserver) {
-        self.haveAddMainObserver = NO;
-        [self.mainScrollView removeObserver:self forKeyPath:kContentOffset];
-    }
-}
-
 - (void)addChildObserver {
     if (self.haveAddChildObserver) {
         return;
@@ -113,11 +94,11 @@ static NSString * const kCenter = @"center";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:kContentOffset]) {
         UIScrollView *tmpScrollView = (UIScrollView *)object;
-            if (tmpScrollView == self.mainScrollView) {
-                NSLog(@"--main");
-            } else if (object == self.childScrollView) {
-                NSLog(@"--child");
-            }
+//            if (tmpScrollView == self.mainScrollView) {
+//                NSLog(@"--main");
+//            } else if (object == self.childScrollView) {
+//                NSLog(@"--child");
+//            }
         
         NSValue *oldValue = change[NSKeyValueChangeOldKey];
         NSValue *newValue = change[NSKeyValueChangeNewKey];
@@ -248,10 +229,8 @@ static NSString * const kCenter = @"center";
     if (internalActive) {
         [self _tryUpdateOffSet];
         [self addChildObserver];
-        [self addMainObserver];
     } else {
         [self removeChildObserver];
-        [self removeMainObserver];
     }
     _internalActive = internalActive;
 }

@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 配置mainScrollView
 /// @param mainScrollView mainScrollView
-#warning Bear 测试过程中，main后配
 - (void)configMainScrollView:(UIScrollView *)mainScrollView;
 
 #pragma mark 激活childScrollView
@@ -43,6 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deactive;
 
 - (void)updateConfig;
+
+/// KVO
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context;
 
 @end
 

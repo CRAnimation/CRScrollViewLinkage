@@ -24,6 +24,7 @@
 @property (nonatomic, assign) BOOL useLinkageHook;
 @property (nonatomic, strong) CRLinkageHookInstanceCook *hookInstanceCook;
 @property (nonatomic, assign) NSInteger currentActiveIndex;
+@property (nonatomic, assign) BOOL haveAddMainObserver;
 
 @end
 
@@ -73,9 +74,11 @@
     }];
     
     [self tryCommonConfig];
+    [self addMainObserver];
 }
 
 - (void)tryCommonConfig {
+#warning Bear 主要靠这个currentActiveIndex，后面看能不能删掉
     if (self.mainScrollView && self.currentActiveIndex >= 0 && self.linkageInternalArray.count > 0) {
         [self.mainScrollView.linkageMainConfig configLinkageInternalForMain:self.linkageInternalArray[self.currentActiveIndex]];
     }
@@ -121,7 +124,6 @@
         UIScrollView *tmpChildScrollView = childScrollViews[activeChildIndex];
         [self activeCurrentChildScrollView:tmpChildScrollView];
     }
-    [self tryCommonConfig];
 }
 
 //- (void)clearChildScrollViews {
@@ -154,7 +156,19 @@
     [self.mainScrollView.linkageMainConfig configLinkageInternalForMain:newChildScrollView.linkageChildConfig.linkageInternal];
 }
 
-- (void)scrollViewTriggerLimitWithScrollView:(nonnull UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType { 
+- (void)scrollViewTriggerLimitWithScrollView:(nonnull UIScrollView *)scrollView scrollViewType:(CRScrollViewType)scrollViewType bouncePostionType:(CRBouncePostionType)bouncePostionType {
+    NSString *typeStr;
+    switch (scrollViewType) {
+        case CRScrollViewType_Main: {typeStr = @"main";} break;
+        case CRScrollViewType_Child: {typeStr = @"child";} break;
+    }
+    NSString *positionStr;
+    switch (bouncePostionType) {
+        case CRBouncePositionOverHeaderLimit: {positionStr = @"headerLimit";} break;
+        case CRBouncePositionOverFooterLimit: {positionStr = @"footerLimit";} break;
+    }
+    NSLog(@"--triggerLimit typeStr:%@ positionStr:%@", typeStr, positionStr);
+    
     switch (scrollViewType) {
         case CRScrollViewType_Main:
         {
@@ -163,7 +177,7 @@
             break;
         case CRScrollViewType_Child:
         {
-            UIView *nextScrollView;
+            UIScrollView *nextScrollView;
             switch (bouncePostionType) {
                 case CRBouncePositionOverHeaderLimit:
                 {
@@ -176,7 +190,7 @@
                 }
                     break;
             }
-            
+            [self activeCurrentChildScrollView:nextScrollView];
         }
             break;
     }
@@ -282,7 +296,7 @@
 - (NSArray <UIScrollView *> *)getChilds {
     NSMutableArray *resArray = [NSMutableArray new];
     [self.linkageInternalArray enumerateObjectsUsingBlock:^(CRLinkageManagerInternal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [resArray addObject:obj];
+        [resArray addObject:obj.childScrollView];
     }];
     return [resArray copy];
 }
@@ -310,6 +324,27 @@
     return _hookInstanceCook;
 }
 
+#pragma mark - KVO
+- (void)addMainObserver {
+    if (self.haveAddMainObserver) {
+        return;
+    }
+    [self.mainScrollView addObserver:self forKeyPath:kContentOffset options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)removeMainObserver {
+    if (self.haveAddMainObserver) {
+        self.haveAddMainObserver = NO;
+        [self.mainScrollView removeObserver:self forKeyPath:kContentOffset];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (self.currentChildScrollView) {
+        [self.currentChildScrollView.linkageChildConfig.linkageInternal observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 #pragma mark - LinkageInternal Method
 - (CRLinkageManagerInternal *)getLinkageManagerInternalByChild:(UIScrollView *)childScrollView {
     for (CRLinkageManagerInternal *linkageManagerInternal in self.linkageInternalArray) {
@@ -324,6 +359,13 @@
     CRLinkageManagerInternal *linkageInternal = [CRLinkageManagerInternal new];
     linkageInternal.delegate = self;
     return linkageInternal;
+}
+
+#pragma mark - Dealloc
+- (void)dealloc
+{
+    [self removeMainObserver];
+    NSLog(@"--dealloc:%@", NSStringFromClass([self class]));
 }
 
 @end
