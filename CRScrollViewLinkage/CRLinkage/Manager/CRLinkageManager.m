@@ -181,15 +181,16 @@
             switch (bouncePostionType) {
                 case CRBouncePositionOverHeaderLimit:
                 {
-                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToNextScrollView currentScrollView:scrollView];
+                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToLastScrollView currentScrollView:scrollView];
                 }
                     break;
                 case CRBouncePositionOverFooterLimit:
                 {
-                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToLastScrollView currentScrollView:scrollView];
+                    nextScrollView = [self findNextScrollView:CRLinkageRelayStatus_ToNextScrollView currentScrollView:scrollView];
                 }
                     break;
             }
+            NSLog(@"--nextScrollView:%@", nextScrollView);
             [self activeCurrentChildScrollView:nextScrollView];
         }
             break;
@@ -236,53 +237,119 @@
     }
     
     __block UIScrollView *resultScrollView;
-    __block CGFloat minDeltaValue = CGFLOAT_MAX;
-    __block CGFloat minDeltaIndex = 0;
-    CGFloat currentBottom = CGRectGetMaxY(currentScrollView.frame);
-    CGFloat currentTop = CGRectGetMinY(currentScrollView.frame);
     
-#warning Bear 这里线程安全优化下
-    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (tmpScrollView == currentScrollView) {
-            return;
+    switch (linkageRelayStatus) {
+        case CRLinkageRelayStatus_RemainCurrent:
+        {
+            nil;
         }
-        
-        CGFloat tmpBottom = CGRectGetMaxY(tmpScrollView.frame);
-        CGFloat tmpTop = CGRectGetMinY(tmpScrollView.frame);
-        
-        switch (linkageRelayStatus) {
-            case CRLinkageRelayStatus_RemainCurrent:
-            {
-                nil;
+            break;
+        case CRLinkageRelayStatus_ToLastScrollView:
+        {
+            if (self.currentActiveIndex > 0) {
+                self.currentActiveIndex--;
+                resultScrollView = [self getChilds][self.currentActiveIndex];
             }
-                break;
-            case CRLinkageRelayStatus_ToLastScrollView:
-            {
-                CGFloat delta = currentBottom - tmpBottom;
-                if (delta > 0 && delta < minDeltaValue) {
-                    minDeltaValue = delta;
-                    resultScrollView = tmpScrollView;
-                    minDeltaIndex = idx;
-                    linkageConfig.lastScrollView = resultScrollView;
-                }
-            }
-                break;
-            case CRLinkageRelayStatus_ToNextScrollView:
-            {
-                CGFloat delta = tmpTop - currentTop;
-                if (delta > 0 && delta < minDeltaValue) {
-                    minDeltaValue = delta;
-                    resultScrollView = tmpScrollView;
-                    minDeltaIndex = idx;
-                    linkageConfig.nextScrollView = resultScrollView;
-                }
-            }
-                break;
         }
-    }];
+            break;
+        case CRLinkageRelayStatus_ToNextScrollView:
+        {
+            if (self.currentActiveIndex < [self getChilds].count - 1) {
+                self.currentActiveIndex++;
+                resultScrollView = [self getChilds][self.currentActiveIndex];
+            }
+        }
+            break;
+    }
     
     return resultScrollView;
 }
+
+//- (UIScrollView * __nullable)findNextScrollView:(CRLinkageRelayStatus)linkageRelayStatus currentScrollView:(UIScrollView *)currentScrollView {
+//    /// 先查缓存
+//    CRLinkageChildConfig *linkageConfig = currentScrollView.linkageChildConfig;
+//    switch (linkageRelayStatus) {
+//        case CRLinkageRelayStatus_RemainCurrent:
+//        {
+//            nil;
+//        }
+//            break;
+//        case CRLinkageRelayStatus_ToLastScrollView:
+//        {
+//            if (linkageConfig.lastScrollView) {
+//                return linkageConfig.lastScrollView;
+//            }
+//        }
+//            break;
+//        case CRLinkageRelayStatus_ToNextScrollView:
+//        {
+//            if (linkageConfig.nextScrollView) {
+//                return linkageConfig.nextScrollView;
+//            }
+//        }
+//            break;
+//    }
+//
+//    pthread_mutex_lock(&_arrayLock);
+//    NSArray *originArray = [self getChilds];
+//    pthread_mutex_unlock(&_arrayLock);
+//
+//    if (linkageRelayStatus == CRLinkageRelayStatus_RemainCurrent || originArray.count == 0) {
+//        return currentScrollView;
+//    }
+//
+//    if (originArray.count == 1) {
+//        return originArray[0];
+//    }
+//
+//    __block UIScrollView *resultScrollView;
+//    __block CGFloat minDeltaValue = CGFLOAT_MAX;
+//    __block CGFloat minDeltaIndex = 0;
+//    CGFloat currentBottom = CGRectGetMaxY(currentScrollView.frame);
+//    CGFloat currentTop = CGRectGetMinY(currentScrollView.frame);
+//
+//#warning Bear 这里线程安全优化下
+//    [originArray enumerateObjectsUsingBlock:^(UIScrollView *tmpScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+//        if (tmpScrollView == currentScrollView) {
+//            return;
+//        }
+//
+//        CGFloat tmpBottom = CGRectGetMaxY(tmpScrollView.frame);
+//        CGFloat tmpTop = CGRectGetMinY(tmpScrollView.frame);
+//
+//        switch (linkageRelayStatus) {
+//            case CRLinkageRelayStatus_RemainCurrent:
+//            {
+//                nil;
+//            }
+//                break;
+//            case CRLinkageRelayStatus_ToLastScrollView:
+//            {
+//                CGFloat delta = currentBottom - tmpBottom;
+//                if (delta > 0 && delta < minDeltaValue) {
+//                    minDeltaValue = delta;
+//                    resultScrollView = tmpScrollView;
+//                    minDeltaIndex = idx;
+//                    linkageConfig.lastScrollView = resultScrollView;
+//                }
+//            }
+//                break;
+//            case CRLinkageRelayStatus_ToNextScrollView:
+//            {
+//                CGFloat delta = tmpTop - currentTop;
+//                if (delta > 0 && delta < minDeltaValue) {
+//                    minDeltaValue = delta;
+//                    resultScrollView = tmpScrollView;
+//                    minDeltaIndex = idx;
+//                    linkageConfig.nextScrollView = resultScrollView;
+//                }
+//            }
+//                break;
+//        }
+//    }];
+//
+//    return resultScrollView;
+//}
 
 #pragma mark - Setter & Getter
 //- (NSArray <UIScrollView *> *)getChildScrollViews {
